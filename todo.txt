@@ -1,0 +1,5 @@
+~ finish drivetrain
+~ falcon 500 --> use TalonFX class
+~ find vision target pictures
+- figure out GRIP
+- install WPILib on driver station computer
