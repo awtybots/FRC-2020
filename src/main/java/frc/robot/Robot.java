@@ -9,12 +9,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.*;
-import frc.robot.commands.AutonDrive;
-import frc.robot.commands.TeleopDrive;
-import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,19 +25,22 @@ public class Robot extends TimedRobot {
 
 	private XboxController xboxController;
 	private DriveTrainSubsystem driveTrainSubsystem;
-	private TeleopDrive teleopDriveCommand;
-	private AutonDrive autoDriveCommand;
+	private Teleop teleopCommand;
+	private Auton autonCommand;
 
 	@Override
 	public void robotInit() {
 		// Subsystems
 		xboxController = new XboxController(Ports.XBOX_CONTROLLER);
 		driveTrainSubsystem = new DriveTrainSubsystem();
+
 		// Commands
-		teleopDriveCommand = new TeleopDrive(driveTrainSubsystem, xboxController);
-		autoDriveCommand = new AutonDrive(driveTrainSubsystem);
+		teleopCommand = new Teleop(xboxController, driveTrainSubsystem);
+		autoCommand = new Auton(driveTrainSubsystem);
+
 		// Button Mappings
-		
+
+
 	}
 
 	/**
@@ -67,9 +68,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
-		// autonomousCommand = robotContainer.getAutonomousCommand();
-
-		// autonomousCommand.schedule();
+		autonCommand.schedule();
 	}
 
 	@Override
@@ -79,11 +78,11 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		// if (autonomousCommand != null) {
-		// 	autonomousCommand.cancel();
-		// }
+		autonCommand.cancel();
 
-		// Uncomment this if robot does not drive 
+		teleopCommand.schedule();
+
+		// Uncomment this if robot does not drive
 		// Command teleopCommand = driveTrainSubsystem.getDefaultCommand();
 		// teleopCommand.schedule();
 	}
