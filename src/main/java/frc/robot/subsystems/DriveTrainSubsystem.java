@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorIDs;
 
-public class DriveTrainSubsystem extends SubsystemBase {
+public class DriveTrainSubsystem extends SubsystemBase { 
+
+	// this is the subsystem that interacts with the motors
 
 	private final WPI_TalonSRX motorL1 = new WPI_TalonSRX(MotorIDs.MOTOR_L1);
 	private final WPI_TalonSRX motorL2 = new WPI_TalonSRX(MotorIDs.MOTOR_L2);
@@ -27,10 +29,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	private final WPI_TalonSRX motorR2 = new WPI_TalonSRX(MotorIDs.MOTOR_R2);
 	private final WPI_TalonSRX motorR3 = new WPI_TalonSRX(MotorIDs.MOTOR_R3);
 
-	private final SpeedControllerGroup speedLeft = new SpeedControllerGroup(motorL1, motorL2, motorL3);
-	private final SpeedControllerGroup speedRight = new SpeedControllerGroup(motorR1, motorR2, motorR3);
+	private final SpeedControllerGroup speedLeft = new SpeedControllerGroup(motorL1, motorL2, motorL3); // all left motors in one group
+	private final SpeedControllerGroup speedRight = new SpeedControllerGroup(motorR1, motorR2, motorR3); // all right motors in another
 
-	private final DifferentialDrive differentialDrive = new DifferentialDrive(speedLeft, speedRight);
+	private final DifferentialDrive differentialDrive = new DifferentialDrive(speedLeft, speedRight); // helpful class that has lots of driving modes built-in
 
 	private final WPI_TalonSRX[] motors = new WPI_TalonSRX[]{
 		motorL1,
@@ -42,7 +44,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	};
 
 	public DriveTrainSubsystem() {
-		forEachMotor((motor) -> motor.setNeutralMode(Constants.BRAKE_MODE));
+		forEachMotor((motor) -> motor.setNeutralMode(Constants.BRAKE_MODE)); // sets the brake mode for all motors (called NeutralMode)
 	}
 
 	@Override
@@ -51,14 +53,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	}
 
 	public void arcadeDrive(double xSpeed, double zRotation) {
-		differentialDrive.arcadeDrive(xSpeed, zRotation);
+		differentialDrive.arcadeDrive(xSpeed, zRotation); // DifferentialDrive has a built-in arcadeDrive function
 	}
 
 	public void stop() {
-		forEachMotor((motor) -> motor.stopMotor());
+		forEachMotor((motor) -> motor.stopMotor()); // stops all motors
 	}
 
-	private void forEachMotor(Consumer<WPI_TalonSRX> consumer) {
+	private void forEachMotor(Consumer<WPI_TalonSRX> consumer) { // utility function to do something for every motor
 		for(WPI_TalonSRX motor : motors) {
 			consumer.accept(motor);
 		}

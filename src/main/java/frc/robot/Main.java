@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 public final class Main {
 
+	// do not touch anything here, WPILib said so
+
 	private Main() {
 		
 	}

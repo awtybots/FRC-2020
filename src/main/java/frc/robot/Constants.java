@@ -38,6 +38,7 @@ public final class Constants {
     }
 
     public final static class Controller {
+        // which stick (left or right) to use for each control of arcade drive (speed and rotation)
         public static final Hand SPEED_HAND = Hand.kLeft;
         public static final Hand ROTATION_HAND = Hand.kRight;
     }

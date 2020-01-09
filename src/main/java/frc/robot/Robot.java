@@ -14,13 +14,6 @@ import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
- */
 public class Robot extends TimedRobot {
 
 	private XboxController xboxController;
@@ -31,12 +24,12 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
 		// Subsystems
-		xboxController = new XboxController(Ports.XBOX_CONTROLLER);
+		xboxController = new XboxController(Ports.XBOX_CONTROLLER); // xbox controller has no family so subsystems adopted it
 		driveTrainSubsystem = new DriveTrainSubsystem();
 
 		// Commands
-		teleopCommand = new Teleop(xboxController, driveTrainSubsystem);
-		autoCommand = new Auton(driveTrainSubsystem);
+		autonCommand = new Auton(driveTrainSubsystem); // overlaying auton command for the auton period
+		teleopCommand = new Teleop(xboxController, driveTrainSubsystem); // overlaying teleop command for the teleop period
 
 		// Button Mappings
 
@@ -68,7 +61,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
-		autonCommand.schedule();
+		autonCommand.schedule(); // start auton
 	}
 
 	@Override
@@ -78,11 +71,11 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		autonCommand.cancel();
+		autonCommand.cancel(); // finish auton
 
-		teleopCommand.schedule();
+		teleopCommand.schedule(); // start teleop
 
-		// Uncomment this if robot does not drive
+		// Alex's code
 		// Command teleopCommand = driveTrainSubsystem.getDefaultCommand();
 		// teleopCommand.schedule();
 	}
