@@ -8,7 +8,7 @@ public class Auton extends ParallelCommandGroup {
      // this is the overlaying command group for everything that happens in auton
      // see https://docs.wpilib.org/en/latest/docs/software/commandbased/command-groups.html
 
-    public Auton(DriveTrainSubsystem driveTrainSubsystem) {
+    public Auton(DriveTrainSubsystem driveTrainSubsystem, AutonType autonType) {
         addCommands(
             // list all commands to do when auton starts
             // turn on intake
@@ -23,4 +23,8 @@ public class Auton extends ParallelCommandGroup {
         );
     }
 
+    public enum AutonType {
+        DO_NOTHING,
+        
+    }
 }

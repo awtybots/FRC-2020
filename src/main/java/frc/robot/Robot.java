@@ -9,9 +9,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
+import frc.robot.commands.Auton.AutonType;
 import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
@@ -21,14 +23,22 @@ public class Robot extends TimedRobot {
 	private Teleop teleopCommand;
 	private Auton autonCommand;
 
+	private SendableChooser<AutonType> autonChooser;
+
 	@Override
 	public void robotInit() {
+		// Auton chooser
+		autonChooser = new SendableChooser<>();
+		AutonType[] autonTypes = AutonType.values();
+		for(AutonType autonType : autonTypes) {
+			autonChooser.addOption(autonType.toString(), autonType);
+		}
+
 		// Subsystems
 		xboxController = new XboxController(Ports.XBOX_CONTROLLER); // xbox controller has no family so subsystems adopted it
 		driveTrainSubsystem = new DriveTrainSubsystem();
 
 		// Commands
-		autonCommand = new Auton(driveTrainSubsystem); // overlaying auton command for the auton period
 		teleopCommand = new Teleop(xboxController, driveTrainSubsystem); // overlaying teleop command for the teleop period
 
 		// Button Mappings
@@ -61,6 +71,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
+		autonCommand = new Auton(driveTrainSubsystem, autonChooser.getSelected());
 		autonCommand.schedule(); // start auton
 	}
 
