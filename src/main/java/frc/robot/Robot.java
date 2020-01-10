@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
-		autonCommand = new Auton(driveTrainSubsystem, autonChooser.getSelected());
+		autonCommand = new Auton(driveTrainSubsystem, autonChooser.getSelected()); // get chosen AutonType
 		autonCommand.schedule(); // start auton
 	}
 
