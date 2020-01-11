@@ -14,7 +14,7 @@ public class Auton extends ParallelCommandGroup {
             // list all commands to do when auton starts
             // turn on intake
             // etc...
-            getAutonSequence(driveTrainSubsystem, autonType);
+            getAutonSequence(driveTrainSubsystem, autonType)
         );
     }
 
