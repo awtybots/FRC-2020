@@ -16,7 +16,7 @@ public final class Constants {
     public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
 
     public final static class Ports {
-        public static final int XBOX_CONTROLLER = 0;
+        public static final int FIRST_DRIVER = 0;
     }
 
     public final static class MotorIDs {
