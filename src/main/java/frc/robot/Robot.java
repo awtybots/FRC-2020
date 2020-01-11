@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		autonCommand = new Auton(driveTrainSubsystem, autonChooser.getSelected()); // get chosen AutonType
-		autonCommand.schedule(); // start auton
+		if(autonCommand != null) autonCommand.schedule(); // start auton
 	}
 
 	@Override
@@ -82,13 +82,9 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		autonCommand.cancel(); // finish auton
+		if(autonCommand != null) autonCommand.cancel(); // finish auton
 
 		teleopCommand.schedule(); // start teleop
-
-		// Alex's code
-		// Command teleopCommand = driveTrainSubsystem.getDefaultCommand();
-		// teleopCommand.schedule();
 	}
 
 	@Override
