@@ -21,12 +21,12 @@ public final class Constants {
 
     public final static class MotorIDs {
         public static final int MOTOR_L1 = 1;
-        public static final int MOTOR_L2 = 2;
-        public static final int MOTOR_L3 = 3;
+        public static final int MOTOR_L2 = 3;
+        public static final int MOTOR_L3 = 4;
 
-        public static final int MOTOR_R1 = 4;
-        public static final int MOTOR_R2 = 5;
-        public static final int MOTOR_R3 = 6;
+        public static final int MOTOR_R1 = 12;
+        public static final int MOTOR_R2 = 13;
+        public static final int MOTOR_R3 = 14;
     }
 
     public final static class Controller {
