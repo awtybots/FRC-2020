@@ -17,7 +17,11 @@ import frc.robot.subsystems.*;
 public class Robot extends TimedRobot {
 
 	private XboxController xboxController;
+
 	private DriveTrainSubsystem driveTrainSubsystem;
+	private IntakeSubsytem intakeSubsystem;
+	private ShooterSubsystem shooterSubsystem;
+
 	private Teleop teleopCommand;
 	private Auton autonCommand;
 
@@ -26,6 +30,8 @@ public class Robot extends TimedRobot {
 		// Subsystems
 		xboxController = new XboxController(Ports.XBOX_CONTROLLER); // xbox controller has no family so subsystems adopted it
 		driveTrainSubsystem = new DriveTrainSubsystem();
+		intakeSubsystem = new IntakeSubsytem();
+		shooterSubsystem = new ShooterSubsystem();
 
 		// Commands
 		autonCommand = new Auton(driveTrainSubsystem); // overlaying auton command for the auton period
