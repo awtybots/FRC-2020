@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
 	private XboxController xboxController;
 
 	private DriveTrainSubsystem driveTrainSubsystem;
-	private IntakeSubsytem intakeSubsystem;
+	private IntakeSubsystem intakeSubsystem;
 	private ShooterSubsystem shooterSubsystem;
 
 	private Teleop teleopCommand;
@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
 		// Subsystems
 		xboxController = new XboxController(Ports.XBOX_CONTROLLER); // xbox controller has no family so subsystems adopted it
 		driveTrainSubsystem = new DriveTrainSubsystem();
-		intakeSubsystem = new IntakeSubsytem();
+		intakeSubsystem = new IntakeSubsystem();
 		shooterSubsystem = new ShooterSubsystem();
 
 		// Commands
