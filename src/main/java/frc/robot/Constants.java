@@ -18,7 +18,7 @@ public final class Constants {
 
     public final static class DriveTrain {
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
-        public final static FeedbackDevice DRIVE_MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative; // TODO add encoders
+        public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative; // TODO add encoders
 
         public final static double MAX_ROBOT_VELOCITY = 36; // inches per second
         public final static double MAX_ROBOT_ACCELERATION = 18; // inches per second per second

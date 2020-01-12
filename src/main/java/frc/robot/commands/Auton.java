@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandGroupBase;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.DriveTrainSubsystem;
 
@@ -18,7 +19,7 @@ public class Auton extends ParallelCommandGroup {
         );
     }
 
-    private CommandGroupBase getAutonSequence(DriveTrainSubsystem driveTrainSubsystem, AutonType autonType) {
+    private CommandBase getAutonSequence(DriveTrainSubsystem driveTrainSubsystem, AutonType autonType) {
         switch(autonType) {
             case SQUARE:
                 return sequence(
@@ -32,7 +33,7 @@ public class Auton extends ParallelCommandGroup {
                     new RotateDegrees(driveTrainSubsystem, 90)
                 );
             default:
-                return sequence();
+                return new InstantCommand();
         }
     }
 

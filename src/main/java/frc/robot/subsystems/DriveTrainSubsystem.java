@@ -63,8 +63,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 			motor.configFactoryDefault();
 			motor.setNeutralMode(DriveTrain.BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
-			motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-			motor.setSensorPhase(true);
+			motor.configSelectedFeedbackSensor(DriveTrain.MOTOR_FEEDBACK_DEVICE); // sets which encoder the motor is using
 		});
 	}
 
@@ -74,7 +73,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		differentialDrive.arcadeDrive(-speed, rotation); // DifferentialDrive has a built-in arcadeDrive function
 	}
 	public void stop() {
-		forEachMotor((motor) -> motor.stopMotor()); // stops all motors
+		arcadeDrive(0, 0);
 	}
 
 

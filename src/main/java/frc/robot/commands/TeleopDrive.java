@@ -14,16 +14,7 @@ import frc.robot.Constants.Controller;
 
 public class TeleopDrive extends CommandBase {
 
-	/**
-	 * 
-	 * 		this command runs the entire teleop period
-	 * 
-	 * 		what it does:
-	 * 		- takes in the controller stick inputs
-	 * 		- sends input to DriveTrainSubsystem every tick
-	 * 		- tells DriveTrainSubsystem to stop motors when done
-	 * 
-	*/
+	// this command runs the entire teleop period
 
 	private final XboxController xboxController;
 	private final DriveTrainSubsystem driveTrainSubsystem;
