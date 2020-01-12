@@ -46,16 +46,15 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		motorR3,
 	};
 
-
-
 	private double driveInchesGoal;
-	private double driveInchesProgress = 0;
-	private double turnDegreesGoal;
-	private double turnDegreesProgress = 0;
-	private Timer timer;
+	private Direction driveInchesDirection;
+	private double driveInchesProgress;
+	private double rotateDegreesGoal;
+	private Direction rotateDegreesDirection;
+	private double rotateDegreesProgress;
+
+	private Timer timer = new Timer();
 	private double lastTime;
-
-
 
 	public DriveTrainSubsystem() {
 		forEachMotor((motor) -> {
@@ -73,41 +72,97 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 	}
 
+
 	public void arcadeDrive(double speed, double rotation) {
-		differentialDrive.arcadeDrive(speed, rotation); // DifferentialDrive has a built-in arcadeDrive function
+		differentialDrive.arcadeDrive(-speed, rotation); // DifferentialDrive has a built-in arcadeDrive function
 	}
+	public void stop() {
+		forEachMotor((motor) -> motor.stopMotor()); // stops all motors
+	}
+
 
 	public void driveInchesInitialize(double inches) {
-		driveInchesGoal = inches;
+		driveInchesGoal = Math.abs(inches);
+		driveInchesDirection = (inches > 0) ? Direction.FORWARD : Direction.BACKWARD;
 		driveInchesProgress = 0;
-		timer = new Timer();
-		timer.start();
-		lastTime = timer.get();
 
-		arcadeDrive(Values.AUTON_DRIVE_SPEED, 0);
+		timer.reset();
+		timer.start();
+		lastTime = 0;
+	}
+	public void driveInchesExecute() {
+		// multiply turn speed by 1 or -1 depending on direction
+		arcadeDrive(Values.AUTON_DRIVE_SPEED * driveInchesDirection.getMultiplier(), 0); // TODO trapezoidal speed
+
+		double currentTime = timer.get();
+		double elapsedTime = currentTime - lastTime;
+		lastTime = currentTime;
+		
+		double inchesTraveled = getAverageInchesPerSecond() * elapsedTime;
+		driveInchesProgress += inchesTraveled;
+	}
+	public boolean driveInchesIsFinished() {
+		return driveInchesProgress >= driveInchesGoal;
 	}
 
-	public void driveInchesExecute() {
-		final double[] motorVelocityAverage = new double[]{0}; // using an array to bypass the arrow function "must be final" error
-		forEachMotor((motor) -> motorVelocityAverage[0] += motor.getSelectedSensorVelocity());
-		motorVelocityAverage[0] /= motors.length;
+
+
+	public void rotateDegreesInitialize(double degrees) {
+		rotateDegreesGoal = Math.abs(degrees);
+		rotateDegreesDirection = (degrees > 0) ? Direction.CLOCKWISE : Direction.COUNTER_CLOCKWISE;
+		rotateDegreesProgress = 0;
+
+		timer.reset();
+		timer.start();
+		lastTime = 0;
+	}
+	public void rotateDegreesExecute() {
+		// multiply turn speed by 1 or -1 depending on direction
+		arcadeDrive(0, Values.AUTON_ROTATE_SPEED * rotateDegreesDirection.getMultiplier()); // TODO trapezoidal turning
 
 		double currentTime = timer.get();
 		double elapsedTime = currentTime - lastTime;
 		lastTime = currentTime;
 
-		driveInchesProgress += elapsedTime * motorVelocityAverage[0] * 10.0 / Values.ENCODER_UNITS;
+		double inchesRotated = getAverageInchesPerSecond() * elapsedTime;
+		double degreesRotated = inchesRotated / Values.ROBOT_CIRMCUMFERENCE * 360.0;
+		rotateDegreesProgress += degreesRotated;
+	}
+	public boolean rotateDegreesIsFinished() {
+		return rotateDegreesProgress >= rotateDegreesGoal;
 	}
 
-	public boolean driveInchesIsFinished() {
-		return driveInchesProgress > driveInchesGoal;
+
+	public enum Direction {
+		CLOCKWISE(1.0),
+		COUNTER_CLOCKWISE(-1.0),
+		FORWARD(1.0),
+		BACKWARD(-1.0);
+
+		private double dir;
+
+		private Direction(double dir) {
+			this.dir = dir;
+		}
+
+		public double getMultiplier() {
+			return dir;
+		}
 	}
 
 
-
-	public void stop() {
-		forEachMotor((motor) -> motor.stopMotor()); // stops all motors
+	private double getAverageInchesPerSecond() { // utility function to get average inches per second from all motors
+		double totalUnitsPer100ms = 0;
+		for(WPI_TalonSRX motor : motors) {
+			totalUnitsPer100ms += Math.abs(motor.getSelectedSensorVelocity());
+		}
+		// encoders give motor velocity in units per 100ms, so multiply by 10 for units per second and divide by units for revs per second
+		// multiply revolutions per second by seconds elapsed and wheel circumference for distance traveled
+		double averageUnitsPer100ms = totalUnitsPer100ms / motors.length;
+		double revolutionsPerSecond = averageUnitsPer100ms * 10.0 / Values.ENCODER_UNITS;
+		return revolutionsPerSecond * Values.WHEEL_CIRCUMFERENCE;
 	}
+
 
 	private void forEachMotor(Consumer<WPI_TalonSRX> consumer) { // utility function to do something for every motor
 		for(WPI_TalonSRX motor : motors) {

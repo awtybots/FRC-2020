@@ -29,9 +29,9 @@ public class TeleopDrive extends CommandBase {
 	private final DriveTrainSubsystem driveTrainSubsystem;
 
 	public TeleopDrive(XboxController xboxController, DriveTrainSubsystem driveTrainSubsystem) {
+		addRequirements(driveTrainSubsystem);
 		this.xboxController = xboxController;
 		this.driveTrainSubsystem = driveTrainSubsystem;
-		addRequirements(driveTrainSubsystem);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class TeleopDrive extends CommandBase {
 
 	@Override
 	public void execute() {
-		double speed = -xboxController.getY(Controller.SPEED_HAND); // get throttle
+		double speed = xboxController.getY(Controller.SPEED_HAND); // get throttle
 		double rotation = xboxController.getX(Controller.ROTATION_HAND); // get rotation
 		driveTrainSubsystem.arcadeDrive(speed, rotation); // give DriveTrainSubsystem throttle and rotation, it'll do the rest
 	}

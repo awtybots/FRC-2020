@@ -3,25 +3,25 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrainSubsystem;
 
-public class DriveInches extends CommandBase {
+public class RotateDegrees extends CommandBase {
 
     private DriveTrainSubsystem driveTrainSubsystem;
-    private double inches;
+    private double degrees;
 
-    public DriveInches(DriveTrainSubsystem driveTrainSubsystem, double inches) {
+    public RotateDegrees(DriveTrainSubsystem driveTrainSubsystem, double degrees) {
 		addRequirements(driveTrainSubsystem);
         this.driveTrainSubsystem = driveTrainSubsystem;
-        this.inches = inches;
+        this.degrees = degrees;
     }
 
     @Override
     public void initialize() {
-        driveTrainSubsystem.driveInchesInitialize(inches);
+        driveTrainSubsystem.rotateDegreesInitialize(degrees);
     }
 
     @Override
     public void execute() {
-        driveTrainSubsystem.driveInchesExecute();
+        driveTrainSubsystem.rotateDegreesExecute();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class DriveInches extends CommandBase {
 
     @Override
 	public boolean isFinished() {
-		return driveTrainSubsystem.driveInchesIsFinished();
+		return driveTrainSubsystem.rotateDegreesIsFinished();
 	}
 
 }

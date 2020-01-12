@@ -18,8 +18,10 @@ public final class Constants {
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public final static FeedbackDevice DRIVE_MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative;
         public final static double ENCODER_UNITS = 4096;
+        public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI; // TODO tune
+        public final static double ROBOT_CIRMCUMFERENCE = 100; // TODO tune
         public final static double AUTON_DRIVE_SPEED = 0.75;
-        public final static double AUTON_TURN_SPEED = 0.75;
+        public final static double AUTON_ROTATE_SPEED = 0.75;
     }
 
     public final static class MotorIDs {
