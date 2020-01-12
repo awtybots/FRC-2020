@@ -16,6 +16,16 @@ import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 
 public final class Constants {
 
+    public final static class MotorIDs {
+        public static final int DRIVE_L1 = 1;
+        public static final int DRIVE_L2 = 3;
+        public static final int DRIVE_L3 = 4;
+
+        public static final int DRIVE_R1 = 12;
+        public static final int DRIVE_R2 = 13;
+        public static final int DRIVE_R3 = 14;
+    }
+
     public final static class DriveTrain {
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative; // TODO add encoders
@@ -30,16 +40,6 @@ public final class Constants {
         
         public final static double AUTON_DRIVE_SPEED = 0.75; // TODO test
         public final static double AUTON_ROTATE_SPEED = 0.75; // TODO test
-    }
-
-    public final static class MotorIDs {
-        public static final int MOTOR_L1 = 1;
-        public static final int MOTOR_L2 = 3;
-        public static final int MOTOR_L3 = 4;
-
-        public static final int MOTOR_R1 = 12;
-        public static final int MOTOR_R2 = 13;
-        public static final int MOTOR_R3 = 14;
     }
 
     public final static class Controller {

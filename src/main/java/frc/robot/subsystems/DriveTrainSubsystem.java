@@ -24,13 +24,13 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 	// this is the subsystem that interacts with the drivetrain motors
 
-	private final WPI_TalonSRX motorL1 = new WPI_TalonSRX(MotorIDs.MOTOR_L1);
-	private final WPI_TalonSRX motorL2 = new WPI_TalonSRX(MotorIDs.MOTOR_L2);
-	private final WPI_TalonSRX motorL3 = new WPI_TalonSRX(MotorIDs.MOTOR_L3);
+	private final WPI_TalonSRX motorL1 = new WPI_TalonSRX(MotorIDs.DRIVE_L1);
+	private final WPI_TalonSRX motorL2 = new WPI_TalonSRX(MotorIDs.DRIVE_L2);
+	private final WPI_TalonSRX motorL3 = new WPI_TalonSRX(MotorIDs.DRIVE_L3);
 
-	private final WPI_TalonSRX motorR1 = new WPI_TalonSRX(MotorIDs.MOTOR_R1);
-	private final WPI_TalonSRX motorR2 = new WPI_TalonSRX(MotorIDs.MOTOR_R2);
-	private final WPI_TalonSRX motorR3 = new WPI_TalonSRX(MotorIDs.MOTOR_R3);
+	private final WPI_TalonSRX motorR1 = new WPI_TalonSRX(MotorIDs.DRIVE_R1);
+	private final WPI_TalonSRX motorR2 = new WPI_TalonSRX(MotorIDs.DRIVE_R2);
+	private final WPI_TalonSRX motorR3 = new WPI_TalonSRX(MotorIDs.DRIVE_R3);
 
 	private final SpeedControllerGroup speedLeft = new SpeedControllerGroup(motorL1, motorL2, motorL3); // all left motors in one group
 	private final SpeedControllerGroup speedRight = new SpeedControllerGroup(motorR1, motorR2, motorR3); // all right motors in another
