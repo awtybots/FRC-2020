@@ -29,6 +29,10 @@ public final class Constants {
         public static final int MOTOR_R3 = 14;
     }
 
+    public final static class PID {
+        public static final PIDController DRIVE_MOTORS = new PIDController(1, 1, 1);
+    }
+
     public final static class Controller {
         // which stick (left or right) to use for each control of arcade drive (speed and rotation)
         public static final Hand SPEED_HAND = Hand.kLeft;

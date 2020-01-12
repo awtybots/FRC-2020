@@ -13,14 +13,13 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorIDs;
 
-public class DriveTrainSubsystem extends SubsystemBase {//PIDSubsystem { 
+public class DriveTrainSubsystem extends SubsystemBase { 
 
-	// this is the subsystem that interacts with the motors
+	// this is the subsystem that interacts with the drivetrain motors
 
 	private final WPI_TalonSRX motorL1 = new WPI_TalonSRX(MotorIDs.MOTOR_L1);
 	private final WPI_TalonSRX motorL2 = new WPI_TalonSRX(MotorIDs.MOTOR_L2);
@@ -45,7 +44,11 @@ public class DriveTrainSubsystem extends SubsystemBase {//PIDSubsystem {
 	};
 
 	public DriveTrainSubsystem() {
-		forEachMotor((motor) -> motor.setNeutralMode(Constants.BRAKE_MODE)); // sets the brake mode for all motors (called NeutralMode)
+		forEachMotor((motor) -> {
+			motor.configFactoryDefault();
+			motor.setNeutralMode(Constants.BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
+			
+		});
 	}
 
 	@Override
@@ -68,18 +71,4 @@ public class DriveTrainSubsystem extends SubsystemBase {//PIDSubsystem {
 			consumer.accept(motor);
 		}
 	}
-
-	/*
-	@Override
-	protected void useOutput(double output, double setpoint) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected double getMeasurement() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	*/
 }
