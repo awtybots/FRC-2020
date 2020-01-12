@@ -18,16 +18,18 @@ public class Auton extends ParallelCommandGroup {
         );
     }
 
-    private CommandGroupBase getAutonSequence(DriveTrainSubsystem driveTrainSubsystem,AutonType autonType) {
+    private CommandGroupBase getAutonSequence(DriveTrainSubsystem driveTrainSubsystem, AutonType autonType) {
         switch(autonType) {
-            case AUTON_1:
+            case SQUARE:
                 return sequence(
-                    //new DriveInches(controller, measurementSource, setpoint, useOutput, requirements)
-                    // list of commands to run consecutively
-                    // drive forward x inches
-                    // turn y degrees
-                    // shoot
-                    // etc...
+                    new DriveInches(driveTrainSubsystem, 24),
+                    new RotateDegrees(driveTrainSubsystem, 90),
+                    new DriveInches(driveTrainSubsystem, 24),
+                    new RotateDegrees(driveTrainSubsystem, 90),
+                    new DriveInches(driveTrainSubsystem, 24),
+                    new RotateDegrees(driveTrainSubsystem, 90),
+                    new DriveInches(driveTrainSubsystem, 24),
+                    new RotateDegrees(driveTrainSubsystem, 90)
                 );
             default:
                 return sequence();
@@ -36,6 +38,6 @@ public class Auton extends ParallelCommandGroup {
 
     public enum AutonType {
         DO_NOTHING,
-        AUTON_1
+        SQUARE
     }
 }
