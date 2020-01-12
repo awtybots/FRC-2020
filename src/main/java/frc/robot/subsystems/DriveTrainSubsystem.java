@@ -13,11 +13,12 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorIDs;
 
-public class DriveTrainSubsystem extends SubsystemBase { 
+public class DriveTrainSubsystem extends SubsystemBase {//PIDSubsystem { 
 
 	// this is the subsystem that interacts with the motors
 
@@ -56,6 +57,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		differentialDrive.arcadeDrive(xSpeed, zRotation); // DifferentialDrive has a built-in arcadeDrive function
 	}
 
+
+
 	public void stop() {
 		forEachMotor((motor) -> motor.stopMotor()); // stops all motors
 	}
@@ -65,4 +68,18 @@ public class DriveTrainSubsystem extends SubsystemBase {
 			consumer.accept(motor);
 		}
 	}
+
+	/*
+	@Override
+	protected void useOutput(double output, double setpoint) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected double getMeasurement() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	*/
 }
