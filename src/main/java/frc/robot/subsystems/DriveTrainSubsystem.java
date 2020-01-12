@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import java.util.function.Consumer;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -47,10 +46,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		motorR3,
 	};
 
-	private double driveInchesGoal;
 	private Direction driveInchesDirection;
 	private double driveInchesProgress;
-	private double rotateDegreesGoal;
 	private Direction rotateDegreesDirection;
 	private double rotateDegreesProgress;
 
@@ -79,7 +76,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 
 	public void driveInchesInitialize(double inches) {
-		driveInchesGoal = Math.abs(inches);
 		driveInchesDirection = (inches > 0) ? Direction.FORWARD : Direction.BACKWARD;
 		driveInchesProgress = 0;
 
@@ -104,7 +100,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 
 	public void rotateDegreesInitialize(double degrees) {
-		rotateDegreesGoal = Math.abs(degrees);
 		rotateDegreesDirection = (degrees > 0) ? Direction.CLOCKWISE : Direction.COUNTER_CLOCKWISE;
 		rotateDegreesProgress = 0;
 

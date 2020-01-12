@@ -12,7 +12,7 @@ public class RotateDegrees extends ProfiledPIDCommand {
 		super(
             DriveTrain.PID_CONTROLLER, // PIDController with P, I, D, and Trapezoid constants
             driveTrainSubsystem::rotateDegreesGetMeasurement, // PID input supplier
-            degrees, // PID goal
+            Math.abs(degrees), // PID goal
             driveTrainSubsystem::rotateDegreesUseOutput, // PID output consumer
             driveTrainSubsystem // requirements
         );

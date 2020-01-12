@@ -44,9 +44,6 @@ public class Robot extends TimedRobot {
 		intakeSubsystem = new IntakeSubsystem();
 		shooterSubsystem = new ShooterSubsystem();
 
-		// Commands
-		teleopCommand = new Teleop(xboxController, driveTrainSubsystem); // overlaying teleop command for the teleop period
-
 		// Button Mappings
 
 
@@ -90,6 +87,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		if(autonCommand != null) autonCommand.cancel(); // finish auton
 
+		teleopCommand = new Teleop(xboxController, driveTrainSubsystem); // overlaying teleop command for the teleop period
 		teleopCommand.schedule(); // start teleop
 	}
 
