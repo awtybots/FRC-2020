@@ -1,27 +1,17 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
+import frc.robot.Constants.DriveTrain;
 import frc.robot.subsystems.DriveTrainSubsystem;
 
-public class DriveInches extends CommandBase {
+public class DriveInches extends ProfiledPIDCommand {
 
     private DriveTrainSubsystem driveTrainSubsystem;
-    private double inches;
 
     public DriveInches(DriveTrainSubsystem driveTrainSubsystem, double inches) {
-		addRequirements(driveTrainSubsystem);
+        super(DriveTrain.PID_CONTROLLER, driveTrainSubsystem::driveInchesGetMeasurement, inches, driveTrainSubsystem::driveInchesUseOutput, driveTrainSubsystem);
         this.driveTrainSubsystem = driveTrainSubsystem;
-        this.inches = inches;
-    }
-
-    @Override
-    public void initialize() {
         driveTrainSubsystem.driveInchesInitialize(inches);
-    }
-
-    @Override
-    public void execute() {
-        driveTrainSubsystem.driveInchesExecute();
     }
 
     @Override
@@ -31,7 +21,7 @@ public class DriveInches extends CommandBase {
 
     @Override
 	public boolean isFinished() {
-		return driveTrainSubsystem.driveInchesIsFinished();
+		return getController().atGoal();
 	}
 
 }

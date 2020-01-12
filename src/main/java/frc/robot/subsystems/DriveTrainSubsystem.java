@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorIDs;
 import frc.robot.Constants.DriveTrain;
@@ -87,16 +88,19 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		timer.start();
 		lastTime = 0;
 	}
-	public void driveInchesExecute() {
-		// multiply turn speed by 1 or -1 depending on direction
-		arcadeDrive(DriveTrain.AUTON_DRIVE_SPEED * driveInchesDirection.getMultiplier(), 0); // TODO trapezoidal speed
-
+	public double driveInchesGetMeasurement() {
 		double currentTime = timer.get();
 		double elapsedTime = currentTime - lastTime;
 		lastTime = currentTime;
 		
 		double inchesTraveled = getAverageInchesPerSecond() * elapsedTime;
 		driveInchesProgress += inchesTraveled;
+
+		return driveInchesProgress;
+	}
+	public void driveInchesUseOutput(double output, TrapezoidProfile.State state) {
+		// multiply turn speed by 1 or -1 depending on directio
+		arcadeDrive(DriveTrain.AUTON_DRIVE_SPEED * output * driveInchesDirection.getMultiplier(), 0);
 	}
 	public boolean driveInchesIsFinished() {
 		return driveInchesProgress >= driveInchesGoal;

@@ -22,7 +22,7 @@ public final class Constants {
 
         public final static double MAX_ROBOT_VELOCITY = 36; // inches per second
         public final static double MAX_ROBOT_ACCELERATION = 18; // inches per second per second
-        public final static ProfiledPIDController DRIVETRAIN_PID_CONTROLLER = new ProfiledPIDController(0.5, 0, 0, new TrapezoidProfile.Constraints(MAX_ROBOT_VELOCITY, MAX_ROBOT_ACCELERATION)); // TODO tune
+        public final static ProfiledPIDController PID_CONTROLLER = new ProfiledPIDController(0.5, 0, 0, new TrapezoidProfile.Constraints(MAX_ROBOT_VELOCITY, MAX_ROBOT_ACCELERATION)); // TODO tune
         
         public final static double ENCODER_UNITS = 4096;
         public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI; // TODO tune
