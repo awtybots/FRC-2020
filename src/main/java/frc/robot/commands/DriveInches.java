@@ -9,7 +9,13 @@ public class DriveInches extends ProfiledPIDCommand {
     private DriveTrainSubsystem driveTrainSubsystem;
 
     public DriveInches(DriveTrainSubsystem driveTrainSubsystem, double inches) {
-        super(DriveTrain.PID_CONTROLLER, driveTrainSubsystem::driveInchesGetMeasurement, inches, driveTrainSubsystem::driveInchesUseOutput, driveTrainSubsystem);
+        super(
+            DriveTrain.PID_CONTROLLER, // PIDController with P, I, D, and Trapezoid constants
+            driveTrainSubsystem::driveInchesGetMeasurement, // PID input supplier
+            inches, // PID goal
+            driveTrainSubsystem::driveInchesUseOutput, // PID output consumer
+            driveTrainSubsystem // requirements
+        );
         this.driveTrainSubsystem = driveTrainSubsystem;
         driveTrainSubsystem.driveInchesInitialize(inches);
     }
