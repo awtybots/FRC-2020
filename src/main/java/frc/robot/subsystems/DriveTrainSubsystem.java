@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorIDs;
-import frc.robot.Constants.Values;
+import frc.robot.Constants.DriveTrain;
 
 public class DriveTrainSubsystem extends SubsystemBase { 
 
@@ -61,16 +61,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
 			motor.set(ControlMode.PercentOutput, 0); // start all motors at 0% speed to stop the blinking
 
 			motor.configFactoryDefault();
-			motor.setNeutralMode(Values.BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
+			motor.setNeutralMode(DriveTrain.BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
 			motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 			motor.setSensorPhase(true);
 		});
 	}
 
-	@Override
-	public void periodic() {
-
-	}
 
 
 	public void arcadeDrive(double speed, double rotation) {
@@ -79,6 +75,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	public void stop() {
 		forEachMotor((motor) -> motor.stopMotor()); // stops all motors
 	}
+
 
 
 	public void driveInchesInitialize(double inches) {
@@ -92,7 +89,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	}
 	public void driveInchesExecute() {
 		// multiply turn speed by 1 or -1 depending on direction
-		arcadeDrive(Values.AUTON_DRIVE_SPEED * driveInchesDirection.getMultiplier(), 0); // TODO trapezoidal speed
+		arcadeDrive(DriveTrain.AUTON_DRIVE_SPEED * driveInchesDirection.getMultiplier(), 0); // TODO trapezoidal speed
 
 		double currentTime = timer.get();
 		double elapsedTime = currentTime - lastTime;
@@ -118,19 +115,20 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	}
 	public void rotateDegreesExecute() {
 		// multiply turn speed by 1 or -1 depending on direction
-		arcadeDrive(0, Values.AUTON_ROTATE_SPEED * rotateDegreesDirection.getMultiplier()); // TODO trapezoidal turning
+		arcadeDrive(0, DriveTrain.AUTON_ROTATE_SPEED * rotateDegreesDirection.getMultiplier()); // TODO trapezoidal turning
 
 		double currentTime = timer.get();
 		double elapsedTime = currentTime - lastTime;
 		lastTime = currentTime;
 
 		double inchesRotated = getAverageInchesPerSecond() * elapsedTime;
-		double degreesRotated = inchesRotated / Values.ROBOT_CIRMCUMFERENCE * 360.0;
+		double degreesRotated = inchesRotated / DriveTrain.ROBOT_CIRMCUMFERENCE * 360.0;
 		rotateDegreesProgress += degreesRotated;
 	}
 	public boolean rotateDegreesIsFinished() {
 		return rotateDegreesProgress >= rotateDegreesGoal;
 	}
+
 
 
 	public enum Direction {
@@ -151,6 +149,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	}
 
 
+
 	private double getAverageInchesPerSecond() { // utility function to get average inches per second from all motors
 		double totalUnitsPer100ms = 0;
 		for(WPI_TalonSRX motor : motors) {
@@ -159,9 +158,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		// encoders give motor velocity in units per 100ms, so multiply by 10 for units per second and divide by units for revs per second
 		// multiply revolutions per second by seconds elapsed and wheel circumference for distance traveled
 		double averageUnitsPer100ms = totalUnitsPer100ms / motors.length;
-		double revolutionsPerSecond = averageUnitsPer100ms * 10.0 / Values.ENCODER_UNITS;
-		return revolutionsPerSecond * Values.WHEEL_CIRCUMFERENCE;
+		double revolutionsPerSecond = averageUnitsPer100ms * 10.0 / DriveTrain.ENCODER_UNITS;
+		return revolutionsPerSecond * DriveTrain.WHEEL_CIRCUMFERENCE;
 	}
+
 
 
 	private void forEachMotor(Consumer<WPI_TalonSRX> consumer) { // utility function to do something for every motor
