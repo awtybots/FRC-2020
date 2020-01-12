@@ -99,11 +99,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		return driveInchesProgress;
 	}
 	public void driveInchesUseOutput(double output, TrapezoidProfile.State state) {
-		// multiply turn speed by 1 or -1 depending on directio
 		arcadeDrive(DriveTrain.AUTON_DRIVE_SPEED * output * driveInchesDirection.getMultiplier(), 0);
-	}
-	public boolean driveInchesIsFinished() {
-		return driveInchesProgress >= driveInchesGoal;
 	}
 
 
@@ -117,10 +113,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		timer.start();
 		lastTime = 0;
 	}
-	public void rotateDegreesExecute() {
-		// multiply turn speed by 1 or -1 depending on direction
-		arcadeDrive(0, DriveTrain.AUTON_ROTATE_SPEED * rotateDegreesDirection.getMultiplier()); // TODO trapezoidal turning
-
+	public double rotateDegreesGetMeasurement() {
 		double currentTime = timer.get();
 		double elapsedTime = currentTime - lastTime;
 		lastTime = currentTime;
@@ -128,9 +121,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double inchesRotated = getAverageInchesPerSecond() * elapsedTime;
 		double degreesRotated = inchesRotated / DriveTrain.ROBOT_CIRMCUMFERENCE * 360.0;
 		rotateDegreesProgress += degreesRotated;
+
+		return rotateDegreesProgress;
 	}
-	public boolean rotateDegreesIsFinished() {
-		return rotateDegreesProgress >= rotateDegreesGoal;
+	public void rotateDegreesUseOutput(double output, TrapezoidProfile.State state) {
+		arcadeDrive(0, DriveTrain.AUTON_ROTATE_SPEED * output * rotateDegreesDirection.getMultiplier());
 	}
 
 

@@ -1,29 +1,25 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
+import frc.robot.Constants.DriveTrain;
 import frc.robot.subsystems.DriveTrainSubsystem;
 
-public class RotateDegrees extends CommandBase {
+public class RotateDegrees extends ProfiledPIDCommand {
 
     private DriveTrainSubsystem driveTrainSubsystem;
-    private double degrees;
 
     public RotateDegrees(DriveTrainSubsystem driveTrainSubsystem, double degrees) {
-		addRequirements(driveTrainSubsystem);
+		super(
+            DriveTrain.PID_CONTROLLER, // PIDController with P, I, D, and Trapezoid constants
+            driveTrainSubsystem::rotateDegreesGetMeasurement, // PID input supplier
+            degrees, // PID goal
+            driveTrainSubsystem::rotateDegreesUseOutput, // PID output consumer
+            driveTrainSubsystem // requirements
+        );
         this.driveTrainSubsystem = driveTrainSubsystem;
-        this.degrees = degrees;
-    }
-
-    @Override
-    public void initialize() {
         driveTrainSubsystem.rotateDegreesInitialize(degrees);
     }
-
-    @Override
-    public void execute() {
-        driveTrainSubsystem.rotateDegreesExecute();
-    }
-
+    
     @Override
 	public void end(boolean interrupted) {
         driveTrainSubsystem.stop();
@@ -31,7 +27,7 @@ public class RotateDegrees extends CommandBase {
 
     @Override
 	public boolean isFinished() {
-		return driveTrainSubsystem.rotateDegreesIsFinished();
+		return getController().atGoal();
 	}
 
 }
