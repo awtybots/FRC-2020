@@ -7,16 +7,19 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 public final class Constants {
 
-    public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
-
-    public final static class Ports {
-        public static final int XBOX_CONTROLLER = 0;
+    public final static class Values {
+        public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
+        public final static FeedbackDevice DRIVE_MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative;
+        public final static double ENCODER_UNITS = 4096;
+        public final static double AUTON_DRIVE_SPEED = 0.75;
+        public final static double AUTON_TURN_SPEED = 0.75;
     }
 
     public final static class MotorIDs {
@@ -29,13 +32,9 @@ public final class Constants {
         public static final int MOTOR_R3 = 14;
     }
 
-    public final static class PID {
-        public static final PIDController DRIVE_MOTORS = new PIDController(1, 1, 1);
-    }
-
     public final static class Controller {
-        // which stick (left or right) to use for each control of arcade drive (speed and rotation)
-        public static final Hand SPEED_HAND = Hand.kLeft;
+		public static final int PORT = 0;
+        public static final Hand SPEED_HAND = Hand.kLeft; // which stick (left or right) to use for each control of arcade drive (speed and rotation)
         public static final Hand ROTATION_HAND = Hand.kRight;
     }
 }

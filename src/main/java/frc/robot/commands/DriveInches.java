@@ -1,16 +1,37 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleConsumer;
-import java.util.function.DoubleSupplier;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveTrainSubsystem;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+public class DriveInches extends CommandBase {
 
-public class DriveInches extends PIDCommand {
+    private DriveTrainSubsystem driveTrainSubsystem;
+    private double inches;
 
-    public DriveInches(PIDController controller, DoubleSupplier measurementSource, double setpoint, DoubleConsumer useOutput, Subsystem[] requirements) {
-        super(controller, measurementSource, setpoint, useOutput, requirements);
+    public DriveInches(DriveTrainSubsystem driveTrainSubsystem, double inches) {
+        this.driveTrainSubsystem = driveTrainSubsystem;
+        this.inches = inches;
+		addRequirements(driveTrainSubsystem);
     }
+
+    @Override
+    public void initialize() {
+        driveTrainSubsystem.driveInchesInitialize(inches);
+    }
+
+    @Override
+    public void execute() {
+        driveTrainSubsystem.driveInchesExecute();
+    }
+
+    @Override
+	public void end(boolean interrupted) {
+        driveTrainSubsystem.stop();
+    }
+
+    @Override
+	public boolean isFinished() {
+		return driveTrainSubsystem.driveInchesIsFinished();
+	}
 
 }

@@ -9,13 +9,16 @@ package frc.robot.subsystems;
 
 import java.util.function.Consumer;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.MotorIDs;
+import frc.robot.Constants.Values;
 
 public class DriveTrainSubsystem extends SubsystemBase { 
 
@@ -43,11 +46,25 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		motorR3,
 	};
 
+
+
+	private double driveInchesGoal;
+	private double driveInchesProgress = 0;
+	private double turnDegreesGoal;
+	private double turnDegreesProgress = 0;
+	private Timer timer;
+	private double lastTime;
+
+
+
 	public DriveTrainSubsystem() {
 		forEachMotor((motor) -> {
+			motor.set(ControlMode.PercentOutput, 0); // start all motors at 0% speed to stop the blinking
+
 			motor.configFactoryDefault();
-			motor.setNeutralMode(Constants.BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
-			
+			motor.setNeutralMode(Values.BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
+			motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+			motor.setSensorPhase(true);
 		});
 	}
 
@@ -56,8 +73,34 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 	}
 
-	public void arcadeDrive(double xSpeed, double zRotation) {
-		differentialDrive.arcadeDrive(xSpeed, zRotation); // DifferentialDrive has a built-in arcadeDrive function
+	public void arcadeDrive(double speed, double rotation) {
+		differentialDrive.arcadeDrive(speed, rotation); // DifferentialDrive has a built-in arcadeDrive function
+	}
+
+	public void driveInchesInitialize(double inches) {
+		driveInchesGoal = inches;
+		driveInchesProgress = 0;
+		timer = new Timer();
+		timer.start();
+		lastTime = timer.get();
+
+		arcadeDrive(Values.AUTON_DRIVE_SPEED, 0);
+	}
+
+	public void driveInchesExecute() {
+		final double[] motorVelocityAverage = new double[]{0}; // using an array to bypass the arrow function "must be final" error
+		forEachMotor((motor) -> motorVelocityAverage[0] += motor.getSelectedSensorVelocity());
+		motorVelocityAverage[0] /= motors.length;
+
+		double currentTime = timer.get();
+		double elapsedTime = currentTime - lastTime;
+		lastTime = currentTime;
+
+		driveInchesProgress += elapsedTime * motorVelocityAverage[0] * 10.0 / Values.ENCODER_UNITS;
+	}
+
+	public boolean driveInchesIsFinished() {
+		return driveInchesProgress > driveInchesGoal;
 	}
 
 

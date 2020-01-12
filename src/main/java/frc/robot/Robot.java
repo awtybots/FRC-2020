@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
 		}
 
 		// Subsystems
-		xboxController = new XboxController(Ports.XBOX_CONTROLLER); // xbox controller has no family so subsystems adopted it
+		xboxController = new XboxController(Controller.PORT); // xbox controller has no family so subsystems adopted it
 		driveTrainSubsystem = new DriveTrainSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
 		shooterSubsystem = new ShooterSubsystem();
