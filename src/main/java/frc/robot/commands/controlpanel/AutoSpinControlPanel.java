@@ -16,9 +16,8 @@ public class AutoSpinControlPanel extends CommandBase {
 
     private PanelColor goalColor;
 
-    private PanelColor startColor;
-    private boolean wasOnStartColor;
-    private int startColorCrossings;
+    private PanelColor lastColor;
+    private int colorChanges;
 
     public AutoSpinControlPanel(ControlPanelSpinnerSubsystem spinner, ColorSensorSubsystem sensor) {
         addRequirements(spinner, sensor);
@@ -34,9 +33,8 @@ public class AutoSpinControlPanel extends CommandBase {
             goalColor = PanelColor.fromChar(gameData.charAt(0));
         } else {
             controlType = ControlType.ROTATION_CONTROL;
-            startColor = sensor.getCurrentColor();
-            wasOnStartColor = true;
-            startColorCrossings = 0;
+            lastColor = sensor.getCurrentColor();
+            colorChanges = 0;
         }
 
         spinner.toggle(true);
@@ -45,12 +43,11 @@ public class AutoSpinControlPanel extends CommandBase {
     @Override
     public void execute() {
         if(controlType == ControlType.ROTATION_CONTROL) {
-            boolean isOnStartColor = sensor.getCurrentColor() == startColor;
-            if(wasOnStartColor != isOnStartColor) {
-                wasOnStartColor = isOnStartColor;
-                if(isOnStartColor) {
-                    startColorCrossings++;
-                }
+            PanelColor currentColor = sensor.getCurrentColor();
+            if(currentColor != lastColor) {
+                colorChanges++;
+                lastColor = currentColor;
+                System.out.println("color changes: "+colorChanges);
             }
         }
     }
@@ -63,7 +60,7 @@ public class AutoSpinControlPanel extends CommandBase {
     @Override
     public boolean isFinished() {
         if(controlType == ControlType.ROTATION_CONTROL) {
-            return startColorCrossings >= ControlPanelSpinner.COLOR_CROSSINGS;
+            return colorChanges >= ControlPanelSpinner.COLOR_CHANGES;
         } else {
             return sensor.getCurrentColor() == goalColor;
         }

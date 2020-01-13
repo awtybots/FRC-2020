@@ -63,8 +63,8 @@ public final class Constants {
     }
 
     public final static class ControlPanelSpinner {
-        public final static double MOTOR_SPEED = 0.5;
-        public final static int COLOR_CROSSINGS = 7;
+        public final static double MOTOR_SPEED = 0;
+        public final static int COLOR_CHANGES = 25;
     }
 
     public final static class Controller {

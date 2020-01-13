@@ -31,7 +31,7 @@ public class ColorSensorSubsystem extends SubsystemBase {
                 break;
             }
         }
-
+        System.out.println(currentColor.getName());
     }
 
     public PanelColor getCurrentColor() {
