@@ -25,6 +25,8 @@ public final class Constants {
         public static final int DRIVE_R2 = 13;
         public static final int DRIVE_R3 = 14;
 
+        public static final int INTAKE = 2;
+
         public static final int CONTROL_PANEL_SPINNER = 5;
     }
 
@@ -42,6 +44,10 @@ public final class Constants {
         
         public final static double AUTON_DRIVE_SPEED = 0.75; // TODO test
         public final static double AUTON_ROTATE_SPEED = 0.75; // TODO test
+    }
+
+    public final static class Intake {
+        public final static double MOTOR_SPEED = 0.5;
     }
 
     public final static class ColorSensor {
