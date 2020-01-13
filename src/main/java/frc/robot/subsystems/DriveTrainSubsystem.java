@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants.MotorIDs;
 import frc.robot.Constants.DriveTrain;
 
@@ -68,10 +67,16 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 
 	public void arcadeDrive(double speed, double rotation) {
-		differentialDrive.arcadeDrive(MathUtil.clamp(-speed, -1, 1), MathUtil.clamp(rotation, -1, 1));
+		differentialDrive.arcadeDrive(-speed, rotation);
 	}
 	public void stop() {
 		arcadeDrive(0, 0);
+	}
+
+
+
+	public void teleopDrive(double speed, double rotation) {
+		arcadeDrive(speed * DriveTrain.TELEOP_DRIVE_SPEED, rotation * DriveTrain.TELEOP_ROTATE_SPEED);
 	}
 
 

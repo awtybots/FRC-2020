@@ -42,8 +42,11 @@ public final class Constants {
         public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI; // TODO tune
         public final static double ROBOT_CIRMCUMFERENCE = 100; // this the the distance (in inches) each wheel travels when the robot spins one time around its center TODO tune
         
-        public final static double AUTON_DRIVE_SPEED = 0.75; // TODO test
-        public final static double AUTON_ROTATE_SPEED = 0.75; // TODO test
+        public final static double AUTON_DRIVE_SPEED = 0.3; // TODO test
+        public final static double AUTON_ROTATE_SPEED = 0.3; // TODO test
+
+		public static final double TELEOP_DRIVE_SPEED = 0.5; // TODO temp
+		public static final double TELEOP_ROTATE_SPEED = 0.5;
     }
 
     public final static class Intake {
