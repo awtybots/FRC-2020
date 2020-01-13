@@ -6,7 +6,11 @@ import frc.robot.subsystems.DriveTrainSubsystem;
 
 public class RotateDegrees extends ProfiledPIDCommand {
 
-    private final DriveTrainSubsystem driveTrainSubsystem;
+    // see these links:
+    //  -  https://docs.wpilib.org/en/latest/docs/software/advanced-control/controllers/pidcontroller.html
+    //  -  https://docs.wpilib.org/en/latest/docs/software/commandbased/profilepid-subsystems-commands.html
+
+    // ProfiledPIDCommand takes in values through it's super constructor and handles the command's initialize, execute, and end functions
 
     public RotateDegrees(DriveTrainSubsystem driveTrainSubsystem, double degrees) {
 		super(
@@ -14,15 +18,9 @@ public class RotateDegrees extends ProfiledPIDCommand {
             driveTrainSubsystem::rotateDegreesGetMeasurement, // PID input supplier
             Math.abs(degrees), // PID goal
             driveTrainSubsystem::rotateDegreesUseOutput, // PID output consumer
-            driveTrainSubsystem // requirements
+            driveTrainSubsystem // required subsystems
         );
-        this.driveTrainSubsystem = driveTrainSubsystem;
         driveTrainSubsystem.rotateDegreesInitialize(degrees);
-    }
-    
-    @Override
-	public void end(boolean interrupted) {
-        driveTrainSubsystem.stop();
     }
 
     @Override

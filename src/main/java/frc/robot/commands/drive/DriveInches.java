@@ -6,7 +6,11 @@ import frc.robot.subsystems.DriveTrainSubsystem;
 
 public class DriveInches extends ProfiledPIDCommand {
 
-    private final DriveTrainSubsystem driveTrainSubsystem;
+    // see these links:
+    //  -  https://docs.wpilib.org/en/latest/docs/software/advanced-control/controllers/pidcontroller.html
+    //  -  https://docs.wpilib.org/en/latest/docs/software/commandbased/profilepid-subsystems-commands.html
+
+    // ProfiledPIDCommand takes in values through it's super constructor and handles the command's initialize, execute, and end functions
 
     public DriveInches(DriveTrainSubsystem driveTrainSubsystem, double inches) {
         super(
@@ -14,15 +18,9 @@ public class DriveInches extends ProfiledPIDCommand {
             driveTrainSubsystem::driveInchesGetMeasurement, // PID input supplier
             Math.abs(inches), // PID goal
             driveTrainSubsystem::driveInchesUseOutput, // PID output consumer
-            driveTrainSubsystem // requirements
+            driveTrainSubsystem // required subsystems
         );
-        this.driveTrainSubsystem = driveTrainSubsystem;
         driveTrainSubsystem.driveInchesInitialize(inches);
-    }
-
-    @Override
-	public void end(boolean interrupted) {
-        driveTrainSubsystem.stop();
     }
 
     @Override
