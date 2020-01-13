@@ -10,6 +10,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
@@ -20,10 +21,11 @@ public final class Constants {
         public static final int DRIVE_L1 = 1;
         public static final int DRIVE_L2 = 3;
         public static final int DRIVE_L3 = 4;
-
         public static final int DRIVE_R1 = 12;
         public static final int DRIVE_R2 = 13;
         public static final int DRIVE_R3 = 14;
+
+        public static final int CONTROL_PANEL_SPINNER = 5;
     }
 
     public final static class DriveTrain {
@@ -40,6 +42,19 @@ public final class Constants {
         
         public final static double AUTON_DRIVE_SPEED = 0.75; // TODO test
         public final static double AUTON_ROTATE_SPEED = 0.75; // TODO test
+    }
+
+    public final static class ColorSensor {
+        public final static I2C.Port PORT = I2C.Port.kOnboard;
+
+        public final static double[] RED     = new double[]{1.00, 0.00, 0.00}; // rgb array [0 - 1]
+        public final static double[] GREEN   = new double[]{0.00, 1.00, 0.00};
+        public final static double[] BLUE    = new double[]{0.00, 1.00, 1.00};
+        public final static double[] YELLOW  = new double[]{1.00, 1.00, 0.00};
+    }
+
+    public final static class ControlPanelSpinner {
+        public final static double MOTOR_SPEED = 0.5;
     }
 
     public final static class Controller {

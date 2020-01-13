@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.*;
-import frc.robot.commands.*;
-import frc.robot.commands.Auton.AutonType;
+import frc.robot.commands.main.*;
+import frc.robot.commands.main.Auton.AutonType;
 import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
@@ -23,6 +23,8 @@ public class Robot extends TimedRobot {
 	private DriveTrainSubsystem driveTrainSubsystem;
 	private IntakeSubsystem intakeSubsystem;
 	private ShooterSubsystem shooterSubsystem;
+	private ColorSensorSubsystem colorSensorSubsystem;
+	private ControlPanelSpinnerSubsystem controlPanelSpinnerSubsystem;
 
 	private Teleop teleopCommand;
 	private Auton autonCommand;
@@ -39,10 +41,20 @@ public class Robot extends TimedRobot {
 		}
 
 		// Subsystems
-		xboxController = new XboxController(Controller.PORT); // xbox controller has no family so subsystems adopted it
+		xboxController = new XboxController(Controller.PORT);
 		driveTrainSubsystem = new DriveTrainSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
 		shooterSubsystem = new ShooterSubsystem();
+		colorSensorSubsystem = new ColorSensorSubsystem();
+		controlPanelSpinnerSubsystem = new ControlPanelSpinnerSubsystem();
+		
+		CommandScheduler.getInstance().registerSubsystem(
+			driveTrainSubsystem,
+			intakeSubsystem,
+			shooterSubsystem,
+			colorSensorSubsystem,
+			controlPanelSpinnerSubsystem
+		);
 
 		// Button Mappings
 
