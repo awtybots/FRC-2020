@@ -58,5 +58,20 @@ public class ColorSensorSubsystem extends SubsystemBase {
         public String getName() {
             return name;
         }
+
+        public static PanelColor fromChar(char c) {
+            switch(c) {
+                case 'R':
+                    return RED;
+                case 'G':
+                    return GREEN;
+                case 'B':
+                    return BLUE;
+                case 'Y':
+                    return YELLOW;
+                default:
+                    return null;
+            }
+        }
     }
 }
