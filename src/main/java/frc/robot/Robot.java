@@ -61,16 +61,12 @@ public class Robot extends TimedRobot {
 		);
 
 		// Button Mappings
-		JoystickButton buttonA = new JoystickButton(xboxController, XboxController.Button.kA.value);
-		JoystickButton buttonB = new JoystickButton(xboxController, XboxController.Button.kB.value);
-		JoystickButton buttonX = new JoystickButton(xboxController, XboxController.Button.kX.value);
-
-		buttonA
+		getButton("A")
 			.whenPressed(new ToggleControlPanelSpinner(controlPanelSpinnerSubsystem, true))
 			.whenReleased(new ToggleControlPanelSpinner(controlPanelSpinnerSubsystem, false));
-		buttonB
+		getButton("B")
 			.whenPressed(new AutoSpinControlPanel(controlPanelSpinnerSubsystem, colorSensorSubsystem));
-		buttonX
+		getButton("X")
 			.whenPressed(new ToggleIntake(intakeSubsystem));
 	}
 
@@ -129,5 +125,9 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testPeriodic() {
 
+	}
+
+	private JoystickButton getButton(String name) {
+		return new JoystickButton(xboxController, XboxController.Button.valueOf("k"+name).value);
 	}
 }
