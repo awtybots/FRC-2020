@@ -1,8 +1,10 @@
-package frc.robot.commands;
+package frc.robot.commands.main;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.commands.drive.DriveInches;
+import frc.robot.commands.drive.RotateDegrees;
 import frc.robot.subsystems.DriveTrainSubsystem;
 
 public class Auton extends ParallelCommandGroup {
