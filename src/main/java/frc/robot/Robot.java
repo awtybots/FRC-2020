@@ -11,15 +11,25 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.*;
-import frc.robot.commands.*;
-import frc.robot.commands.Auton.AutonType;
+import frc.robot.commands.controlpanel.AutoSpinControlPanel;
+import frc.robot.commands.controlpanel.ToggleControlPanelSpinner;
+import frc.robot.commands.intake.ToggleIntake;
+import frc.robot.commands.main.*;
+import frc.robot.commands.main.Auton.AutonType;
 import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
 
 	private XboxController xboxController;
+
 	private DriveTrainSubsystem driveTrainSubsystem;
+	private IntakeSubsystem intakeSubsystem;
+	private ShooterSubsystem shooterSubsystem;
+	private ColorSensorSubsystem colorSensorSubsystem;
+	private ControlPanelSpinnerSubsystem controlPanelSpinnerSubsystem;
+
 	private Teleop teleopCommand;
 	private Auton autonCommand;
 
@@ -35,15 +45,29 @@ public class Robot extends TimedRobot {
 		}
 
 		// Subsystems
-		xboxController = new XboxController(Ports.FIRST_DRIVER); // xbox controller has no family so subsystems adopted it
+		xboxController = new XboxController(Controller.PORT);
 		driveTrainSubsystem = new DriveTrainSubsystem();
-
-		// Commands
-		teleopCommand = new Teleop(xboxController, driveTrainSubsystem); // overlaying teleop command for the teleop period
+		intakeSubsystem = new IntakeSubsystem();
+		shooterSubsystem = new ShooterSubsystem();
+		colorSensorSubsystem = new ColorSensorSubsystem();
+		controlPanelSpinnerSubsystem = new ControlPanelSpinnerSubsystem();
+		
+		CommandScheduler.getInstance().registerSubsystem(
+			driveTrainSubsystem,
+			intakeSubsystem,
+			shooterSubsystem,
+			colorSensorSubsystem,
+			controlPanelSpinnerSubsystem
+		);
 
 		// Button Mappings
-
-
+		getButton("A")
+			.whenPressed(new ToggleControlPanelSpinner(controlPanelSpinnerSubsystem, true))
+			.whenReleased(new ToggleControlPanelSpinner(controlPanelSpinnerSubsystem, false));
+		getButton("B")
+			.whenPressed(new AutoSpinControlPanel(controlPanelSpinnerSubsystem, colorSensorSubsystem));
+		getButton("X")
+			.whenPressed(new ToggleIntake(intakeSubsystem));
 	}
 
 	/**
@@ -84,6 +108,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		if(autonCommand != null) autonCommand.cancel(); // finish auton
 
+		teleopCommand = new Teleop(xboxController, driveTrainSubsystem); // overlaying teleop command for the teleop period
 		teleopCommand.schedule(); // start teleop
 	}
 
@@ -100,5 +125,9 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testPeriodic() {
 
+	}
+
+	private JoystickButton getButton(String name) {
+		return new JoystickButton(xboxController, XboxController.Button.valueOf("k"+name).value);
 	}
 }

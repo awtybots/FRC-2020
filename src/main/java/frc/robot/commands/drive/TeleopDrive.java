@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import frc.robot.subsystems.DriveTrainSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
@@ -14,24 +14,15 @@ import frc.robot.Constants.Controller;
 
 public class TeleopDrive extends CommandBase {
 
-	/**
-	 * 
-	 * 		this command runs the entire teleop period
-	 * 
-	 * 		what it does:
-	 * 		- takes in the controller stick inputs
-	 * 		- sends input to DriveTrainSubsystem every tick
-	 * 		- tells DriveTrainSubsystem to stop motors when done
-	 * 
-	*/
+	// this command runs the entire teleop period
 
 	private final XboxController xboxController;
 	private final DriveTrainSubsystem driveTrainSubsystem;
 
 	public TeleopDrive(XboxController xboxController, DriveTrainSubsystem driveTrainSubsystem) {
+		addRequirements(driveTrainSubsystem);
 		this.xboxController = xboxController;
 		this.driveTrainSubsystem = driveTrainSubsystem;
-		addRequirements(driveTrainSubsystem);
 	}
 
 	@Override
@@ -41,9 +32,9 @@ public class TeleopDrive extends CommandBase {
 
 	@Override
 	public void execute() {
-		double xSpeed = -xboxController.getY(Controller.SPEED_HAND); // get throttle
-		double zRotation = xboxController.getX(Controller.ROTATION_HAND); // get rotation
-		driveTrainSubsystem.arcadeDrive(xSpeed, zRotation); // give DriveTrainSubsystem throttle and rotation, it'll do the rest
+		double speed = xboxController.getY(Controller.SPEED_HAND); // get throttle
+		double rotation = xboxController.getX(Controller.ROTATION_HAND); // get rotation
+		driveTrainSubsystem.arcadeDrive(speed, rotation); // give DriveTrainSubsystem throttle and rotation, it'll do the rest
 	}
 
 	@Override
