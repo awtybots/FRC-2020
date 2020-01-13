@@ -27,7 +27,7 @@ public final class Constants {
 
         public static final int INTAKE = 2;
 
-        public static final int CONTROL_PANEL_SPINNER = 5;
+        public static final int CONTROL_PANEL_SPINNER = 11;
     }
 
     public final static class DriveTrain {
