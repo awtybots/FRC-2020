@@ -4,6 +4,7 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ColorSensor;
@@ -31,7 +32,7 @@ public class ColorSensorSubsystem extends SubsystemBase {
                 break;
             }
         }
-        System.out.println(currentColor.getName());
+        SmartDashboard.putString("Color", currentColor.getName());
     }
 
     public PanelColor getCurrentColor() {
