@@ -50,9 +50,9 @@ public class ColorSensorSubsystem extends SubsystemBase {
 
         private PanelColor(double[] cmyk) {
             this.color = ColorMatch.makeColor(
-                255 * ( 1 - cmyk[0] / 100 ) * ( 1 - cmyk[3] / 100 ),
-                255 * ( 1 - cmyk[1] / 100 ) * ( 1 - cmyk[3] / 100 ),
-                255 * ( 1 - cmyk[2] / 100 ) * ( 1 - cmyk[3] / 100 )
+                ( 1 - cmyk[0] / 100 ) * ( 1 - cmyk[3] / 100 ),
+                ( 1 - cmyk[1] / 100 ) * ( 1 - cmyk[3] / 100 ),
+                ( 1 - cmyk[2] / 100 ) * ( 1 - cmyk[3] / 100 )
             );
             this.name = this.toString();
         }

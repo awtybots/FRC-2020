@@ -56,10 +56,10 @@ public final class Constants {
     public final static class ColorSensor {
         public final static I2C.Port PORT = I2C.Port.kOnboard;
 
-        public final static double[] BLUE    = new double[]{100, 000, 000, 50};
-        public final static double[] GREEN   = new double[]{100, 000, 100, 30};
-        public final static double[] RED     = new double[]{000, 100, 100, 30}; // rgb array [0 - 1]
-        public final static double[] YELLOW  = new double[]{000, 000, 100, 30};
+        public final static double[] BLUE    = new double[]{100, 000, 000, 050};
+        public final static double[] GREEN   = new double[]{100, 000, 100, 030};
+        public final static double[] RED     = new double[]{000, 100, 100, 030}; // rgb array [0 - 1]
+        public final static double[] YELLOW  = new double[]{000, 000, 100, 030};
     }
 
     public final static class ControlPanelSpinner {
