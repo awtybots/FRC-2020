@@ -1,6 +1,7 @@
 package frc.robot.commands.controlpanel;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ControlPanelSpinner;
 import frc.robot.subsystems.ColorSensorSubsystem;
@@ -47,7 +48,7 @@ public class AutoSpinControlPanel extends CommandBase {
             if(currentColor != lastColor) {
                 colorChanges++;
                 lastColor = currentColor;
-                System.out.println("color changes: "+colorChanges);
+                SmartDashboard.putNumber("Color changes", colorChanges);
             }
         }
     }
