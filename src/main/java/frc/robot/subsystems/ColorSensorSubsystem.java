@@ -25,6 +25,7 @@ public class ColorSensorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         Color detectedColor = colorSensor.getColor();
+        SmartDashboard.putString("Detected color", (int)(detectedColor.red*100) + ", " + (int)(detectedColor.green*100) + ", " + (int)(detectedColor.blue*100));
         ColorMatchResult colorMatchResult = colorMatcher.matchClosestColor(detectedColor);
         for(PanelColor color : PanelColor.values()) {
             if(colorMatchResult.color == color.getColor()) {
@@ -32,7 +33,7 @@ public class ColorSensorSubsystem extends SubsystemBase {
                 break;
             }
         }
-        SmartDashboard.putString("Color", currentColor.getName());
+        SmartDashboard.putString("Closest color", currentColor.getName());
     }
 
     public PanelColor getCurrentColor() {
@@ -48,12 +49,8 @@ public class ColorSensorSubsystem extends SubsystemBase {
         private Color color;
         private String name;
 
-        private PanelColor(double[] cmyk) {
-            this.color = ColorMatch.makeColor(
-                ( 1 - cmyk[0] / 100 ) * ( 1 - cmyk[3] / 100 ),
-                ( 1 - cmyk[1] / 100 ) * ( 1 - cmyk[3] / 100 ),
-                ( 1 - cmyk[2] / 100 ) * ( 1 - cmyk[3] / 100 )
-            );
+        private PanelColor(double[] rgb) {
+            this.color = ColorMatch.makeColor(rgb[0], rgb[1], rgb[2]);
             this.name = this.toString();
         }
 
