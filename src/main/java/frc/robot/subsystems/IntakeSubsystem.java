@@ -10,12 +10,18 @@ import frc.robot.Constants.MotorIDs;
 public class IntakeSubsystem extends SubsystemBase {
 
     private final WPI_TalonSRX motor = new WPI_TalonSRX(MotorIDs.INTAKE);
+
+    private boolean on;
     
     public IntakeSubsystem() {
         toggle(false);
     }
 
     public void toggle(boolean on) {
+        this.on = on;
         motor.set(ControlMode.PercentOutput, on ? Intake.MOTOR_SPEED : 0);
+    }
+    public boolean getOn() {
+        return on;
     }
 }

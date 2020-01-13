@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.*;
 import frc.robot.commands.controlpanel.AutoSpinControlPanel;
 import frc.robot.commands.controlpanel.ToggleControlPanelSpinner;
+import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.main.*;
 import frc.robot.commands.main.Auton.AutonType;
 import frc.robot.subsystems.*;
@@ -62,12 +63,15 @@ public class Robot extends TimedRobot {
 		// Button Mappings
 		JoystickButton buttonA = new JoystickButton(xboxController, XboxController.Button.kA.value);
 		JoystickButton buttonB = new JoystickButton(xboxController, XboxController.Button.kB.value);
+		JoystickButton buttonX = new JoystickButton(xboxController, XboxController.Button.kX.value);
 
 		buttonA
 			.whenPressed(new ToggleControlPanelSpinner(controlPanelSpinnerSubsystem, true))
 			.whenReleased(new ToggleControlPanelSpinner(controlPanelSpinnerSubsystem, false));
 		buttonB
 			.whenPressed(new AutoSpinControlPanel(controlPanelSpinnerSubsystem, colorSensorSubsystem));
+		buttonX
+			.whenPressed(new ToggleIntake(intakeSubsystem));
 	}
 
 	/**

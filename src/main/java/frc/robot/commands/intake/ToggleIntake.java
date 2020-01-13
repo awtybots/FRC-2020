@@ -13,6 +13,11 @@ public class ToggleIntake extends InstantCommand {
         this.intake = intake;
         this.on = on;
     }
+    public ToggleIntake(IntakeSubsystem intake) {
+        addRequirements(intake);
+        this.intake = intake;
+        this.on = !intake.getOn();
+    }
 
     @Override
     public void initialize() {
