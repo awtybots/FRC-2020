@@ -12,14 +12,10 @@ public class ControlPanelSpinnerSubsystem extends SubsystemBase {
     private final WPI_TalonSRX spinner = new WPI_TalonSRX(MotorIDs.CONTROL_PANEL_SPINNER);
     
     public ControlPanelSpinnerSubsystem() {
-        stop();
+        toggle(false);
     }
 
-    public void start() {
-        spinner.set(ControlMode.PercentOutput, ControlPanelSpinner.MOTOR_SPEED);
-    }
-
-    public void stop() {
-        spinner.set(ControlMode.PercentOutput, 0);
+    public void toggle(boolean on) {
+        spinner.set(ControlMode.PercentOutput, on ? ControlPanelSpinner.MOTOR_SPEED : 0);
     }
 }

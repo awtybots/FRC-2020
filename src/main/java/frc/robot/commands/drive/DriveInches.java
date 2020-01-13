@@ -6,7 +6,7 @@ import frc.robot.subsystems.DriveTrainSubsystem;
 
 public class DriveInches extends ProfiledPIDCommand {
 
-    private DriveTrainSubsystem driveTrainSubsystem;
+    private final DriveTrainSubsystem driveTrainSubsystem;
 
     public DriveInches(DriveTrainSubsystem driveTrainSubsystem, double inches) {
         super(

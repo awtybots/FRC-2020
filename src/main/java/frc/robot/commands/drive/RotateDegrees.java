@@ -6,7 +6,7 @@ import frc.robot.subsystems.DriveTrainSubsystem;
 
 public class RotateDegrees extends ProfiledPIDCommand {
 
-    private DriveTrainSubsystem driveTrainSubsystem;
+    private final DriveTrainSubsystem driveTrainSubsystem;
 
     public RotateDegrees(DriveTrainSubsystem driveTrainSubsystem, double degrees) {
 		super(
