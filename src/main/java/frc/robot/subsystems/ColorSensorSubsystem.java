@@ -4,6 +4,7 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,6 +16,8 @@ public class ColorSensorSubsystem extends SubsystemBase {
     private final ColorMatch colorMatcher = new ColorMatch();
     
     private PanelColor currentColor;
+    private PanelColor pendingColor;
+    private Timer verifyColorTimer = new Timer();
 
     public ColorSensorSubsystem() {
         for(PanelColor color : PanelColor.values()) {
@@ -24,18 +27,39 @@ public class ColorSensorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Color detectedColor = colorSensor.getColor();
-        SmartDashboard.putString("Detected color", (int)(detectedColor.red*100) + ", " + (int)(detectedColor.green*100) + ", " + (int)(detectedColor.blue*100));
-        ColorMatchResult colorMatchResult = colorMatcher.matchClosestColor(detectedColor);
-        for(PanelColor color : PanelColor.values()) {
-            if(colorMatchResult.color == color.getColor()) {
-                currentColor = color;
-                break;
+        PanelColor detectedColor = getDetectedColor();
+
+        if(detectedColor == pendingColor) {
+            if(verifyColorTimer.get() >= ColorSensor.VERIFY_COLOR_TIME) {
+                verifyColorTimer.stop();
+
+                currentColor = pendingColor;
+            }
+        } else {
+            pendingColor = null;
+
+            if(detectedColor != currentColor) {
+                verifyColorTimer.reset();
+                verifyColorTimer.start();
+
+                pendingColor = detectedColor;
             }
         }
-        SmartDashboard.putString("Closest color", currentColor.getName());
+        
+        SmartDashboard.putString("Current color", currentColor.getName());
     }
-
+    
+    private PanelColor getDetectedColor() {
+        Color detectedColorRaw = colorSensor.getColor();
+        SmartDashboard.putString("Detected color", (int)(detectedColorRaw.red*100) + ", " + (int)(detectedColorRaw.green*100) + ", " + (int)(detectedColorRaw.blue*100));
+        ColorMatchResult colorMatchResult = colorMatcher.matchClosestColor(detectedColorRaw);
+        for(PanelColor color : PanelColor.values()) {
+            if(colorMatchResult.color == color.getColor()) {
+                return color;
+            }
+        }
+        return null;
+    }
     public PanelColor getCurrentColor() {
         return currentColor;
     }

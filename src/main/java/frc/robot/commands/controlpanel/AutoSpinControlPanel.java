@@ -46,8 +46,8 @@ public class AutoSpinControlPanel extends CommandBase {
         if(controlType == ControlType.ROTATION_CONTROL) {
             PanelColor currentColor = sensor.getCurrentColor();
             if(currentColor != lastColor) {
-                colorChanges++;
                 lastColor = currentColor;
+                colorChanges++;
                 SmartDashboard.putNumber("Color changes", colorChanges);
             }
         }
