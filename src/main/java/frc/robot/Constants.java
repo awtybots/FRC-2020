@@ -41,6 +41,13 @@ public final class Constants {
         public static double PERIOD = 0.02; // time between execute()
         public final static double GOAL_TOLERANCE = 0.5; // how many inches away do we stop
 
+        // PID
+        public final static double PID_P = 0.02;
+        public final static double PID_I = 0;
+        public final static double PID_D = 0;
+        public final static double INTEGRAL_MIN = -100;
+        public final static double INTEGRAL_MAX = 100;
+
         // FEEDFORWARD FORMULA: FF_S + (FF_V * velocity) + (FF_A * acceleration)
         public final static double FF_S = 3.0; // voltage required to move a wheel any amount
         public final static double FF_V = 0.1; // voltage required to move a wheel 1 inch per second

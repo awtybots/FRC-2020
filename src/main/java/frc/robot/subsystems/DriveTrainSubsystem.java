@@ -15,6 +15,8 @@ import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 import frc.robot.Constants.MotorIDs;
 import static frc.robot.Constants.DriveTrain.*;
 
+import java.util.HashMap;
+
 public class DriveTrainSubsystem extends SubsystemBase {
 
 	// this is the subsystem that interacts with the drivetrain motors
@@ -39,6 +41,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	private double outputLeft = 0;
 	private double outputRight = 0;
 
+	private double integralError = 0;
+	private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
+
 	public DriveTrainSubsystem() {
 		for (WPI_TalonSRX motor : motors) {
 			motor.set(0); // start all motors at 0% speed to stop the blinking
@@ -51,8 +56,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		outputLeft += calculateFF(MotorGroup.LEFT, goalVelocityLeft);
-		outputRight += calculateFF(MotorGroup.RIGHT, goalVelocityRight);
+		outputLeft = calculateFF(MotorGroup.LEFT, goalVelocityLeft);
+		outputRight = calculateFF(MotorGroup.RIGHT, goalVelocityRight);
 
 		set(outputLeft, outputRight);
 	}
@@ -71,7 +76,16 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		setGoalVelocity(0, 0);
 	}
 
-	public double calculateFF(MotorGroup motorGroup, double goalVelocity) { // this is my best understanding of PID, not sure how accurate this is
+	private double calculatePID(MotorGroup motorGroup, double goalVelocity) {
+		double currentVelocity = getAverageInchesPerSecond(motorGroup, false);
+		double velocityError = goalVelocity - currentVelocity;
+		double accelerationError = (velocityError - lastVelocityError.getOrDefault(motorGroup, 0.0)) / PERIOD;
+		lastVelocityError.put(motorGroup, velocityError);
+		integralError = clamp(integralError + (velocityError * PERIOD), INTEGRAL_MIN / PID_I, INTEGRAL_MAX / PID_I);
+		return (PID_P * velocityError) + (PID_I * integralError) + (PID_D * accelerationError);
+	}
+
+	private double calculateFF(MotorGroup motorGroup, double goalVelocity) { // this is my best understanding of PID, not sure how accurate this is
 		double constrainedGoalVelocity = clamp(goalVelocity, -MAX_VELOCITY, MAX_VELOCITY);
 		double currentVelocity = getAverageInchesPerSecond(motorGroup, false);
 		double goalAcceleration = constrainedGoalVelocity - currentVelocity;
