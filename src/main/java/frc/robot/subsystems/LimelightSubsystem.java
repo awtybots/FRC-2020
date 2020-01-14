@@ -4,7 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Vector3;
-import static frc.robot.Constants.Shooter.*;
+import static frc.robot.Constants.Limelight.*;
 
 public class LimelightSubsystem extends SubsystemBase {
 
@@ -26,13 +26,17 @@ public class LimelightSubsystem extends SubsystemBase {
 
         double targetOffsetAngleHorizontal = getDouble("tx");
         double targetOffsetAngleVertical = getDouble("ty");
-        double targetArea = getDouble("ta");
-        double targetSkew = getDouble("ts");
+        //double targetArea = getDouble("ta");
+        //double targetSkew = getDouble("ts");
 
-        setTargetVector(new Vector3( // TODO do math
-            0,
-            TARGET_HEIGHT - SHOOTER_HEIGHT,
-            0
+        double zOffset = SHOOTER_HEIGHT_OFFSET / Math.tan(CAMERA_MOUNTING_ANGLE + targetOffsetAngleVertical);
+        double forwardOffset = (new Vector3(0, SHOOTER_HEIGHT_OFFSET, zOffset)).getMagnitude();
+        double xOffset = forwardOffset * Math.tan(targetOffsetAngleHorizontal);
+
+        setTargetVector(new Vector3(
+            xOffset,
+            SHOOTER_HEIGHT_OFFSET,
+            zOffset
         ));
     }
 

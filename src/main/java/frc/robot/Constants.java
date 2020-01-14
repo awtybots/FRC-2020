@@ -54,9 +54,11 @@ public final class Constants {
         public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 inch per second per second
     }
 
-    public final static class Shooter {
+    public final static class Limelight {
         public final static double TARGET_HEIGHT = 98.25;
         public final static double SHOOTER_HEIGHT = 20;
+        public final static double SHOOTER_HEIGHT_OFFSET = TARGET_HEIGHT - SHOOTER_HEIGHT;
+        public final static double CAMERA_MOUNTING_ANGLE = 20;
     }
 
     public final static class Intake {

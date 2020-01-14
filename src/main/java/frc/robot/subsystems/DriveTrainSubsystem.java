@@ -76,7 +76,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		setGoalVelocity(0, 0);
 	}
 
-	private double calculatePID(MotorGroup motorGroup, double goalVelocity) {
+	public double calculatePID(MotorGroup motorGroup, double goalVelocity) {
 		double currentVelocity = getAverageInchesPerSecond(motorGroup, false);
 		double velocityError = goalVelocity - currentVelocity;
 		double accelerationError = (velocityError - lastVelocityError.getOrDefault(motorGroup, 0.0)) / PERIOD;
