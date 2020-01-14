@@ -1,31 +1,72 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
-import frc.robot.Constants.DriveTrain;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
+import static frc.robot.Constants.DriveTrain.*;
 import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.DriveTrainSubsystem.MotorGroup;
 
-public class RotateDegrees extends ProfiledPIDCommand {
+public class RotateDegrees extends CommandBase {
 
-    // see these links:
-    //  -  https://docs.wpilib.org/en/latest/docs/software/advanced-control/controllers/pidcontroller.html
-    //  -  https://docs.wpilib.org/en/latest/docs/software/commandbased/profilepid-subsystems-commands.html
+    private final DriveTrainSubsystem driveTrainSubsystem;
 
-    // ProfiledPIDCommand takes in values through it's super constructor and handles the command's initialize, execute, and end functions
+    private final double goalDistance;
+    private double goalVelocity;
+    private double currentDistance = 0;
+    private double multiplier;
+
+    private final Timer timer = new Timer();
 
     public RotateDegrees(DriveTrainSubsystem driveTrainSubsystem, double degrees) {
-		super(
-            DriveTrain.PID_CONTROLLER, // PIDController with P, I, D, and Trapezoid constants
-            driveTrainSubsystem::rotateDegreesGetMeasurement, // PID input supplier
-            Math.abs(degrees), // PID goal
-            driveTrainSubsystem::rotateDegreesUseOutput, // PID output consumer
-            driveTrainSubsystem // required subsystems
-        );
-        driveTrainSubsystem.rotateDegreesInitialize(degrees);
+        this.driveTrainSubsystem = driveTrainSubsystem;
+        this.goalDistance = Math.abs(degrees)/360 * ROBOT_CIRMCUMFERENCE;
+        this.multiplier = degrees/Math.abs(degrees);
+        this.goalVelocity = multiplier * MAX_VELOCITY;
+    }
+
+    @Override
+    public void initialize() {
+        timer.reset();
+    }
+
+    @Override
+    public void execute() {
+        // elapsed time
+        double elapsedTime = timer.get();
+        timer.reset();
+
+        // encoders
+        double currentVelocity = driveTrainSubsystem.getAverageInchesPerSecond(MotorGroup.ALL, true);
+        currentDistance += currentVelocity * elapsedTime;
+
+        // stopping distance
+        double remainingDistance = goalDistance - currentDistance;
+        double stoppingDistance = currentVelocity * currentVelocity / MAX_ACCELERATION / 2;
+        if(stoppingDistance >= remainingDistance) {
+            goalVelocity = 0; // start slowing down before we hit the target
+        }
+
+        // motors
+        driveTrainSubsystem.setGoalVelocity(goalVelocity * multiplier, goalVelocity * -multiplier);
+
+        // SmartDashbaord
+        SmartDashboard.putNumber("Current Distance", currentDistance);
+        SmartDashboard.putNumber("Goal Distance", goalDistance);
+        SmartDashboard.putNumber("Current Velocity", currentVelocity);
+        SmartDashboard.putNumber("Goal Velocity", goalVelocity);
+        SmartDashboard.putNumber("Stopping Distance", stoppingDistance);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        driveTrainSubsystem.stop();
     }
 
     @Override
 	public boolean isFinished() {
-		return getController().atGoal();
+		return currentDistance >= goalDistance - GOAL_TOLERANCE;
 	}
 
 }

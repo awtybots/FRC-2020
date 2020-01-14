@@ -10,7 +10,8 @@ package frc.robot.commands.drive;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.Controller;
+import static frc.robot.Constants.Controller.*;
+import static frc.robot.Constants.DriveTrain.*;
 
 public class TeleopDrive extends CommandBase {
 
@@ -24,22 +25,17 @@ public class TeleopDrive extends CommandBase {
 		this.xboxController = xboxController;
 		this.driveTrainSubsystem = driveTrainSubsystem;
 	}
-
-	@Override
-	public void initialize() {
-		
-	}
-
+	
 	@Override
 	public void execute() {
-		double speed = xboxController.getY(Controller.SPEED_HAND); // get throttle
-		double rotation = xboxController.getX(Controller.ROTATION_HAND); // get rotation
-		driveTrainSubsystem.teleopDrive(speed, rotation); // give DriveTrainSubsystem throttle and rotation, it'll do the rest
+		double speed = -xboxController.getY(SPEED_HAND);
+		double rotation = xboxController.getX(ROTATION_HAND);
+		driveTrainSubsystem.setGoalVelocity((speed + rotation) * MAX_VELOCITY, (speed - rotation) * MAX_VELOCITY);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		driveTrainSubsystem.stop(); // stop the motors
+		driveTrainSubsystem.stop();
 	}
 
 	@Override
