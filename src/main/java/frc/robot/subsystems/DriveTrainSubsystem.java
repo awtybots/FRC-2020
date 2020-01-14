@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 import frc.robot.Constants.MotorIDs;
@@ -39,8 +38,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	private double goalVelocityRight = 0;
 	private double outputLeft = 0;
 	private double outputRight = 0;
-
-	private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(FF_S, FF_V, FF_A);
 
 	public DriveTrainSubsystem() {
 		for (WPI_TalonSRX motor : motors) {
@@ -79,7 +76,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double currentVelocity = getAverageInchesPerSecond(motorGroup, false);
 		double goalAcceleration = constrainedGoalVelocity - currentVelocity;
 		double constrainedGoalAcceleration = clamp(goalAcceleration, -MAX_ACCELERATION, MAX_ACCELERATION);
-		return feedforward.calculate(currentVelocity, constrainedGoalAcceleration);
+		return (FF_S * Math.signum(currentVelocity)) + (FF_V * currentVelocity) + (FF_A * constrainedGoalAcceleration);
 	}
 
 	public double getAverageInchesPerSecond(MotorGroup motorGroup, boolean abs) { // utility function to get average inches per second from certain groups of motors

@@ -22,7 +22,7 @@ public class RotateDegrees extends CommandBase {
     public RotateDegrees(DriveTrainSubsystem driveTrainSubsystem, double degrees) {
         this.driveTrainSubsystem = driveTrainSubsystem;
         this.goalDistance = Math.abs(degrees)/360 * ROBOT_CIRMCUMFERENCE;
-        this.multiplier = degrees/Math.abs(degrees);
+        this.multiplier = Math.signum(degrees);
         this.goalVelocity = multiplier * MAX_VELOCITY;
     }
 

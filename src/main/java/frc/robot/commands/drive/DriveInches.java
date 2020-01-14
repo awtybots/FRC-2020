@@ -21,7 +21,7 @@ public class DriveInches extends CommandBase {
     public DriveInches(DriveTrainSubsystem driveTrainSubsystem, double inches) {
         this.driveTrainSubsystem = driveTrainSubsystem;
         this.goalDistance = inches;
-        this.goalVelocity = goalDistance/Math.abs(goalDistance) * MAX_VELOCITY;
+        this.goalVelocity = Math.signum(goalDistance) * MAX_VELOCITY;
     }
 
     @Override
