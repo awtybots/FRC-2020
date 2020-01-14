@@ -60,11 +60,7 @@ public class AutoSpinControlPanel extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if(controlType == ControlType.ROTATION_CONTROL) {
-            return colorChanges >= ControlPanelSpinner.COLOR_CHANGES;
-        } else {
-            return sensor.getCurrentColor() == goalColor;
-        }
+        return (controlType == ControlType.ROTATION_CONTROL) ? (colorChanges >= ControlPanelSpinner.COLOR_CHANGES) : (sensor.getCurrentColor() == goalColor);
     }
 
     private enum ControlType {
