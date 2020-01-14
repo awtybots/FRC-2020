@@ -23,22 +23,23 @@ public final class Constants {
         public static final int DRIVE_R2 = 13;
         public static final int DRIVE_R3 = 14;
 
-        public static final int INTAKE = 2;
+        public static final int INTAKE = 11;
+
+        public static final int SHOOTER = 11;
 
         public static final int CONTROL_PANEL_SPINNER = 11;
     }
 
     public final static class DriveTrain {
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
-        public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative; // TODO add encoders
+        public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative;
         public final static double ENCODER_UNITS = 4096;
         
-        public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI; // TODO tune
-        public final static double ROBOT_CIRMCUMFERENCE = 100; // this the the distance (in inches) each wheel travels when the robot spins one time around its center TODO tune
+        public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI;
+        public final static double ROBOT_CIRMCUMFERENCE = 100; // this the the distance (in inches) each wheel travels when the robot spins one time around its center
 
         public final static double MAX_VELOCITY = 36; // inches per second
         public final static double MAX_ACCELERATION = 6; // inches per second per second
-        public static double PERIOD = 0.02; // time between execute()
         public final static double GOAL_TOLERANCE = 0.5; // how many inches away do we stop
 
         // PID
@@ -50,8 +51,12 @@ public final class Constants {
 
         // FEEDFORWARD FORMULA: FF_S + (FF_V * velocity) + (FF_A * acceleration)
         public final static double FF_S = 3.0; // voltage required to move a wheel any amount
-        public final static double FF_V = 0.1; // voltage required to move a wheel 1 inch per second
+        public final static double FF_V = 0.1; // voltage required to sustain a wheel's speed moving 1 inch per second
         public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 inch per second per second
+    }
+
+    public final static class Intake {
+        public final static double MOTOR_SPEED = 0.5;
     }
 
     public final static class Limelight {
@@ -61,8 +66,26 @@ public final class Constants {
         public final static double CAMERA_MOUNTING_ANGLE = 20;
     }
 
-    public final static class Intake {
-        public final static double MOTOR_SPEED = 0.5;
+    public final static class Shooter {
+        public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
+        public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative;
+        public final static double ENCODER_UNITS = 4096;
+
+        public final static double MAX_ACCELERATION = 10;
+        public final static double SHOOTER_TELEOP_SPEED = 60;
+        public final static double GOAL_VELOCITY_THRESHOLD = 5;
+
+        // PID
+        public final static double PID_P = 0.02;
+        public final static double PID_I = 0;
+        public final static double PID_D = 0;
+        public final static double INTEGRAL_MIN = -100;
+        public final static double INTEGRAL_MAX = 100;
+
+        // FEEDFORWARD FORMULA: FF_S + (FF_V * velocity) + (FF_A * acceleration)
+        public final static double FF_S = 3.0; // voltage required to move the flywheel any amount
+        public final static double FF_V = 0.1; // voltage required to sustain the flywheel's speed moving at 1 rev per second
+        public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 rev per second per second
     }
 
     public final static class ColorSensor {

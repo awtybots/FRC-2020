@@ -18,6 +18,7 @@ import frc.robot.commands.controlpanel.ToggleControlPanelSpinner;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.main.*;
 import frc.robot.commands.main.Auton.AutonType;
+import frc.robot.commands.shooter.ToggleShooter;
 import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
@@ -36,9 +37,11 @@ public class Robot extends TimedRobot {
 
 	private SendableChooser<AutonType> autonChooser;
 
+	private static double period;
+
 	@Override
 	public void robotInit() {
-		Constants.DriveTrain.PERIOD = getPeriod();
+		period = getPeriod();
 
 		// Auton chooser
 		autonChooser = new SendableChooser<>();
@@ -69,6 +72,9 @@ public class Robot extends TimedRobot {
 		getButton("Y")
 			.whenPressed(new ToggleControlPanelSpinner(controlPanelSpinnerSubsystem, true))
 			.whenReleased(new ToggleControlPanelSpinner(controlPanelSpinnerSubsystem, false));
+		getButton("X")
+			.whenPressed(new ToggleShooter(shooterSubsystem, true))
+			.whenReleased(new ToggleShooter(shooterSubsystem, false));
 		getButton("A")
 			.whenPressed(new AutoSpinControlPanel(controlPanelSpinnerSubsystem, colorSensorSubsystem));
 		getButton("B")
@@ -134,5 +140,9 @@ public class Robot extends TimedRobot {
 
 	private JoystickButton getButton(String name) {
 		return new JoystickButton(xboxController, XboxController.Button.valueOf("k"+name).value);
+	}
+
+	public static double getTimePeriod() {
+		return period;
 	}
 }

@@ -12,6 +12,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
+
+import frc.robot.Robot;
 import frc.robot.Constants.MotorIDs;
 import static frc.robot.Constants.DriveTrain.*;
 
@@ -44,7 +46,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	private double integralError = 0;
 	private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
 
+	private static double PERIOD;
+
 	public DriveTrainSubsystem() {
+		PERIOD = Robot.getTimePeriod();
+
 		for (WPI_TalonSRX motor : motors) {
 			motor.set(0); // start all motors at 0% speed to stop the blinking
 
