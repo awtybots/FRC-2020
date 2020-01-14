@@ -79,7 +79,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double currentVelocity = getAverageInchesPerSecond(motorGroup, false);
 		double goalAcceleration = constrainedGoalVelocity - currentVelocity;
 		double constrainedGoalAcceleration = clamp(goalAcceleration, -MAX_ACCELERATION, MAX_ACCELERATION);
-		return feedforward.calculate(constrainedGoalVelocity, constrainedGoalAcceleration);
+		return feedforward.calculate(currentVelocity, constrainedGoalAcceleration);
 	}
 
 	public double getAverageInchesPerSecond(MotorGroup motorGroup, boolean abs) { // utility function to get average inches per second from certain groups of motors
