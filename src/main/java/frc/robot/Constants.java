@@ -54,6 +54,11 @@ public final class Constants {
         public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 inch per second per second
     }
 
+    public final static class Shooter {
+        public final static double TARGET_HEIGHT = 98.25;
+        public final static double SHOOTER_HEIGHT = 20;
+    }
+
     public final static class Intake {
         public final static double MOTOR_SPEED = 0.5;
     }
