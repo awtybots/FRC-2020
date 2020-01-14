@@ -34,7 +34,7 @@ public class TeleopDrive extends CommandBase {
 	public void execute() {
 		double speed = xboxController.getY(Controller.SPEED_HAND); // get throttle
 		double rotation = xboxController.getX(Controller.ROTATION_HAND); // get rotation
-		driveTrainSubsystem.arcadeDrive(speed, rotation); // give DriveTrainSubsystem throttle and rotation, it'll do the rest
+		driveTrainSubsystem.teleopDrive(speed, rotation); // give DriveTrainSubsystem throttle and rotation, it'll do the rest
 	}
 
 	@Override
