@@ -37,6 +37,8 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit() {
+		Constants.DriveTrain.PERIOD = getPeriod();
+
 		// Auton chooser
 		autonChooser = new SendableChooser<>();
 		AutonType[] autonTypes = AutonType.values();

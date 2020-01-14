@@ -38,6 +38,7 @@ public final class Constants {
 
         public final static double MAX_VELOCITY = 36; // inches per second
         public final static double MAX_ACCELERATION = 6; // inches per second per second
+        public static double PERIOD = 0.02; // time between execute()
         public final static double GOAL_TOLERANCE = 0.5; // how many inches away do we stop
 
         // FEEDFORWARD FORMULA: FF_S + (FF_V * velocity) + (FF_A * acceleration)

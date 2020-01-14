@@ -43,7 +43,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		for (WPI_TalonSRX motor : motors) {
 			motor.set(0); // start all motors at 0% speed to stop the blinking
 
-			motor.configFactoryDefault();
+			motor.configFactoryDefault(); // reset settings
 			motor.setNeutralMode(BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
 			motor.configSelectedFeedbackSensor(MOTOR_FEEDBACK_DEVICE); // sets which encoder the motor is using
 		}
@@ -75,7 +75,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double constrainedGoalVelocity = clamp(goalVelocity, -MAX_VELOCITY, MAX_VELOCITY);
 		double currentVelocity = getAverageInchesPerSecond(motorGroup, false);
 		double goalAcceleration = constrainedGoalVelocity - currentVelocity;
-		double constrainedGoalAcceleration = clamp(goalAcceleration, -MAX_ACCELERATION, MAX_ACCELERATION);
+		double constrainedGoalAcceleration = clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
 		return (FF_S * Math.signum(currentVelocity)) + (FF_V * currentVelocity) + (FF_A * constrainedGoalAcceleration);
 	}
 
