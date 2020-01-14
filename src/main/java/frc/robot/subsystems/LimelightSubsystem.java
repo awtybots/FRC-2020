@@ -43,14 +43,14 @@ public class LimelightSubsystem extends SubsystemBase {
         //double targetSkew = getDouble("ts");
 
         if(pipeline == Pipeline.POWER_PORT) {
-            double zOffset = SHOOTER_HEIGHT_OFFSET / Math.tan(CAMERA_MOUNTING_ANGLE + targetOffsetAngleVertical);
-            double forwardOffset = (new Vector3(0, SHOOTER_HEIGHT_OFFSET, zOffset)).getMagnitude();
+            double yOffset = SHOOTER_HEIGHT_OFFSET / Math.tan(CAMERA_MOUNTING_ANGLE + targetOffsetAngleVertical);
+            double forwardOffset = (new Vector3(0, yOffset, SHOOTER_HEIGHT_OFFSET)).getMagnitude();
             double xOffset = forwardOffset * Math.tan(targetOffsetAngleHorizontal);
 
             return new Vector3(
                 xOffset,
-                SHOOTER_HEIGHT_OFFSET,
-                zOffset
+                yOffset,
+                SHOOTER_HEIGHT_OFFSET
             );
         } else {
             return null;
