@@ -20,14 +20,32 @@ public class Vector3 {
     public double getMagnitude() {
         return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
     }
-    public void setMagnitude(double mag) {
+    public Vector3 setMagnitude(double mag) {
         double factor = mag/getMagnitude();
         x *= factor;
         y *= factor;
         z *= factor;
+        return this;
     }
-    public void normalize() {
+    public Vector3 normalize() {
         setMagnitude(1);
+        return this;
+    }
+    public Vector3 setZ(double z) {
+        this.z = z;
+        return this;
+    }
+    public Vector3 rotateZ(double deg) {
+        double s = Math.sin(Math.toRadians(deg));
+        double c = Math.cos(Math.toRadians(deg));
+
+        double x2 = x * c - y * s;
+        double y2 = x * s + y * c;
+
+        this.x = x2;
+        this.y = y2;
+
+        return this;
     }
 
 
@@ -49,6 +67,10 @@ public class Vector3 {
     @Override
     public String toString() {
         return "( "+x+", "+y+", "+z+" )";
+    }
+    @Override
+    public Vector3 clone() {
+        return new Vector3(x, y, z);
     }
 
 }

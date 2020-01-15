@@ -5,8 +5,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static frc.robot.Constants.Shooter.*;
+import static frc.robot.Constants.Positions.*;
 import frc.robot.util.Vector3;
-import static frc.robot.Constants.Limelight.*;
 
 import javax.annotation.Nullable;
 
@@ -43,7 +44,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
 
     @Nullable
-    public Vector3 getTargetVector() {
+    public Vector3 getRelativeTargetVector() {
         boolean targetExists = getDouble("tv") == 1.0;
         if(!targetExists) {
             return null;
@@ -62,7 +63,7 @@ public class LimelightSubsystem extends SubsystemBase {
             return new Vector3(
                 xOffset,
                 yOffset,
-                SHOOTER_HEIGHT_OFFSET
+                0
             );
         } else {
             return null;

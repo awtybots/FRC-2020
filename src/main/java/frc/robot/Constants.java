@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import frc.robot.util.Vector3;
 
 public final class Constants {
 
@@ -61,21 +62,20 @@ public final class Constants {
         public final static double MOTOR_SPEED = 0.5;
     }
 
-    public final static class Limelight {
-        public final static double TARGET_HEIGHT = 98.25;
-        public final static double SHOOTER_HEIGHT = 20;
-        public final static double SHOOTER_HEIGHT_OFFSET = TARGET_HEIGHT - SHOOTER_HEIGHT;
-        public final static double CAMERA_MOUNTING_ANGLE = 20;
-    }
-
     public final static class Shooter {
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative;
         public final static double ENCODER_UNITS = 4096;
+        public final static double WHEEL_CIRCUMFERENCE = 4 * Math.PI;
+        
+		public final static double CAMERA_MOUNTING_ANGLE = 20;
 
         public final static double MAX_ACCELERATION = 10;
         public final static double SHOOTER_TELEOP_SPEED = 60;
         public final static double GOAL_VELOCITY_THRESHOLD = 5;
+        public final static double GOAL_ANGLE_THRESHOLD = 2;
+
+        public final static double DRAG = 600;
 
         // PID
         public final static double PID_P = 0.02;
@@ -88,6 +88,13 @@ public final class Constants {
         public final static double FF_S = 3.0; // voltage required to move the flywheel any amount
         public final static double FF_V = 0.1; // voltage required to sustain the flywheel's speed moving at 1 rev per second
         public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 rev per second per second
+    }
+
+    public final static class Positions {
+        public final static Vector3 POWER_PORT_POSITION = new Vector3(0, 48, 98.25);
+        
+		public final static double SHOOTER_HEIGHT = 20;
+        public final static double SHOOTER_HEIGHT_OFFSET = POWER_PORT_POSITION.z - SHOOTER_HEIGHT;
     }
 
     public final static class ColorSensor {
