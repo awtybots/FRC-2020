@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static frc.robot.Constants.Positions.*;
+import static frc.robot.Constants.NavX.*;
 import frc.robot.util.Vector3;
 
 import com.kauailabs.navx.frc.AHRS;

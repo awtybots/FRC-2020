@@ -69,8 +69,8 @@ public final class Constants {
         public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative;
         public final static double ENCODER_UNITS = 4096;
         public final static double WHEEL_CIRCUMFERENCE = 4 * Math.PI;
-        
-		public final static double CAMERA_MOUNTING_ANGLE = 20;
+
+        public final static double SHOOTER_HEIGHT = 24;
 
         public final static double MAX_ACCELERATION = 10;
         public final static double SHOOTER_TELEOP_SPEED = 60;
@@ -92,11 +92,19 @@ public final class Constants {
         public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 rev per second per second
     }
 
-    public final static class Positions {
-        public final static Vector3 POWER_PORT_POSITION = new Vector3(0, 48, 98.25);
+    public final static class Limelight {
+		public final static double CAMERA_MOUNTING_ANGLE = 20;
+        public final static double CAMERA_HEIGHT = 20;
         
-		public final static double SHOOTER_HEIGHT = 20;
-        public final static double SHOOTER_HEIGHT_OFFSET = POWER_PORT_POSITION.z - SHOOTER_HEIGHT;
+        public final static double SHOOTER_VISION_HEIGHT = 95;
+        public final static double LOADING_STATION_VISION_HEIGHT = 95;
+        
+        public final static double SHOOTER_VISION_HEIGHT_OFFSET = SHOOTER_VISION_HEIGHT - CAMERA_HEIGHT;
+        public final static double LOADING_STATION_VISION_HEIGHT_OFFSET = LOADING_STATION_VISION_HEIGHT - CAMERA_HEIGHT;
+    }
+
+    public final static class NavX {
+        public final static Vector3 POWER_PORT_POSITION = new Vector3(0, 48, 98.25);
     }
 
     public final static class ColorSensor {
