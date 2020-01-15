@@ -90,7 +90,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 	
 
-	public void setGoalVelocity(double left, double right) { // TODO reconsider
+	public void setGoalVelocity(double left, double right) {
 		goalVelocityLeft = left;
 		goalVelocityRight = right;
 	}
