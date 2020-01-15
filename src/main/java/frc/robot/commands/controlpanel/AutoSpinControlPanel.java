@@ -15,9 +15,6 @@ public class AutoSpinControlPanel extends CommandBase {
 
     private PanelColor goalColor;
 
-    private PanelColor lastColor;
-    private int colorChanges;
-
     public AutoSpinControlPanel(ControlPanelSubsystem controlPanelSubsystem) {
         addRequirements(controlPanelSubsystem);
         this.controlPanelSubsystem = controlPanelSubsystem;
@@ -30,9 +27,7 @@ public class AutoSpinControlPanel extends CommandBase {
             controlType = ControlType.POSITION_CONTROL;
             goalColor = PanelColor.fromChar(gameData.charAt(0));
         } else {
-            controlType = ControlType.ROTATION_CONTROL;
-            lastColor = controlPanelSubsystem.getCurrentColor();
-            colorChanges = 0;
+            controlPanelSubsystem.resetRotations();
         }
 
         controlPanelSubsystem.toggle(true);
@@ -40,14 +35,7 @@ public class AutoSpinControlPanel extends CommandBase {
 
     @Override
     public void execute() {
-        if(controlType == ControlType.ROTATION_CONTROL) {
-            PanelColor currentColor = controlPanelSubsystem.getCurrentColor();
-            if(currentColor != lastColor) {
-                lastColor = currentColor;
-                colorChanges++;
-                SmartDashboard.putNumber("Color changes", colorChanges);
-            }
-        }
+        if(controlType == ControlType.ROTATION_CONTROL) SmartDashboard.putNumber("Rotations", controlPanelSubsystem.getRotations());
     }
 
     @Override
@@ -57,7 +45,7 @@ public class AutoSpinControlPanel extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (controlType == ControlType.ROTATION_CONTROL) ? (colorChanges >= ControlPanelSpinner.COLOR_CHANGES) : (controlPanelSubsystem.getCurrentColor() == goalColor);
+        return (controlType == ControlType.ROTATION_CONTROL) ? (controlPanelSubsystem.getRotations() >= ControlPanelSpinner.ROTATIONS) : (controlPanelSubsystem.getCurrentColor() == goalColor);
     }
 
     private enum ControlType {

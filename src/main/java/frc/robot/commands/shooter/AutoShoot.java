@@ -1,20 +1,26 @@
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.NavXSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.LimelightSubsystem.Pipeline;
+import frc.robot.subsystems.NavXSubsystem.FieldObject;
 import frc.robot.util.Vector3;
+import static frc.robot.Constants.Shooter.*;
 
 public class AutoShoot extends CommandBase {
 
     private final ShooterSubsystem shooter;
     private final LimelightSubsystem limelight;
+    private final NavXSubsystem navX;
 
-    public AutoShoot(ShooterSubsystem shooter, LimelightSubsystem limelight) {
+    public AutoShoot(ShooterSubsystem shooter, LimelightSubsystem limelight, NavXSubsystem navX) {
         addRequirements(shooter, limelight);
         this.shooter = shooter;
         this.limelight = limelight;
+        this.navX = navX;
     }
 
     @Override
@@ -24,7 +30,34 @@ public class AutoShoot extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.aimTowards(limelight.getTargetVector(), new Vector3()); // use NavX velocity
+        Vector3 targetVector = limelight.getRelativeTargetVector();
+        double robotAngle = navX.getDirection();
+        Vector3 robotVelocity = navX.getVelocity().setZ(0);
+        
+        Vector3 targetDisplacement = targetVector == null ? navX.getDisplacement(FieldObject.POWER_PORT) : targetVector.rotateZ(robotAngle);
+        targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
+        
+        Vector3 ballVelocity = getOptimalBallVelocity(targetDisplacement).subtract(robotVelocity);
+        double aimAngle = Math.toDegrees(Math.atan2(ballVelocity.y, ballVelocity.x)) - robotAngle;
+        
+        shooter.setGoalVelocity(getOptimalRevsPerSecond(ballVelocity));
+        shooter.setGoalAngle(aimAngle);
+
+        SmartDashboard.putString("Shooter Goal Velocity", ballVelocity.toString());
+        SmartDashboard.putNumber("Shooter Goal Angle", aimAngle);
+    }
+
+    private Vector3 getOptimalBallVelocity(Vector3 targetDisplacement) {
+        //double magnitudeXY = targetDisplacement.clone().setZ(0).getMagnitude();
+        //double magnitudeZ = targetDisplacement.z;
+
+        // https://www.desmos.com/calculator/on4xzwtdwz
+
+        return new Vector3();
+    }
+    private double getOptimalRevsPerSecond(Vector3 ballVelocity) {
+        double velocity = ballVelocity.getMagnitude();
+        return velocity / WHEEL_CIRCUMFERENCE;
     }
 
     @Override

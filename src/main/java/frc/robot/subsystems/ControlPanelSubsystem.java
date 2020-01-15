@@ -24,8 +24,15 @@ public class ControlPanelSubsystem extends SubsystemBase {
     private PanelColor pendingColor;
     private Timer verifyColorTimer = new Timer();
 
+    private final Timer timer = new Timer();
+    private double rotations;
+
     public ControlPanelSubsystem() {
+        spinner.configFactoryDefault();
+        spinner.setNeutralMode(ControlPanelSpinner.BRAKE_MODE);
+        spinner.configSelectedFeedbackSensor(ControlPanelSpinner.MOTOR_FEEDBACK_DEVICE);
         toggle(false);
+        
         for(PanelColor color : PanelColor.values()) {
             colorMatcher.addColorMatch(color.getColor());
         }
@@ -33,6 +40,10 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        double revsPerSecond = Math.abs(spinner.getSelectedSensorVelocity()) * 10.0 / ControlPanelSpinner.ENCODER_UNITS;
+        rotations += revsPerSecond * timer.get() * ControlPanelSpinner.WHEEL_CIRCUMFERENCE / ControlPanelSpinner.CONTROL_PANEL_CIRCUMFERENCE;
+        timer.reset();
+
         PanelColor detectedColor = getDetectedColor();
 
         if(detectedColor == pendingColor) {
@@ -58,6 +69,13 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
     public void toggle(boolean on) {
         spinner.set(on ? ControlPanelSpinner.MOTOR_SPEED : 0);
+    }
+    public void resetRotations() {
+        timer.reset();
+        rotations = 0;
+    }
+    public double getRotations() {
+        return rotations;
     }
     
     private PanelColor getDetectedColor() {

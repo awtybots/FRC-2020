@@ -5,8 +5,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.Vector3;
 import static frc.robot.Constants.Limelight.*;
+
+import frc.robot.util.Vector3;
 
 import javax.annotation.Nullable;
 
@@ -14,12 +15,12 @@ public class LimelightSubsystem extends SubsystemBase {
 
     private final NetworkTable table;
 
-    private Pipeline pipeline;
+    private Pipeline currentPipeline;
     private SendableChooser<Number> ledChooser = new SendableChooser<>();
 
     public LimelightSubsystem() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
-        pipeline = Pipeline.POWER_PORT;
+        currentPipeline = Pipeline.POWER_PORT;
         
         ledChooser.addOption("ON", 3);
         ledChooser.setDefaultOption("OFF", 1);
@@ -43,7 +44,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
 
     @Nullable
-    public Vector3 getTargetVector() {
+    public Vector3 getRelativeTargetVector() {
         boolean targetExists = getDouble("tv") == 1.0;
         if(!targetExists) {
             return null;
@@ -54,39 +55,42 @@ public class LimelightSubsystem extends SubsystemBase {
         //double targetArea = getDouble("ta");
         //double targetSkew = getDouble("ts");
 
-        if(pipeline == Pipeline.POWER_PORT) {
-            double yOffset = SHOOTER_HEIGHT_OFFSET / Math.tan(CAMERA_MOUNTING_ANGLE + targetOffsetAngleVertical);
-            double forwardOffset = (new Vector3(0, yOffset, SHOOTER_HEIGHT_OFFSET)).getMagnitude();
-            double xOffset = forwardOffset * Math.tan(targetOffsetAngleHorizontal);
+        double targetHeight = currentPipeline.getTargetHeight();
 
-            return new Vector3(
-                xOffset,
-                yOffset,
-                SHOOTER_HEIGHT_OFFSET
-            );
-        } else {
-            return null;
-        }
+        double yOffset = targetHeight / Math.tan(CAMERA_MOUNTING_ANGLE + targetOffsetAngleVertical);
+        double forwardOffset = (new Vector3(0, yOffset, targetHeight)).getMagnitude();
+        double xOffset = forwardOffset * Math.tan(targetOffsetAngleHorizontal);
+        return new Vector3(
+            xOffset,
+            yOffset,
+            0
+        );
     }
 
 
 
     public void setPipeline(Pipeline pipeline) {
-        this.pipeline = pipeline;
+        this.currentPipeline = pipeline;
         setNumber("pipeline", pipeline.getID());
     }
+
     public enum Pipeline {
-        POWER_PORT(0),
-        LOADING_STATION(1);
+        POWER_PORT(0, SHOOTER_VISION_HEIGHT_OFFSET),
+        LOADING_STATION(1, LOADING_STATION_VISION_HEIGHT_OFFSET);
 
         private int num;
+        private double height;
 
-        private Pipeline(int num) {
+        private Pipeline(int num, double height) {
             this.num = num;
+            this.height = height;
         }
 
-        public int getID() {
+        private int getID() {
             return num;
+        }
+        private double getTargetHeight() {
+            return height;
         }
     }
 

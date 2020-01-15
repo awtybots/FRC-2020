@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
 	private ShooterSubsystem shooterSubsystem;
 	private ControlPanelSubsystem controlPanelSubsystem;
 	private LimelightSubsystem limelightSubsystem;
+	private NavXSubsystem navXSubsystem;
 
 	private Teleop teleopCommand;
 	private Auton autonCommand;
@@ -62,13 +63,15 @@ public class Robot extends TimedRobot {
 		shooterSubsystem = new ShooterSubsystem();
 		controlPanelSubsystem = new ControlPanelSubsystem();
 		limelightSubsystem = new LimelightSubsystem();
+		navXSubsystem = new NavXSubsystem();
 		
 		CommandScheduler.getInstance().registerSubsystem(
 			driveTrainSubsystem,
 			intakeSubsystem,
 			shooterSubsystem,
 			controlPanelSubsystem,
-			limelightSubsystem
+			limelightSubsystem,
+			navXSubsystem
 		);
 
 		// Button Mappings
