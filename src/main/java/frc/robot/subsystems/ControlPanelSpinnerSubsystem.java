@@ -16,6 +16,10 @@ public class ControlPanelSpinnerSubsystem extends SubsystemBase {
     private double rotations;
     
     public ControlPanelSpinnerSubsystem() {
+        spinner.configFactoryDefault();
+        spinner.setNeutralMode(BRAKE_MODE);
+        spinner.configSelectedFeedbackSensor(MOTOR_FEEDBACK_DEVICE);
+
         toggle(false);
     }
     @Override

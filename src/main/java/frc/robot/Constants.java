@@ -116,6 +116,9 @@ public final class Constants {
         public final static double ENCODER_UNITS = 4096;
         public final static double WHEEL_CIRCUMFERENCE = 2 * Math.PI;
         public final static double CONTROL_PANEL_CIRCUMFERENCE = 32 * Math.PI;
+
+        public final static NeutralMode BRAKE_MODE = NeutralMode.Brake;
+        public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative;
     }
 
     public final static class Controller {
