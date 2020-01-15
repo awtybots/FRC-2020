@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
 	private ColorSensorSubsystem colorSensorSubsystem;
 	private ControlPanelSpinnerSubsystem controlPanelSpinnerSubsystem;
 	private LimelightSubsystem limelightSubsystem;
+	private NavXSubsystem navXSubsystem;
 
 	private Teleop teleopCommand;
 	private Auton autonCommand;
@@ -58,6 +59,7 @@ public class Robot extends TimedRobot {
 		colorSensorSubsystem = new ColorSensorSubsystem();
 		controlPanelSpinnerSubsystem = new ControlPanelSpinnerSubsystem();
 		limelightSubsystem = new LimelightSubsystem();
+		navXSubsystem = new NavXSubsystem();
 		
 		CommandScheduler.getInstance().registerSubsystem(
 			driveTrainSubsystem,
@@ -65,7 +67,8 @@ public class Robot extends TimedRobot {
 			shooterSubsystem,
 			colorSensorSubsystem,
 			controlPanelSpinnerSubsystem,
-			limelightSubsystem
+			limelightSubsystem,
+			navXSubsystem
 		);
 
 		// Button Mappings

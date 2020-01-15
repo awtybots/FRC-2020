@@ -82,7 +82,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		setGoalVelocity(0, 0);
 	}
 
-	public double calculatePID(MotorGroup motorGroup, double goalVelocity) {
+	public double calculatePID(MotorGroup motorGroup, double goalVelocity) { // this is my best understanding of PID, not sure how accurate this is
 		double currentVelocity = getAverageInchesPerSecond(motorGroup, false);
 		double velocityError = goalVelocity - currentVelocity;
 		double accelerationError = (velocityError - lastVelocityError.getOrDefault(motorGroup, 0.0)) / PERIOD;
@@ -91,7 +91,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		return (PID_P * velocityError) + (PID_I * integralError) + (PID_D * accelerationError);
 	}
 
-	private double calculateFF(MotorGroup motorGroup, double goalVelocity) { // this is my best understanding of PID, not sure how accurate this is
+	private double calculateFF(MotorGroup motorGroup, double goalVelocity) {
 		double constrainedGoalVelocity = clamp(goalVelocity, -MAX_VELOCITY, MAX_VELOCITY);
 		double currentVelocity = getAverageInchesPerSecond(motorGroup, false);
 		double goalAcceleration = constrainedGoalVelocity - currentVelocity;
