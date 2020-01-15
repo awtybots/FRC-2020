@@ -28,13 +28,18 @@ public class TeleopDrive extends CommandBase {
 	
 	@Override
 	public void execute() {
-		double speed = -xboxController.getY(SPEED_HAND);
-		double rotation = xboxController.getX(ROTATION_HAND);
-		if(Math.abs(speed) < DEADZONE) speed = 0;
-		if(Math.abs(rotation) < DEADZONE) rotation = 0;
-		speed = Math.pow(speed, 2) * Math.signum(speed);
-		rotation = Math.pow(rotation, 2) * Math.signum(rotation);
-		driveTrainSubsystem.setGoalVelocity((speed + rotation) * MAX_VELOCITY, (speed - rotation) * MAX_VELOCITY);
+		double speed = smooth(-xboxController.getY(SPEED_HAND));
+		double rotation = smooth(xboxController.getX(ROTATION_HAND));
+		if(TUNING_MODE) {
+			driveTrainSubsystem.set(speed);
+		} else {
+			driveTrainSubsystem.setGoalVelocity((speed + rotation) * MAX_VELOCITY, (speed - rotation) * MAX_VELOCITY);
+		}
+	}
+
+	private double smooth(double x) {
+		if(Math.abs(x) < DEADZONE) return x;
+		return Math.pow(x, 2) * Math.signum(x);
 	}
 
 	@Override

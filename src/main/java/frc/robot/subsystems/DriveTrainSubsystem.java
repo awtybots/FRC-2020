@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -63,21 +64,31 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		for (WPI_TalonSRX motor : rightMotors) {
 			motor.setSensorPhase(true);
 		}
+
+		speedRight.setInverted(true);
 	}
 
 
 
 	@Override
 	public void periodic() {
-		SmartDashboard.putNumber("currentVelocity", getAverageInchesPerSecond(MotorGroup.ALL, true));
+		if(!TUNING_MODE) {
+			SmartDashboard.putNumber("currentVelocity", getAverageInchesPerSecond(MotorGroup.ALL, true));
 
-		outputLeft = calculateFF(MotorGroup.LEFT, goalVelocityLeft);
-		outputRight = calculateFF(MotorGroup.RIGHT, goalVelocityRight);
-		SmartDashboard.putNumber("outputLeft", outputLeft);
-		SmartDashboard.putNumber("outputRight", outputRight);
+			outputLeft = calculateFF(MotorGroup.LEFT, goalVelocityLeft);
+			outputRight = calculateFF(MotorGroup.RIGHT, goalVelocityRight);
+			SmartDashboard.putNumber("outputLeft", outputLeft);
+			SmartDashboard.putNumber("outputRight", outputRight);
 
-		speedLeft.setVoltage(outputLeft);
-		speedRight.setVoltage(-outputRight);
+			speedLeft.setVoltage(outputLeft);
+			speedRight.setVoltage(outputRight);
+		}
+	}
+	public void set(double speed) {
+		speedLeft.set(speed);
+		speedRight.set(speed);
+		SmartDashboard.putNumber("Voltage", speed * RobotController.getBatteryVoltage());
+		SmartDashboard.putNumber("Velocity", getAverageInchesPerSecond(MotorGroup.ALL, true));
 	}
 
 	public double calculatePID(MotorGroup motorGroup, double goalVelocity) { // this is my best understanding of PID, not sure how accurate this is
