@@ -20,11 +20,10 @@ public class ControlPanelSubsystem extends SubsystemBase {
     private final ColorSensorV3 colorSensor = new ColorSensorV3(ColorSensor.PORT);
     private final ColorMatch colorMatcher = new ColorMatch();
     
+    private PanelColor detectedColor;
     private PanelColor currentColor;
     private PanelColor pendingColor;
     private Timer verifyColorTimer = new Timer();
-
-    private final Timer timer = new Timer();
     private double rotations;
 
     public ControlPanelSubsystem() {
@@ -40,17 +39,16 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double revsPerSecond = Math.abs(spinner.getSelectedSensorVelocity()) * 10.0 / ControlPanelSpinner.ENCODER_UNITS;
-        rotations += revsPerSecond * timer.get() * ControlPanelSpinner.WHEEL_CIRCUMFERENCE / ControlPanelSpinner.CONTROL_PANEL_CIRCUMFERENCE;
-        timer.reset();
+        rotations = ((double)spinner.getSelectedSensorPosition())/4096.0;
 
-        PanelColor detectedColor = getDetectedColor();
-
+        detectedColor = getDetectedColor();
+        System.out.println(detectedColor.getName());
         if(detectedColor == pendingColor) {
             if(verifyColorTimer.get() >= ColorSensor.VERIFY_COLOR_TIME) {
                 verifyColorTimer.stop();
-
+                System.out.println("---------------");
                 currentColor = pendingColor;
+                pendingColor = null;
             }
         } else {
             pendingColor = null;
@@ -71,7 +69,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
         spinner.set(on ? ControlPanelSpinner.MOTOR_SPEED : 0);
     }
     public void resetRotations() {
-        timer.reset();
+        spinner.setSelectedSensorPosition(0);
         rotations = 0;
     }
     public double getRotations() {
@@ -90,6 +88,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
         return null;
     }
     public PanelColor getCurrentColor() {
+        //return detectedColor;
         return currentColor;
     }
 
