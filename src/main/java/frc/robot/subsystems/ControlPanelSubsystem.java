@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
@@ -9,8 +10,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ColorSensor;
+import frc.robot.Constants.ControlPanelSpinner;
+import frc.robot.Constants.MotorIDs;
 
-public class ColorSensorSubsystem extends SubsystemBase {
+public class ControlPanelSubsystem extends SubsystemBase {
+
+    private final WPI_TalonSRX spinner = new WPI_TalonSRX(MotorIDs.CONTROL_PANEL_SPINNER);
     
     private final ColorSensorV3 colorSensor = new ColorSensorV3(ColorSensor.PORT);
     private final ColorMatch colorMatcher = new ColorMatch();
@@ -19,7 +24,8 @@ public class ColorSensorSubsystem extends SubsystemBase {
     private PanelColor pendingColor;
     private Timer verifyColorTimer = new Timer();
 
-    public ColorSensorSubsystem() {
+    public ControlPanelSubsystem() {
+        toggle(false);
         for(PanelColor color : PanelColor.values()) {
             colorMatcher.addColorMatch(color.getColor());
         }
@@ -48,6 +54,10 @@ public class ColorSensorSubsystem extends SubsystemBase {
         
         if(currentColor != null)
             SmartDashboard.putString("Current color", currentColor.getName());
+    }
+
+    public void toggle(boolean on) {
+        spinner.set(on ? ControlPanelSpinner.MOTOR_SPEED : 0);
     }
     
     private PanelColor getDetectedColor() {

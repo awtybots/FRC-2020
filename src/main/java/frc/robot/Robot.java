@@ -29,8 +29,7 @@ public class Robot extends TimedRobot {
 	private DriveTrainSubsystem driveTrainSubsystem;
 	private IntakeSubsystem intakeSubsystem;
 	private ShooterSubsystem shooterSubsystem;
-	private ColorSensorSubsystem colorSensorSubsystem;
-	private ControlPanelSpinnerSubsystem controlPanelSpinnerSubsystem;
+	private ControlPanelSubsystem controlPanelSubsystem;
 	private LimelightSubsystem limelightSubsystem;
 
 	private Teleop teleopCommand;
@@ -61,28 +60,26 @@ public class Robot extends TimedRobot {
 		driveTrainSubsystem = new DriveTrainSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
 		shooterSubsystem = new ShooterSubsystem();
-		colorSensorSubsystem = new ColorSensorSubsystem();
-		controlPanelSpinnerSubsystem = new ControlPanelSpinnerSubsystem();
+		controlPanelSubsystem = new ControlPanelSubsystem();
 		limelightSubsystem = new LimelightSubsystem();
 		
 		CommandScheduler.getInstance().registerSubsystem(
 			driveTrainSubsystem,
 			intakeSubsystem,
 			shooterSubsystem,
-			colorSensorSubsystem,
-			controlPanelSpinnerSubsystem,
+			controlPanelSubsystem,
 			limelightSubsystem
 		);
 
 		// Button Mappings
 		getButton("Y")
-			.whenPressed(new ToggleControlPanelSpinner(controlPanelSpinnerSubsystem, true))
-			.whenReleased(new ToggleControlPanelSpinner(controlPanelSpinnerSubsystem, false));
+			.whenPressed(new ToggleControlPanelSpinner(controlPanelSubsystem, true))
+			.whenReleased(new ToggleControlPanelSpinner(controlPanelSubsystem, false));
 		getButton("X")
 			.whenPressed(new ToggleShooter(shooterSubsystem, true))
 			.whenReleased(new ToggleShooter(shooterSubsystem, false));
 		getButton("A")
-			.whenPressed(new AutoSpinControlPanel(controlPanelSpinnerSubsystem, colorSensorSubsystem));
+			.whenPressed(new AutoSpinControlPanel(controlPanelSubsystem));
 		getButton("B")
 			.whenPressed(new ToggleIntake(intakeSubsystem));
 	}

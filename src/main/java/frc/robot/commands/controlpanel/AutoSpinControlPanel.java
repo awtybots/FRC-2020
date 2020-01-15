@@ -4,14 +4,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ControlPanelSpinner;
-import frc.robot.subsystems.ColorSensorSubsystem;
-import frc.robot.subsystems.ColorSensorSubsystem.PanelColor;
-import frc.robot.subsystems.ControlPanelSpinnerSubsystem;
+import frc.robot.subsystems.ControlPanelSubsystem;
+import frc.robot.subsystems.ControlPanelSubsystem.PanelColor;
 
 public class AutoSpinControlPanel extends CommandBase {
 
-    private final ControlPanelSpinnerSubsystem spinner;
-    private final ColorSensorSubsystem sensor;
+    private final ControlPanelSubsystem controlPanelSubsystem;
 
     private ControlType controlType;
 
@@ -20,10 +18,9 @@ public class AutoSpinControlPanel extends CommandBase {
     private PanelColor lastColor;
     private int colorChanges;
 
-    public AutoSpinControlPanel(ControlPanelSpinnerSubsystem spinner, ColorSensorSubsystem sensor) {
-        addRequirements(spinner, sensor);
-        this.spinner = spinner;
-        this.sensor = sensor;
+    public AutoSpinControlPanel(ControlPanelSubsystem controlPanelSubsystem) {
+        addRequirements(controlPanelSubsystem);
+        this.controlPanelSubsystem = controlPanelSubsystem;
     }
 
     @Override
@@ -34,17 +31,17 @@ public class AutoSpinControlPanel extends CommandBase {
             goalColor = PanelColor.fromChar(gameData.charAt(0));
         } else {
             controlType = ControlType.ROTATION_CONTROL;
-            lastColor = sensor.getCurrentColor();
+            lastColor = controlPanelSubsystem.getCurrentColor();
             colorChanges = 0;
         }
 
-        spinner.toggle(true);
+        controlPanelSubsystem.toggle(true);
     }
 
     @Override
     public void execute() {
         if(controlType == ControlType.ROTATION_CONTROL) {
-            PanelColor currentColor = sensor.getCurrentColor();
+            PanelColor currentColor = controlPanelSubsystem.getCurrentColor();
             if(currentColor != lastColor) {
                 lastColor = currentColor;
                 colorChanges++;
@@ -55,12 +52,12 @@ public class AutoSpinControlPanel extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        spinner.toggle(false);
+        controlPanelSubsystem.toggle(false);
     }
 
     @Override
     public boolean isFinished() {
-        return (controlType == ControlType.ROTATION_CONTROL) ? (colorChanges >= ControlPanelSpinner.COLOR_CHANGES) : (sensor.getCurrentColor() == goalColor);
+        return (controlType == ControlType.ROTATION_CONTROL) ? (colorChanges >= ControlPanelSpinner.COLOR_CHANGES) : (controlPanelSubsystem.getCurrentColor() == goalColor);
     }
 
     private enum ControlType {
