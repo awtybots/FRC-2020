@@ -41,6 +41,6 @@ public class Auton extends ParallelCommandGroup {
 
     public enum AutonType {
         DO_NOTHING,
-        SQUARE
+        SQUARE;
     }
 }

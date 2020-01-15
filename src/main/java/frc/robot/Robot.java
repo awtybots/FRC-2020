@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.*;
@@ -48,8 +49,13 @@ public class Robot extends TimedRobot {
 		autonChooser = new SendableChooser<>();
 		AutonType[] autonTypes = AutonType.values();
 		for(AutonType autonType : autonTypes) {
-			autonChooser.addOption(autonType.toString(), autonType);
+			if(autonType == AutonType.DO_NOTHING) {
+				autonChooser.setDefaultOption(autonType.toString(), autonType);
+			} else {
+				autonChooser.addOption(autonType.toString(), autonType);
+			}
 		}
+		SmartDashboard.putData(autonChooser);
 
 		// Subsystems
 		xboxController = new XboxController(Controller.PORT);

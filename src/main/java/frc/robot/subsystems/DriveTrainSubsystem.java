@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 
@@ -43,8 +44,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	private double outputLeft = 0;
 	private double outputRight = 0;
 
-	private double integralError = 0;
 	private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
+	private HashMap<MotorGroup, Double> integralError = new HashMap<>();
 
 	private static double PERIOD;
 
@@ -58,28 +59,25 @@ public class DriveTrainSubsystem extends SubsystemBase {
 			motor.setNeutralMode(BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
 			motor.configSelectedFeedbackSensor(MOTOR_FEEDBACK_DEVICE); // sets which encoder the motor is using
 		}
+
+		for (WPI_TalonSRX motor : rightMotors) {
+			motor.setSensorPhase(true);
+		}
 	}
+
+
 
 	@Override
 	public void periodic() {
+		SmartDashboard.putNumber("currentVelocity", getAverageInchesPerSecond(MotorGroup.ALL, true));
+
 		outputLeft = calculateFF(MotorGroup.LEFT, goalVelocityLeft);
 		outputRight = calculateFF(MotorGroup.RIGHT, goalVelocityRight);
+		SmartDashboard.putNumber("outputLeft", outputLeft);
+		SmartDashboard.putNumber("outputRight", outputRight);
 
-		set(outputLeft, outputRight);
-	}
-
-	private void set(double left, double right) {
-		speedLeft.setVoltage(left);
-		speedRight.setVoltage(right);
-	}
-
-	public void setGoalVelocity(double left, double right) {
-		goalVelocityLeft = left;
-		goalVelocityRight = right;
-	}
-
-	public void stop() {
-		setGoalVelocity(0, 0);
+		speedLeft.setVoltage(outputLeft);
+		speedRight.setVoltage(-outputRight);
 	}
 
 	public double calculatePID(MotorGroup motorGroup, double goalVelocity) { // this is my best understanding of PID, not sure how accurate this is
@@ -87,8 +85,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double velocityError = goalVelocity - currentVelocity;
 		double accelerationError = (velocityError - lastVelocityError.getOrDefault(motorGroup, 0.0)) / PERIOD;
 		lastVelocityError.put(motorGroup, velocityError);
-		integralError = clamp(integralError + (velocityError * PERIOD), INTEGRAL_MIN / PID_I, INTEGRAL_MAX / PID_I);
-		return (PID_P * velocityError) + (PID_I * integralError) + (PID_D * accelerationError);
+		integralError.put(motorGroup, clamp(integralError.getOrDefault(motorGroup, 0.0) + (velocityError * PERIOD), INTEGRAL_MIN / PID_I, INTEGRAL_MAX / PID_I));
+		return (PID_P * velocityError) + (PID_I * integralError.get(motorGroup)) + (PID_D * accelerationError);
 	}
 
 	private double calculateFF(MotorGroup motorGroup, double goalVelocity) {
@@ -96,8 +94,18 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double currentVelocity = getAverageInchesPerSecond(motorGroup, false);
 		double goalAcceleration = constrainedGoalVelocity - currentVelocity;
 		double constrainedGoalAcceleration = clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
-		return (FF_S * Math.signum(currentVelocity)) + (FF_V * currentVelocity) + (FF_A * constrainedGoalAcceleration);
+		double direction = currentVelocity == 0 ? goalVelocity : Math.signum(currentVelocity);
+		return (FF_S * direction) + (FF_V * currentVelocity) + (FF_A * constrainedGoalAcceleration);
 	}
+
+	
+
+	public void setGoalVelocity(double left, double right) {
+		goalVelocityLeft = left;
+		goalVelocityRight = right;
+	}
+
+
 
 	public double getAverageInchesPerSecond(MotorGroup motorGroup, boolean abs) { // utility function to get average inches per second from certain groups of motors
 		double totalUnitsPer100ms = 0;

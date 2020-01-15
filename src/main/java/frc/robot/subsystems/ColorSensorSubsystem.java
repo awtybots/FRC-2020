@@ -46,7 +46,8 @@ public class ColorSensorSubsystem extends SubsystemBase {
             }
         }
         
-        SmartDashboard.putString("Current color", currentColor.getName());
+        if(currentColor != null)
+            SmartDashboard.putString("Current color", currentColor.getName());
     }
     
     private PanelColor getDetectedColor() {

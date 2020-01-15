@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Vector3;
 import static frc.robot.Constants.Limelight.*;
@@ -13,10 +15,20 @@ public class LimelightSubsystem extends SubsystemBase {
     private final NetworkTable table;
 
     private Pipeline pipeline;
+    private SendableChooser<Number> ledChooser = new SendableChooser<>();
 
     public LimelightSubsystem() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         pipeline = Pipeline.POWER_PORT;
+        
+        ledChooser.addOption("ON", 3);
+        ledChooser.setDefaultOption("OFF", 1);
+        SmartDashboard.putData(ledChooser);
+    }
+    @Override
+    public void periodic() {
+        Number ledMode = ledChooser.getSelected();
+        setNumber("ledMode", ledMode);
     }
 
 
@@ -43,14 +55,14 @@ public class LimelightSubsystem extends SubsystemBase {
         //double targetSkew = getDouble("ts");
 
         if(pipeline == Pipeline.POWER_PORT) {
-            double zOffset = SHOOTER_HEIGHT_OFFSET / Math.tan(CAMERA_MOUNTING_ANGLE + targetOffsetAngleVertical);
-            double forwardOffset = (new Vector3(0, SHOOTER_HEIGHT_OFFSET, zOffset)).getMagnitude();
+            double yOffset = SHOOTER_HEIGHT_OFFSET / Math.tan(CAMERA_MOUNTING_ANGLE + targetOffsetAngleVertical);
+            double forwardOffset = (new Vector3(0, yOffset, SHOOTER_HEIGHT_OFFSET)).getMagnitude();
             double xOffset = forwardOffset * Math.tan(targetOffsetAngleHorizontal);
 
             return new Vector3(
                 xOffset,
-                SHOOTER_HEIGHT_OFFSET,
-                zOffset
+                yOffset,
+                SHOOTER_HEIGHT_OFFSET
             );
         } else {
             return null;

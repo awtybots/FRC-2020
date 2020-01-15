@@ -30,12 +30,11 @@ public class TeleopDrive extends CommandBase {
 	public void execute() {
 		double speed = -xboxController.getY(SPEED_HAND);
 		double rotation = xboxController.getX(ROTATION_HAND);
+		if(Math.abs(speed) < DEADZONE) speed = 0;
+		if(Math.abs(rotation) < DEADZONE) rotation = 0;
+		speed = Math.pow(speed, 2) * Math.signum(speed);
+		rotation = Math.pow(rotation, 2) * Math.signum(rotation);
 		driveTrainSubsystem.setGoalVelocity((speed + rotation) * MAX_VELOCITY, (speed - rotation) * MAX_VELOCITY);
-	}
-
-	@Override
-	public void end(boolean interrupted) {
-		driveTrainSubsystem.stop();
 	}
 
 	@Override

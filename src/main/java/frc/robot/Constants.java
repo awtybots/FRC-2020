@@ -23,9 +23,9 @@ public final class Constants {
         public static final int DRIVE_R2 = 13;
         public static final int DRIVE_R3 = 14;
 
-        public static final int INTAKE = 11;
+        public static final int INTAKE = 1;
 
-        public static final int SHOOTER = 11;
+        public static final int SHOOTER = 3;
 
         public static final int CONTROL_PANEL_SPINNER = 11;
     }
@@ -34,6 +34,8 @@ public final class Constants {
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative;
         public final static double ENCODER_UNITS = 4096;
+
+        public final static double DEADZONE = 0.1;
         
         public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI;
         public final static double ROBOT_CIRMCUMFERENCE = 100; // this the the distance (in inches) each wheel travels when the robot spins one time around its center
@@ -100,7 +102,7 @@ public final class Constants {
     }
 
     public final static class ControlPanelSpinner {
-        public final static double MOTOR_SPEED = 0;
+        public final static double MOTOR_SPEED = 0.3;
         public final static int COLOR_CHANGES = 25;
     }
 
