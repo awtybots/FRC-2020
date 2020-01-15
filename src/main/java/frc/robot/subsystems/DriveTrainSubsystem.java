@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 
@@ -58,17 +59,25 @@ public class DriveTrainSubsystem extends SubsystemBase {
 			motor.setNeutralMode(BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
 			motor.configSelectedFeedbackSensor(MOTOR_FEEDBACK_DEVICE); // sets which encoder the motor is using
 		}
+
+		for (WPI_TalonSRX motor : rightMotors) {
+			motor.setSensorPhase(true);
+		}
 	}
 
 
 
 	@Override
 	public void periodic() {
+		SmartDashboard.putNumber("currentVelocity", getAverageInchesPerSecond(MotorGroup.ALL, true));
+
 		outputLeft = calculateFF(MotorGroup.LEFT, goalVelocityLeft);
 		outputRight = calculateFF(MotorGroup.RIGHT, goalVelocityRight);
+		SmartDashboard.putNumber("outputLeft", outputLeft);
+		SmartDashboard.putNumber("outputRight", outputRight);
 
 		speedLeft.setVoltage(outputLeft);
-		speedRight.setVoltage(outputRight);
+		speedRight.setVoltage(-outputRight);
 	}
 
 	public double calculatePID(MotorGroup motorGroup, double goalVelocity) {
@@ -85,7 +94,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double currentVelocity = getAverageInchesPerSecond(motorGroup, false);
 		double goalAcceleration = constrainedGoalVelocity - currentVelocity;
 		double constrainedGoalAcceleration = clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
-		return (FF_S * Math.signum(currentVelocity)) + (FF_V * currentVelocity) + (FF_A * constrainedGoalAcceleration);
+		double direction = currentVelocity == 0 ? goalVelocity : Math.signum(currentVelocity);
+		return (FF_S * direction) + (FF_V * currentVelocity) + (FF_A * constrainedGoalAcceleration);
 	}
 
 	

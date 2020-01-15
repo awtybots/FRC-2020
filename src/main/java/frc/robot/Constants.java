@@ -34,6 +34,8 @@ public final class Constants {
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative;
         public final static double ENCODER_UNITS = 4096;
+
+        public final static double DEADZONE = 0.1;
         
         public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI;
         public final static double ROBOT_CIRMCUMFERENCE = 100; // this the the distance (in inches) each wheel travels when the robot spins one time around its center
