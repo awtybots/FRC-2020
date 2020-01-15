@@ -71,6 +71,7 @@ public final class Constants {
         public final static double WHEEL_CIRCUMFERENCE = 4 * Math.PI;
 
         public final static double SHOOTER_HEIGHT = 24;
+        public final static double SHOOTER_ANGLE = 45;
 
         public final static double MAX_ACCELERATION = 10;
         public final static double SHOOTER_TELEOP_SPEED = 60;
