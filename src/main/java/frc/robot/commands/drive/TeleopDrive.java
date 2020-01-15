@@ -34,11 +34,6 @@ public class TeleopDrive extends CommandBase {
 	}
 
 	@Override
-	public void end(boolean interrupted) {
-		driveTrainSubsystem.stop();
-	}
-
-	@Override
 	public boolean isFinished() {
 		return false;
 	}

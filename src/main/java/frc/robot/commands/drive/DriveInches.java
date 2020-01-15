@@ -58,11 +58,6 @@ public class DriveInches extends CommandBase {
     }
 
     @Override
-    public void end(boolean interrupted) {
-        driveTrainSubsystem.stop();
-    }
-
-    @Override
 	public boolean isFinished() {
 		return Math.abs(currentDistance) >= Math.abs(goalDistance) - GOAL_TOLERANCE;
 	}
