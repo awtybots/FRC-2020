@@ -36,7 +36,8 @@ public final class Constants {
         public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative;
         public final static double ENCODER_UNITS = 4096;
 
-        public final static boolean TUNING_MODE = true;
+        public final static boolean TUNING_MODE = false;
+        public final static double TEST_SPEED = 0.2;
 
         public final static double DEADZONE = 0.1;
         

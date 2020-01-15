@@ -38,7 +38,7 @@ public class TeleopDrive extends CommandBase {
 	}
 
 	private double smooth(double x) {
-		if(Math.abs(x) < DEADZONE) return x;
+		if(Math.abs(x) < DEADZONE) return 0;
 		return Math.pow(x, 2) * Math.signum(x);
 	}
 

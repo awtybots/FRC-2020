@@ -80,8 +80,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("outputLeft", outputLeft);
 			SmartDashboard.putNumber("outputRight", outputRight);
 
-			speedLeft.setVoltage(outputLeft);
-			speedRight.setVoltage(outputRight);
+			speedLeft.setVoltage(outputLeft * TEST_SPEED);
+			speedRight.setVoltage(outputRight * TEST_SPEED);
 		}
 	}
 	public void set(double speed) {
