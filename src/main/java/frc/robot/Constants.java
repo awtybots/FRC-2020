@@ -112,7 +112,10 @@ public final class Constants {
 
     public final static class ControlPanelSpinner {
         public final static double MOTOR_SPEED = 0.3;
-        public final static int COLOR_CHANGES = 25;
+        public final static double ROTATIONS = 3.1;
+        public final static double ENCODER_UNITS = 4096;
+        public final static double WHEEL_CIRCUMFERENCE = 2 * Math.PI;
+        public final static double CONTROL_PANEL_CIRCUMFERENCE = 32 * Math.PI;
     }
 
     public final static class Controller {

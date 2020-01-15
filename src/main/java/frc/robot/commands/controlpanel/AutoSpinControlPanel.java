@@ -3,7 +3,7 @@ package frc.robot.commands.controlpanel;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ControlPanelSpinner;
+import static frc.robot.Constants.ControlPanelSpinner.*;
 import frc.robot.subsystems.ColorSensorSubsystem;
 import frc.robot.subsystems.ColorSensorSubsystem.PanelColor;
 import frc.robot.subsystems.ControlPanelSpinnerSubsystem;
@@ -16,9 +16,6 @@ public class AutoSpinControlPanel extends CommandBase {
     private ControlType controlType;
 
     private PanelColor goalColor;
-
-    private PanelColor lastColor;
-    private int colorChanges;
 
     public AutoSpinControlPanel(ControlPanelSpinnerSubsystem spinner, ColorSensorSubsystem sensor) {
         addRequirements(spinner, sensor);
@@ -33,9 +30,7 @@ public class AutoSpinControlPanel extends CommandBase {
             controlType = ControlType.POSITION_CONTROL;
             goalColor = PanelColor.fromChar(gameData.charAt(0));
         } else {
-            controlType = ControlType.ROTATION_CONTROL;
-            lastColor = sensor.getCurrentColor();
-            colorChanges = 0;
+            spinner.resetRotations();
         }
 
         spinner.toggle(true);
@@ -43,14 +38,7 @@ public class AutoSpinControlPanel extends CommandBase {
 
     @Override
     public void execute() {
-        if(controlType == ControlType.ROTATION_CONTROL) {
-            PanelColor currentColor = sensor.getCurrentColor();
-            if(currentColor != lastColor) {
-                lastColor = currentColor;
-                colorChanges++;
-                SmartDashboard.putNumber("Color changes", colorChanges);
-            }
-        }
+        if(controlType == ControlType.ROTATION_CONTROL) SmartDashboard.putNumber("Rotations", spinner.getRotations());
     }
 
     @Override
@@ -60,7 +48,7 @@ public class AutoSpinControlPanel extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (controlType == ControlType.ROTATION_CONTROL) ? (colorChanges >= ControlPanelSpinner.COLOR_CHANGES) : (sensor.getCurrentColor() == goalColor);
+        return (controlType == ControlType.ROTATION_CONTROL) ? (spinner.getRotations() >= ROTATIONS) : (sensor.getCurrentColor() == goalColor);
     }
 
     private enum ControlType {
