@@ -42,11 +42,11 @@ public class ControlPanelSubsystem extends SubsystemBase {
         rotations = ((double)spinner.getSelectedSensorPosition())/4096.0;
 
         detectedColor = getDetectedColor();
-        System.out.println(detectedColor.getName());
+        
         if(detectedColor == pendingColor) {
             if(verifyColorTimer.get() >= ColorSensor.VERIFY_COLOR_TIME) {
                 verifyColorTimer.stop();
-                System.out.println("---------------");
+                
                 currentColor = pendingColor;
                 pendingColor = null;
             }
