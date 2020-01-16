@@ -29,7 +29,8 @@ public class RotateDegrees extends CommandBase {
     }
 
     @Override
-    public void execute() {        // encoders
+    public void execute() {
+        // encoders
         double currentVelocity = driveTrainSubsystem.getVelocity(MotorGroup.ALL, true);
         currentDistance = driveTrainSubsystem.getDistance(true);
 
