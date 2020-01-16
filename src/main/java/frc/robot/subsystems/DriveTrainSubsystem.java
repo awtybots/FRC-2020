@@ -33,10 +33,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	private final static WPI_TalonSRX motorR2 = new WPI_TalonSRX(MotorIDs.DRIVE_R2);
 	private final static WPI_TalonSRX motorR3 = new WPI_TalonSRX(MotorIDs.DRIVE_R3);
 
-	private final static WPI_TalonSRX[] motors = new WPI_TalonSRX[] { motorL1, motorL2, motorL3, motorR1, motorR2, motorR3 };
-	private final static WPI_TalonSRX[] leftMotors = new WPI_TalonSRX[] { motorL1, motorL2, motorL3 };
-	private final static WPI_TalonSRX[] rightMotors = new WPI_TalonSRX[] { motorR1, motorR2, motorR3 };
-
 	private final static SpeedControllerGroup speedLeft = new SpeedControllerGroup(motorL1, motorL2, motorL3);
 	private final static SpeedControllerGroup speedRight = new SpeedControllerGroup(motorR1, motorR2, motorR3);
 
@@ -53,7 +49,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	public DriveTrainSubsystem() {
 		PERIOD = Robot.getTimePeriod();
 
-		for (WPI_TalonSRX motor : motors) {
+		for (WPI_TalonSRX motor : MotorGroup.ALL.getMotors()) {
 			motor.set(0); // start all motors at 0% speed to stop the blinking
 
 			motor.configFactoryDefault(); // reset settings
@@ -61,7 +57,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 			motor.configSelectedFeedbackSensor(MOTOR_FEEDBACK_DEVICE); // sets which encoder the motor is using
 		}
 
-		for (WPI_TalonSRX motor : rightMotors) {
+		for (WPI_TalonSRX motor : MotorGroup.RIGHT.getMotors()) {
 			motor.setSensorPhase(true);
 		}
 
@@ -80,8 +76,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 			SmartDashboard.putNumber("outputLeft", outputLeft);
 			SmartDashboard.putNumber("outputRight", outputRight);
 
-			speedLeft.setVoltage(outputLeft * TEST_SPEED);
-			speedRight.setVoltage(outputRight * TEST_SPEED);
+			//speedLeft.setVoltage(outputLeft);
+			//speedRight.setVoltage(outputRight);
 		}
 	}
 	public void set(double speed) {
@@ -106,7 +102,20 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double goalAcceleration = constrainedGoalVelocity - currentVelocity;
 		double constrainedGoalAcceleration = clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
 		double direction = currentVelocity == 0 ? goalVelocity : Math.signum(currentVelocity);
-		return (FF_S * direction) + (FF_V * currentVelocity) + (FF_A * constrainedGoalAcceleration);
+
+		double S = FF_S * direction;
+		double V = FF_V * currentVelocity;
+		double A = FF_A * constrainedGoalAcceleration;
+		double voltage = S + V + A;
+
+		SmartDashboard.putNumber("Goal Velocity", constrainedGoalVelocity);
+		SmartDashboard.putNumber("Goal Acceleration", constrainedGoalAcceleration);
+		SmartDashboard.putNumber("FF_S", S);
+		SmartDashboard.putNumber("FF_V", V);
+		SmartDashboard.putNumber("FF_A", A);
+		SmartDashboard.putNumber("Voltage", voltage);
+		
+		return voltage;
 	}
 
 	
@@ -126,15 +135,15 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		}
 		// encoders give motor velocity in units per 100ms, so multiply by 10 for units per second and divide by units per rev for revs per second
 		// multiply revolutions per second by seconds elapsed and wheel circumference for distance traveled
-		double averageUnitsPer100ms = totalUnitsPer100ms / motors.length;
+		double averageUnitsPer100ms = totalUnitsPer100ms / motorGroup.getMotors().length;
 		double revolutionsPerSecond = averageUnitsPer100ms * 10.0 / ENCODER_UNITS;
 		return revolutionsPerSecond * WHEEL_CIRCUMFERENCE;
 	}
 
 	public enum MotorGroup {
-		LEFT(leftMotors),
-		RIGHT(rightMotors),
-		ALL(motors);
+		LEFT(new WPI_TalonSRX[]{ motorL1, motorL2, motorL3 }),
+		RIGHT(new WPI_TalonSRX[]{ motorR1, motorR2, motorR3 }),
+		ALL(new WPI_TalonSRX[]{ motorL1, motorL2, motorL3, motorR1, motorR2, motorR3 });
 
 		private WPI_TalonSRX[] motorList;
 
