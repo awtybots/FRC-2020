@@ -23,7 +23,7 @@ public final class Constants {
         public static final int DRIVE_R2 = 13;
         public static final int DRIVE_R3 = 14;
 
-        public static final int INTAKE = 1;
+        public static final int INTAKE = 11;
 
         public static final int SHOOTER = 3;
 

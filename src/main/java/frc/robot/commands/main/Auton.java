@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.drive.DriveInches;
 import frc.robot.commands.drive.RotateDegrees;
+import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 public class Auton extends ParallelCommandGroup {
 
@@ -14,12 +16,10 @@ public class Auton extends ParallelCommandGroup {
 
     private final DriveTrainSubsystem driveTrainSubsystem;
 
-    public Auton(DriveTrainSubsystem driveTrainSubsystem, AutonType autonType) {
+    public Auton(DriveTrainSubsystem driveTrainSubsystem, IntakeSubsystem intakeSubsystem, AutonType autonType) {
         this.driveTrainSubsystem = driveTrainSubsystem;
         addCommands(
-            // list all commands to do when auton starts
-            // turn on intake
-            // etc...
+            new ToggleIntake(intakeSubsystem, true),
             getAutonSequence(driveTrainSubsystem, autonType)
         );
     }
