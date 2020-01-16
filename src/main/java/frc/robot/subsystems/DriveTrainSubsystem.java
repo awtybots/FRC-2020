@@ -88,7 +88,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Velocity", getVelocity(MotorGroup.ALL, true));
 	}
 
-	public double calculatePID(MotorGroup motorGroup, double goalVelocity) { // this is my best understanding of PID, not sure how accurate this is
+    @SuppressWarnings("unused")
+	private double calculatePID(MotorGroup motorGroup, double goalVelocity) { // this is my best understanding of PID, not sure how accurate this is
 		double currentVelocity = getVelocity(motorGroup, false);
 		double velocityError = goalVelocity - currentVelocity;
 		double accelerationError = (velocityError - lastVelocityError.getOrDefault(motorGroup, 0.0)) / PERIOD;

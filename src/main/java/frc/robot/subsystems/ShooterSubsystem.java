@@ -12,51 +12,76 @@ import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-    private final WPI_TalonSRX motor = new WPI_TalonSRX(MotorIDs.SHOOTER);
+    private final WPI_TalonSRX flywheel = new WPI_TalonSRX(MotorIDs.SHOOTER_FLYWHEEL);
+    private final WPI_TalonSRX turret = new WPI_TalonSRX(MotorIDs.SHOOTER_TURRET);
 
-	private static double PERIOD;
+	private double PERIOD;
 
     private double goalVelocity;
     private double goalAngle;
+
+    private boolean readyToShoot;
     
     public ShooterSubsystem() {
         PERIOD = Robot.getTimePeriod();
 
-        motor.configFactoryDefault(); // reset settings
-        motor.setNeutralMode(BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
-        motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); // sets which encoder the motor is using
+        flywheel.configFactoryDefault();
+        flywheel.setNeutralMode(FLYWHEEL_BRAKE_MODE);
+        flywheel.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+
+        turret.configFactoryDefault();
+        turret.setNeutralMode(TURRET_BRAKE_MODE);
+        turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        turret.setSelectedSensorPosition(0);
             
         setGoalVelocity(0);
     }
 
     @Override
     public void periodic() {
-        doBangBang();
+        boolean velocityAtGoal = Math.abs(getFlywheelRevsPerSecond() - goalVelocity) <= GOAL_VELOCITY_THRESHOLD;;
+        boolean angleAtGoal = Math.abs(getTurretAngle() - goalAngle) <= GOAL_ANGLE_THRESHOLD;
+        readyToShoot = velocityAtGoal && angleAtGoal;
+
+        flywheelBangBang();
+        spinTurret();
     }
 
-    private void doBangBang() {
-        double currentVelocity = getRevsPerSecond();
+    private void flywheelBangBang() {
+        double currentVelocity = getFlywheelRevsPerSecond();
         if(currentVelocity < goalVelocity - GOAL_VELOCITY_THRESHOLD) {
-            motor.set(1);
+            flywheel.set(1);
         } else if(currentVelocity > goalVelocity + GOAL_VELOCITY_THRESHOLD){
-            motor.set(0);
+            flywheel.set(0);
         }
     }
-    public void doFeedForward() {
-		double currentVelocity = getRevsPerSecond();
+    @SuppressWarnings("unused")
+    private void flywheelFeedForward() {
+		double currentVelocity = getFlywheelRevsPerSecond();
         double goalAcceleration = clamp(goalVelocity - currentVelocity, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
         double direction = currentVelocity == 0 ? goalVelocity : Math.signum(currentVelocity);
         double voltage = (FF_S * direction) + (FF_V * currentVelocity) + (FF_A * goalAcceleration);
-        motor.setVoltage(voltage);
+        flywheel.setVoltage(voltage);
+    }
+
+    private void spinTurret() {
+        double currentAngle = getTurretAngle();
+        if(currentAngle > goalAngle + GOAL_ANGLE_THRESHOLD) {
+            turret.set(-TURRET_SPEED);
+        } else if(currentAngle < goalAngle - GOAL_ANGLE_THRESHOLD) {
+            turret.set(TURRET_SPEED);
+        } else {
+            turret.set(0);
+        }
     }
 
 
 
-    public double getRevsPerSecond() {
-        return motor.getSelectedSensorVelocity() / 409.6;
+    public double getFlywheelRevsPerSecond() {
+        return flywheel.getSelectedSensorVelocity() / 409.6;
     }
-    public double getAngle() {
-        return 0;
+    public double getTurretAngle() {
+        return turret.getSelectedSensorPosition() / 4096 * TURRET_RATIO * 360;
     }
 
 
@@ -68,16 +93,8 @@ public class ShooterSubsystem extends SubsystemBase {
         this.goalAngle = goalAngle;
     }
 
-
-
-    public boolean velocityAtGoal() {
-        return Math.abs(getRevsPerSecond() - goalVelocity) <= GOAL_VELOCITY_THRESHOLD;
-    }
-    public boolean angleAtGoal() {
-        return Math.abs(getAngle() - goalAngle) <= GOAL_ANGLE_THRESHOLD;
-    }
     public boolean readyToShoot() {
-        return velocityAtGoal() && angleAtGoal();
+        return readyToShoot;
     }
 
 }

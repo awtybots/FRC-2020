@@ -36,11 +36,12 @@ public class AutoShoot extends CommandBase {
         
         Vector3 targetDisplacement = targetVector == null ? navX.getDisplacement(FieldObject.POWER_PORT) : targetVector.rotateZ(robotAngle);
         targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
-        
         Vector3 ballVelocity = getOptimalBallVelocity(targetDisplacement).subtract(robotVelocity);
+        
+        double revsPerSecond = ballVelocity.getMagnitude() / WHEEL_CIRCUMFERENCE;
         double aimAngle = Math.toDegrees(Math.atan2(ballVelocity.y, ballVelocity.x)) - robotAngle;
         
-        shooter.setGoalVelocity(getOptimalRevsPerSecond(ballVelocity));
+        shooter.setGoalVelocity(revsPerSecond);
         shooter.setGoalAngle(aimAngle);
 
         SmartDashboard.putString("Shooter Goal Velocity", ballVelocity.toString());
@@ -80,10 +81,6 @@ public class AutoShoot extends CommandBase {
         //    https://www.desmos.com/calculator/on4xzwtdwz
         //    https://demonstrations.wolfram.com/ProjectileWithAirDrag/
         
-    }
-    private double getOptimalRevsPerSecond(Vector3 ballVelocity) {
-        double velocity = ballVelocity.getMagnitude();
-        return velocity / WHEEL_CIRCUMFERENCE;
     }
 
     @Override

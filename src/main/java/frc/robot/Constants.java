@@ -23,9 +23,10 @@ public final class Constants {
         public static final int DRIVE_R2 = 13;
         public static final int DRIVE_R3 = 14;
 
-        public static final int INTAKE = 11;
+        public static final int INTAKE = -1;
 
-        public static final int SHOOTER = 3;
+        public static final int SHOOTER_FLYWHEEL = -1;
+        public static final int SHOOTER_TURRET = -1;
 
         public static final int CONTROL_PANEL_SPINNER = 11;
     }
@@ -62,12 +63,17 @@ public final class Constants {
     }
 
     public final static class Shooter {
-        public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
+        public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
+        public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
         public final static double WHEEL_CIRCUMFERENCE = 4 * Math.PI;
 
         public final static double SHOOTER_HEIGHT = 24;
         public final static double SHOOTER_ANGLE = 45;
         public final static double GRAVITY = 16.1 * 12.0; // inches per second per second
+
+        public final static double TURRET_START_ANGLE = 0;
+        public final static double TURRET_RATIO = 1/3;
+        public final static double TURRET_SPEED = 0.3;
 
         public final static double MAX_ACCELERATION = 10;
         public final static double SHOOTER_TELEOP_SPEED = 60;
