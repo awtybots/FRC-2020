@@ -55,7 +55,7 @@ public class AutoShoot extends CommandBase {
         double vx = Math.cos(SHOOTER_ANGLE);
         double vz = Math.sin(SHOOTER_ANGLE);
 
-        double v0 = Math.sqrt((4.9 * x*x) / ((-z + x*vz/vx) * vx*vx));
+        double v0 = Math.sqrt((GRAVITY*x*x) / ((-z + x*vz/vx)*vx*vx));
 
         double velocityXY = v0 * vx;
         double velocityX = velocityXY * xr;
