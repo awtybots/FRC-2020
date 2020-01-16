@@ -48,12 +48,38 @@ public class AutoShoot extends CommandBase {
     }
 
     private Vector3 getOptimalBallVelocity(Vector3 targetDisplacement) {
-        //double magnitudeXY = targetDisplacement.clone().setZ(0).getMagnitude();
-        //double magnitudeZ = targetDisplacement.z;
+        double x = targetDisplacement.clone().setZ(0).getMagnitude();
+        double z = targetDisplacement.z;
+        double xr = targetDisplacement.x / x;
+        double yr = targetDisplacement.y / x;
+        double vx = Math.cos(SHOOTER_ANGLE);
+        double vz = Math.sin(SHOOTER_ANGLE);
 
-        // https://www.desmos.com/calculator/on4xzwtdwz
+        double v0 = Math.sqrt((4.9 * x*x) / ((-z + x*vz/vx) * vx*vx));
 
-        return new Vector3();
+        double velocityXY = v0 * vx;
+        double velocityX = velocityXY * xr;
+        double velocityY = velocityXY * yr;
+        double velocityZ = v0 * vz;
+
+        return new Vector3(velocityX, velocityY, velocityZ);
+
+
+        // x = cos(ang) * v0 * t
+        // z = sin(ang) * v0 * t - 4.9t^2
+
+        // t = x / (cos(ang) * v0)
+        // z = sin(ang) * v0 * x / (cos(ang) * v0) - 4.9x^2/(cos(ang)^2 * v0^2)
+        // sqrt(4.9x^2/(-z + sin(ang) * x / cos(ang))/cos(ang)^2) = v0
+
+
+        // WITHOUT DRAG:
+        //    https://youtu.be/tKrlchCio_k
+        //
+        // WITH DRAG:
+        //    https://www.desmos.com/calculator/on4xzwtdwz
+        //    https://demonstrations.wolfram.com/ProjectileWithAirDrag/
+        
     }
     private double getOptimalRevsPerSecond(Vector3 ballVelocity) {
         double velocity = ballVelocity.getMagnitude();
