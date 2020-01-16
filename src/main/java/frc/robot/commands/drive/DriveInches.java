@@ -30,7 +30,7 @@ public class DriveInches extends CommandBase {
     public void execute() {
         // encoders
         double currentVelocity = driveTrainSubsystem.getVelocity(MotorGroup.ALL, false);
-        currentDistance = driveTrainSubsystem.getDistance();
+        currentDistance = driveTrainSubsystem.getDistance(false);
 
         // stopping distance
         double remainingDistance = Math.abs(goalDistance - currentDistance);
@@ -43,11 +43,11 @@ public class DriveInches extends CommandBase {
         driveTrainSubsystem.setGoalVelocity(goalVelocity, goalVelocity);
 
         // SmartDashbaord
-        SmartDashboard.putNumber("Current Distance", currentDistance);
-        SmartDashboard.putNumber("Goal Distance", goalDistance);
-        SmartDashboard.putNumber("Current Velocity", currentVelocity);
-        SmartDashboard.putNumber("Goal Velocity", goalVelocity);
-        SmartDashboard.putNumber("Stopping Distance", stoppingDistance);
+        SmartDashboard.putNumber("DI - Current Distance", currentDistance);
+        SmartDashboard.putNumber("DI - Goal Distance", goalDistance);
+        SmartDashboard.putNumber("DI - Current Velocity", currentVelocity);
+        SmartDashboard.putNumber("DI - Goal Velocity", goalVelocity);
+        SmartDashboard.putNumber("DI - Stopping Distance", stoppingDistance);
     }
 
     @Override

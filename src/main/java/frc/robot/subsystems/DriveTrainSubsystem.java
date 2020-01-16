@@ -140,10 +140,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double revolutionsPerSecond = averageUnitsPer100ms / 409.6;
 		return revolutionsPerSecond * WHEEL_CIRCUMFERENCE;
 	}
-	public double getDistance() {
+	public double getDistance(boolean abs) {
 		double totalUnits = 0;
 		for(WPI_TalonSRX motor : MotorGroup.ALL.getMotors()) {
-			totalUnits += motor.getSelectedSensorPosition();
+			double pos = motor.getSelectedSensorPosition();
+			totalUnits += abs ? Math.abs(pos) : pos;
 		}
 		double revolutions = totalUnits / 4096 / MotorGroup.ALL.getMotors().length;
 		return revolutions * WHEEL_CIRCUMFERENCE;

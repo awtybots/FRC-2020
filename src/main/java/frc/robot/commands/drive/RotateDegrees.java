@@ -31,7 +31,7 @@ public class RotateDegrees extends CommandBase {
     @Override
     public void execute() {        // encoders
         double currentVelocity = driveTrainSubsystem.getVelocity(MotorGroup.ALL, true);
-        currentDistance = driveTrainSubsystem.getDistance();
+        currentDistance = driveTrainSubsystem.getDistance(true);
 
         // stopping distance
         double remainingDistance = goalDistance - currentDistance;
@@ -44,11 +44,11 @@ public class RotateDegrees extends CommandBase {
         driveTrainSubsystem.setGoalVelocity(goalVelocity * multiplier, goalVelocity * -multiplier);
 
         // SmartDashbaord
-        SmartDashboard.putNumber("Current Distance", currentDistance);
-        SmartDashboard.putNumber("Goal Distance", goalDistance);
-        SmartDashboard.putNumber("Current Velocity", currentVelocity);
-        SmartDashboard.putNumber("Goal Velocity", goalVelocity);
-        SmartDashboard.putNumber("Stopping Distance", stoppingDistance);
+        SmartDashboard.putNumber("RD - Current Distance", currentDistance);
+        SmartDashboard.putNumber("RD - Goal Distance", goalDistance);
+        SmartDashboard.putNumber("RD - Current Velocity", currentVelocity);
+        SmartDashboard.putNumber("RD - Goal Velocity", goalVelocity);
+        SmartDashboard.putNumber("RD - Stopping Distance", stoppingDistance);
     }
 
     @Override
