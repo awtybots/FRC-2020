@@ -70,7 +70,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		if(!TUNING_MODE) {
-			SmartDashboard.putNumber("currentVelocity", getAverageInchesPerSecond(MotorGroup.ALL, true));
+			SmartDashboard.putNumber("currentVelocity", getVelocity(MotorGroup.ALL, true));
 
 			outputLeft = calculateFF(MotorGroup.LEFT, goalVelocityLeft);
 			outputRight = calculateFF(MotorGroup.RIGHT, goalVelocityRight);
@@ -85,11 +85,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		speedLeft.set(speed);
 		speedRight.set(speed);
 		SmartDashboard.putNumber("Voltage", speed * RobotController.getBatteryVoltage());
-		SmartDashboard.putNumber("Velocity", getAverageInchesPerSecond(MotorGroup.ALL, true));
+		SmartDashboard.putNumber("Velocity", getVelocity(MotorGroup.ALL, true));
 	}
 
 	public double calculatePID(MotorGroup motorGroup, double goalVelocity) { // this is my best understanding of PID, not sure how accurate this is
-		double currentVelocity = getAverageInchesPerSecond(motorGroup, false);
+		double currentVelocity = getVelocity(motorGroup, false);
 		double velocityError = goalVelocity - currentVelocity;
 		double accelerationError = (velocityError - lastVelocityError.getOrDefault(motorGroup, 0.0)) / PERIOD;
 		lastVelocityError.put(motorGroup, velocityError);
@@ -99,7 +99,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 	private double calculateFF(MotorGroup motorGroup, double goalVelocity) {
 		double constrainedGoalVelocity = clamp(goalVelocity, -MAX_VELOCITY, MAX_VELOCITY);
-		double currentVelocity = getAverageInchesPerSecond(motorGroup, false);
+		double currentVelocity = getVelocity(motorGroup, false);
 		double goalAcceleration = constrainedGoalVelocity - currentVelocity;
 		double constrainedGoalAcceleration = clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
 		double direction = currentVelocity == 0 ? goalVelocity : Math.signum(currentVelocity);
@@ -128,7 +128,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 
 
-	public double getAverageInchesPerSecond(MotorGroup motorGroup, boolean abs) { // utility function to get average inches per second from certain groups of motors
+	public double getVelocity(MotorGroup motorGroup, boolean abs) { // utility function to get average inches per second from certain groups of motors
 		double totalUnitsPer100ms = 0;
 		for(WPI_TalonSRX motor : motorGroup.getMotors()) {
 			double motorVelocity = motor.getSelectedSensorVelocity();
@@ -137,8 +137,21 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		// encoders give motor velocity in units per 100ms, so multiply by 10 for units per second and divide by units per rev for revs per second
 		// multiply revolutions per second by seconds elapsed and wheel circumference for distance traveled
 		double averageUnitsPer100ms = totalUnitsPer100ms / motorGroup.getMotors().length;
-		double revolutionsPerSecond = averageUnitsPer100ms * 409.6;
+		double revolutionsPerSecond = averageUnitsPer100ms / 409.6;
 		return revolutionsPerSecond * WHEEL_CIRCUMFERENCE;
+	}
+	public double getDistance() {
+		double totalUnits = 0;
+		for(WPI_TalonSRX motor : MotorGroup.ALL.getMotors()) {
+			totalUnits += motor.getSelectedSensorPosition();
+		}
+		double revolutions = totalUnits / 4096 / MotorGroup.ALL.getMotors().length;
+		return revolutions * WHEEL_CIRCUMFERENCE;
+	}
+	public void resetDistance() {
+		for(WPI_TalonSRX motor : MotorGroup.ALL.getMotors()) {
+			motor.setSelectedSensorPosition(0);
+		}
 	}
 
 	public enum MotorGroup {

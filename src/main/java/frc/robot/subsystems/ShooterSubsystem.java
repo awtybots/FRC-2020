@@ -53,7 +53,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     public double getRevsPerSecond() {
-        return motor.getSelectedSensorVelocity() * 409.6;
+        return motor.getSelectedSensorVelocity() / 409.6;
     }
     public double getAngle() {
         return 0;

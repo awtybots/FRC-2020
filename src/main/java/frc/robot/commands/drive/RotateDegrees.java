@@ -1,6 +1,5 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -17,8 +16,6 @@ public class RotateDegrees extends CommandBase {
     private double currentDistance = 0;
     private double multiplier;
 
-    private final Timer timer = new Timer();
-
     public RotateDegrees(DriveTrainSubsystem driveTrainSubsystem, double degrees) {
         this.driveTrainSubsystem = driveTrainSubsystem;
         this.goalDistance = Math.abs(degrees)/360 * ROBOT_CIRMCUMFERENCE;
@@ -28,18 +25,13 @@ public class RotateDegrees extends CommandBase {
 
     @Override
     public void initialize() {
-        timer.reset();
+        driveTrainSubsystem.resetDistance();
     }
 
     @Override
-    public void execute() {
-        // elapsed time
-        double elapsedTime = timer.get();
-        timer.reset();
-
-        // encoders
-        double currentVelocity = driveTrainSubsystem.getAverageInchesPerSecond(MotorGroup.ALL, true);
-        currentDistance += currentVelocity * elapsedTime;
+    public void execute() {        // encoders
+        double currentVelocity = driveTrainSubsystem.getVelocity(MotorGroup.ALL, true);
+        currentDistance = driveTrainSubsystem.getDistance();
 
         // stopping distance
         double remainingDistance = goalDistance - currentDistance;

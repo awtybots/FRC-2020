@@ -1,6 +1,5 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -16,8 +15,6 @@ public class DriveInches extends CommandBase {
     private double goalVelocity;
     private double currentDistance = 0;
 
-    private final Timer timer = new Timer();
-
     public DriveInches(DriveTrainSubsystem driveTrainSubsystem, double inches) {
         this.driveTrainSubsystem = driveTrainSubsystem;
         this.goalDistance = inches;
@@ -26,18 +23,14 @@ public class DriveInches extends CommandBase {
 
     @Override
     public void initialize() {
-        timer.reset();
+        driveTrainSubsystem.resetDistance();
     }
 
     @Override
     public void execute() {
-        // elapsed time
-        double elapsedTime = timer.get();
-        timer.reset();
-
         // encoders
-        double currentVelocity = driveTrainSubsystem.getAverageInchesPerSecond(MotorGroup.ALL, false);
-        currentDistance += currentVelocity * elapsedTime;
+        double currentVelocity = driveTrainSubsystem.getVelocity(MotorGroup.ALL, false);
+        currentDistance = driveTrainSubsystem.getDistance();
 
         // stopping distance
         double remainingDistance = Math.abs(goalDistance - currentDistance);
