@@ -9,10 +9,13 @@ import frc.robot.subsystems.DriveTrainSubsystem;
 
 public class Auton extends ParallelCommandGroup {
 
-     // this is the overlaying command group for everything that happens in auton
-     // see https://docs.wpilib.org/en/latest/docs/software/commandbased/command-groups.html
+    // this is the overlaying command group for everything that happens in auton
+    // see https://docs.wpilib.org/en/latest/docs/software/commandbased/command-groups.html
+
+    private final DriveTrainSubsystem driveTrainSubsystem;
 
     public Auton(DriveTrainSubsystem driveTrainSubsystem, AutonType autonType) {
+        this.driveTrainSubsystem = driveTrainSubsystem;
         addCommands(
             // list all commands to do when auton starts
             // turn on intake
@@ -25,18 +28,25 @@ public class Auton extends ParallelCommandGroup {
         switch(autonType) {
             case SQUARE:
                 return sequence(
-                    new DriveInches(driveTrainSubsystem, 24),
-                    new RotateDegrees(driveTrainSubsystem, 90),
-                    new DriveInches(driveTrainSubsystem, 24),
-                    new RotateDegrees(driveTrainSubsystem, 90),
-                    new DriveInches(driveTrainSubsystem, 24),
-                    new RotateDegrees(driveTrainSubsystem, 90),
-                    new DriveInches(driveTrainSubsystem, 24),
-                    new RotateDegrees(driveTrainSubsystem, 90)
+                    driveInches(24),
+                    rotateDegrees(90),
+                    driveInches(24),
+                    rotateDegrees(90),
+                    driveInches(24),
+                    rotateDegrees(90),
+                    driveInches(24),
+                    rotateDegrees(90)
                 );
             default:
                 return new InstantCommand();
         }
+    }
+
+    private DriveInches driveInches(double inches) {
+        return new DriveInches(driveTrainSubsystem, inches);
+    }
+    private RotateDegrees rotateDegrees(double degrees) {
+        return new RotateDegrees(driveTrainSubsystem, degrees);
     }
 
     public enum AutonType {
