@@ -9,6 +9,7 @@ import frc.robot.subsystems.LimelightSubsystem.Pipeline;
 import frc.robot.subsystems.NavXSubsystem.FieldObject;
 import frc.robot.util.Vector3;
 import static frc.robot.Constants.Shooter.*;
+import static java.lang.Math.*;
 
 public class AutoShoot extends CommandBase {
 
@@ -39,7 +40,7 @@ public class AutoShoot extends CommandBase {
         Vector3 ballVelocity = getOptimalBallVelocity(targetDisplacement).subtract(robotVelocity);
         
         double revsPerSecond = ballVelocity.getMagnitude() / WHEEL_CIRCUMFERENCE;
-        double aimAngle = Math.toDegrees(Math.atan2(ballVelocity.y, ballVelocity.x)) - robotAngle;
+        double aimAngle = toDegrees(atan2(ballVelocity.y, ballVelocity.x)) - robotAngle;
         
         shooter.setGoalVelocity(revsPerSecond);
         shooter.setGoalAngle(aimAngle);
@@ -53,10 +54,14 @@ public class AutoShoot extends CommandBase {
         double z = targetDisplacement.z;
         double xr = targetDisplacement.x / x;
         double yr = targetDisplacement.y / x;
-        double vx = Math.cos(SHOOTER_ANGLE);
-        double vz = Math.sin(SHOOTER_ANGLE);
+        double vx = cos(SHOOTER_ANGLE);
+        double vz = sin(SHOOTER_ANGLE);
 
-        double v0 = Math.sqrt((GRAVITY*x*x) / ((-z + x*vz/vx)*vx*vx));
+        double v0 = sqrt(
+            (GRAVITY * x * x)
+            /
+            ((x * tan(SHOOTER_ANGLE) - z) * vx * vx * 2)
+        );
 
         double velocityXY = v0 * vx;
         double velocityX = velocityXY * xr;

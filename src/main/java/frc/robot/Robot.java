@@ -75,6 +75,7 @@ public class Robot extends TimedRobot {
 		);
 
 		// Button Mappings
+		/*
 		getButton("Y")
 			.whenPressed(new ToggleControlPanelSpinner(controlPanelSubsystem, true))
 			.whenReleased(new ToggleControlPanelSpinner(controlPanelSubsystem, false));
@@ -85,6 +86,7 @@ public class Robot extends TimedRobot {
 			.whenPressed(new AutoSpinControlPanel(controlPanelSubsystem));
 		getButton("B")
 			.whenPressed(new ToggleIntake(intakeSubsystem));
+		*/
 	}
 
 	/**

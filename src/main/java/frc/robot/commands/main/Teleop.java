@@ -14,7 +14,7 @@ public class Teleop extends ParallelCommandGroup {
 
     public Teleop(XboxController xboxController, DriveTrainSubsystem driveTrainSubsystem, IntakeSubsystem intakeSubsystem) {
         addCommands(
-            new ToggleIntake(intakeSubsystem, true),
+            //new ToggleIntake(intakeSubsystem, true),
             new TeleopDrive(xboxController, driveTrainSubsystem)
         );
     }
