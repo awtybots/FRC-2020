@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,7 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         motor.configFactoryDefault(); // reset settings
         motor.setNeutralMode(BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
-        motor.configSelectedFeedbackSensor(MOTOR_FEEDBACK_DEVICE); // sets which encoder the motor is using
+        motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); // sets which encoder the motor is using
             
         setGoalVelocity(0);
     }
@@ -52,7 +53,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     public double getRevsPerSecond() {
-        return motor.getSelectedSensorVelocity() * 10.0 / ENCODER_UNITS;
+        return motor.getSelectedSensorVelocity() * 409.6;
     }
     public double getAngle() {
         return 0;

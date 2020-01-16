@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.I2C;
@@ -33,8 +32,6 @@ public final class Constants {
 
     public final static class DriveTrain {
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
-        public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative;
-        public final static double ENCODER_UNITS = 4096;
 
         public final static boolean TUNING_MODE = true;
 
@@ -66,8 +63,6 @@ public final class Constants {
 
     public final static class Shooter {
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
-        public final static FeedbackDevice MOTOR_FEEDBACK_DEVICE = FeedbackDevice.CTRE_MagEncoder_Relative;
-        public final static double ENCODER_UNITS = 4096;
         public final static double WHEEL_CIRCUMFERENCE = 4 * Math.PI;
 
         public final static double SHOOTER_HEIGHT = 24;

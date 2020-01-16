@@ -84,7 +84,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
     }
 
     public enum PanelColor {
-        RED     (ColorSensor.RED), // get colors from constants and make enums for each one
+        RED     (ColorSensor.RED),
         GREEN   (ColorSensor.GREEN),
         BLUE    (ColorSensor.BLUE),
         YELLOW  (ColorSensor.YELLOW);
