@@ -17,6 +17,9 @@ public class AutoShoot extends CommandBase {
     private final LimelightSubsystem limelight;
     private final NavXSubsystem navX;
 
+    private double revsPerSecond = 0;
+    private double aimAngle = TURRET_START_ANGLE;
+
     public AutoShoot(ShooterSubsystem shooter, LimelightSubsystem limelight, NavXSubsystem navX) {
         addRequirements(shooter, limelight);
         this.shooter = shooter;
@@ -31,22 +34,45 @@ public class AutoShoot extends CommandBase {
 
     @Override
     public void execute() {
+        boolean canShoot = calculateTrajectory();
+        
+        shooter.setGoalFlywheelRevsPerSecond(revsPerSecond);
+        shooter.setGoalTurretAngle(aimAngle);
+
+        SmartDashboard.putBoolean("Shooter trajectory possible", canShoot);
+
+        if(canShoot && shooter.readyToShoot()) {
+            // actually shoot a ball
+        }
+    }
+
+    private boolean calculateTrajectory() {
         Vector3 targetVector = limelight.getRelativeTargetVector();
-        double robotAngle = navX.getDirection();
         Vector3 robotVelocity = navX.getVelocity().setZ(0);
+
+        double robotAngle = navX.getDirection();
+        aimAngle = toDegrees(atan2(targetVector.y, targetVector.x)) - robotAngle;
         
         Vector3 targetDisplacement = targetVector == null ? navX.getDisplacement(FieldObject.POWER_PORT) : targetVector.rotateZ(robotAngle);
         targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
         Vector3 ballVelocity = getOptimalBallVelocity(targetDisplacement).subtract(robotVelocity);
+
+        if(ballVelocity == null) {
+            revsPerSecond = 0;
+            return false;
+        }
         
-        double revsPerSecond = ballVelocity.getMagnitude() / WHEEL_CIRCUMFERENCE;
-        double aimAngle = toDegrees(atan2(ballVelocity.y, ballVelocity.x)) - robotAngle;
-        
-        shooter.setGoalVelocity(revsPerSecond);
-        shooter.setGoalAngle(aimAngle);
+        revsPerSecond = ballVelocity.getMagnitude() / WHEEL_CIRCUMFERENCE;
+
+        if(revsPerSecond > MAX_REVS_PER_SECOND) {
+            revsPerSecond = 0;
+            return false;
+        }
 
         SmartDashboard.putString("Shooter Goal Velocity", ballVelocity.toString());
         SmartDashboard.putNumber("Shooter Goal Angle", Math.round(aimAngle));
+
+        return true;
     }
 
     private Vector3 getOptimalBallVelocity(Vector3 targetDisplacement) {
@@ -54,30 +80,21 @@ public class AutoShoot extends CommandBase {
         double z = targetDisplacement.z;
         double xr = targetDisplacement.x / x;
         double yr = targetDisplacement.y / x;
-        double vx = cos(SHOOTER_ANGLE);
-        double vz = sin(SHOOTER_ANGLE);
 
         double v0 = sqrt(
             (GRAVITY * x * x)
             /
-            ((x * tan(SHOOTER_ANGLE) - z) * vx * vx * 2)
+            ((x * tan(SHOOTER_ANGLE) - z) * cos(SHOOTER_ANGLE) * cos(SHOOTER_ANGLE) * 2)
         );
 
-        double velocityXY = v0 * vx;
+        if(v0 == Double.NaN) return null;
+
+        double velocityXY = v0 * cos(SHOOTER_ANGLE);
         double velocityX = velocityXY * xr;
         double velocityY = velocityXY * yr;
-        double velocityZ = v0 * vz;
+        double velocityZ = v0 * sin(SHOOTER_ANGLE);
 
         return new Vector3(velocityX, velocityY, velocityZ);
-
-
-        // x = cos(ang) * v0 * t
-        // z = sin(ang) * v0 * t - 4.9t^2
-
-        // t = x / (cos(ang) * v0)
-        // z = sin(ang) * v0 * x / (cos(ang) * v0) - 4.9x^2/(cos(ang)^2 * v0^2)
-        // sqrt(4.9x^2/(-z + sin(ang) * x / cos(ang))/cos(ang)^2) = v0
-
 
         // WITHOUT DRAG:
         //    https://youtu.be/tKrlchCio_k
@@ -90,7 +107,7 @@ public class AutoShoot extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        shooter.setGoalVelocity(0);
+        shooter.setGoalFlywheelRevsPerSecond(0);
     }
 
     @Override

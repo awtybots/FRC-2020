@@ -136,7 +136,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		// encoders give motor velocity in units per 100ms, so multiply by 10 for units per second and divide by units per rev for revs per second
 		// multiply revolutions per second by seconds elapsed and wheel circumference for distance traveled
 		double averageUnitsPer100ms = totalUnitsPer100ms / motorGroup.getMotors().length;
-		double revolutionsPerSecond = averageUnitsPer100ms / 409.6;
+		double revolutionsPerSecond = averageUnitsPer100ms / 409.6 * GEAR_RATIO;
 		return revolutionsPerSecond * WHEEL_CIRCUMFERENCE;
 	}
 	public double getDistance(boolean abs) {

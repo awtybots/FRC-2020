@@ -18,7 +18,7 @@ public class ToggleShooter extends InstantCommand {
 
     @Override
     public void initialize() {
-        shooter.setGoalVelocity(on ? SHOOTER_TELEOP_SPEED : 0);
+        shooter.setGoalFlywheelRevsPerSecond(on ? SHOOTER_TELEOP_SPEED : 0);
     }
 
 }

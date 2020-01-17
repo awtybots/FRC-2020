@@ -9,8 +9,6 @@ import static frc.robot.Constants.Limelight.*;
 
 import frc.robot.util.Vector3;
 
-import javax.annotation.Nullable;
-
 public class LimelightSubsystem extends SubsystemBase {
 
     private final NetworkTable table;
@@ -43,7 +41,6 @@ public class LimelightSubsystem extends SubsystemBase {
 
 
 
-    @Nullable
     public Vector3 getRelativeTargetVector() {
         boolean targetExists = getDouble("tv") == 1.0;
         if(!targetExists) {

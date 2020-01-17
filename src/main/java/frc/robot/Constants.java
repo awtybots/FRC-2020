@@ -38,6 +38,7 @@ public final class Constants {
 
         public final static double DEADZONE = 0.1;
         
+        public final static double GEAR_RATIO = 1/8;
         public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI;
         public final static double ROBOT_CIRMCUMFERENCE = 100; // this the the distance (in inches) each wheel travels when the robot spins one time around its center
 
@@ -69,18 +70,21 @@ public final class Constants {
 
         public final static double SHOOTER_HEIGHT = 24;
         public final static double SHOOTER_ANGLE = 45;
-        public final static double GRAVITY = 16.1 * 12.0; // inches per second per second
-
         public final static double TURRET_START_ANGLE = 0;
-        public final static double TURRET_RATIO = 1/3;
         public final static double TURRET_SPEED = 0.3;
 
+        public final static double GRAVITY = 16.1 * 12.0; // inches per second per second
+
+        public final static double FLYWHEEL_RATIO = 1/4;
+        public final static double TURRET_RATIO = 1/4;
+
+        public final static double MAX_REVS_PER_SECOND = 100;
         public final static double MAX_ACCELERATION = 10;
+
+        public final static double BANG_BANG_OUTPUT = 0.3;
         public final static double SHOOTER_TELEOP_SPEED = 60;
         public final static double GOAL_VELOCITY_THRESHOLD = 5;
         public final static double GOAL_ANGLE_THRESHOLD = 2;
-
-        public final static double DRAG = 600;
 
         // PID
         public final static double PID_P = 0.02;
