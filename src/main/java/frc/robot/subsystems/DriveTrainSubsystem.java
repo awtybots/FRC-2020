@@ -99,7 +99,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double currentVelocity = getVelocity(motorGroup, false);
 		double goalAcceleration = constrainedGoalVelocity - currentVelocity;
 		double constrainedGoalAcceleration = clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
-		double direction = currentVelocity == 0 ? goalVelocity : Math.signum(currentVelocity);
+		double direction = Math.signum(currentVelocity == 0 ? goalVelocity : currentVelocity);
 
 		double S = FF_S * direction;
 		double V = FF_V * currentVelocity;
