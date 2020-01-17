@@ -64,9 +64,12 @@ public class Vector3 {
     }
 
 
+    private double round(double n, double amt) {
+        return Math.round(n * Math.pow(10, amt)) / Math.pow(10, amt);
+    }
     @Override
     public String toString() {
-        return "( "+x+", "+y+", "+z+" )";
+        return "( "+round(x,1)+", "+round(y,1)+", "+round(z,1)+" )";
     }
     @Override
     public Vector3 clone() {
