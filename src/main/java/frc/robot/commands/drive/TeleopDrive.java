@@ -9,6 +9,7 @@ package frc.robot.commands.drive;
 
 import frc.robot.subsystems.DriveTrainSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import static frc.robot.Constants.Controller.*;
 import static frc.robot.Constants.DriveTrain.*;
@@ -24,15 +25,19 @@ public class TeleopDrive extends CommandBase {
 		addRequirements(driveTrainSubsystem);
 		this.xboxController = xboxController;
 		this.driveTrainSubsystem = driveTrainSubsystem;
+		if(TUNING_MODE) {
+			SmartDashboard.setDefaultNumber("Test Speed", 0);
+		}
 	}
 	
 	@Override
 	public void execute() {
-		double speed = smooth(-xboxController.getY(SPEED_HAND));
-		double rotation = smooth(xboxController.getX(ROTATION_HAND));
 		if(TUNING_MODE) {
+			double speed = SmartDashboard.getNumber("Test Speed", 0);
 			driveTrainSubsystem.set(speed);
 		} else {
+			double speed = smooth(-xboxController.getY(SPEED_HAND));
+			double rotation = smooth(xboxController.getX(ROTATION_HAND));
 			driveTrainSubsystem.setGoalVelocity((speed + rotation) * MAX_VELOCITY, (speed - rotation) * MAX_VELOCITY);
 		}
 	}

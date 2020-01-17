@@ -70,13 +70,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		if(!TUNING_MODE) {
-			SmartDashboard.putNumber("currentVelocity", getVelocity(MotorGroup.ALL, true));
-
 			outputLeft = calculateFF(MotorGroup.LEFT, goalVelocityLeft);
 			outputRight = calculateFF(MotorGroup.RIGHT, goalVelocityRight);
-			SmartDashboard.putNumber("outputLeft", outputLeft);
-			SmartDashboard.putNumber("outputRight", outputRight);
-
+			
 			//speedLeft.setVoltage(outputLeft);
 			//speedRight.setVoltage(outputRight);
 		}
@@ -110,6 +106,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double A = FF_A * constrainedGoalAcceleration;
 		double voltage = S + V + A;
 
+		SmartDashboard.putNumber("Current Velocity", currentVelocity);
 		SmartDashboard.putNumber("Goal Velocity", constrainedGoalVelocity);
 		SmartDashboard.putNumber("Goal Acceleration", constrainedGoalAcceleration);
 		SmartDashboard.putNumber("FF_S", S);
