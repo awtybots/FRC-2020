@@ -7,6 +7,7 @@ import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
+@SuppressWarnings("unused")
 public class Teleop extends ParallelCommandGroup {
 
     // this is the overlaying command group for everything that happens in the teleop period

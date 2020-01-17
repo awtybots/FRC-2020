@@ -39,8 +39,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 	private double goalVelocityLeft = 0;
 	private double goalVelocityRight = 0;
-	private double outputLeft = 0;
-	private double outputRight = 0;
+	
+	@SuppressWarnings("unused") private double outputLeft = 0;
+	@SuppressWarnings("unused") private double outputRight = 0;
 
 	private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
 	private HashMap<MotorGroup, Double> integralError = new HashMap<>();
@@ -99,10 +100,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double currentVelocity = getVelocity(motorGroup, false);
 		double goalAcceleration = constrainedGoalVelocity - currentVelocity;
 		double constrainedGoalAcceleration = clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
-		double direction = Math.signum(currentVelocity == 0 ? goalVelocity : currentVelocity);
+		constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
 
-		double S = FF_S * direction;
-		double V = FF_V * currentVelocity;
+		double S = FF_S * Math.signum(constrainedGoalVelocity);
+		double V = FF_V * constrainedGoalVelocity;
 		double A = FF_A * constrainedGoalAcceleration;
 		double voltage = S + V + A;
 
