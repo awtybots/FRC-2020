@@ -19,7 +19,7 @@ public class Auton extends ParallelCommandGroup {
     public Auton(DriveTrainSubsystem driveTrainSubsystem, IntakeSubsystem intakeSubsystem, AutonType autonType) {
         this.driveTrainSubsystem = driveTrainSubsystem;
         addCommands(
-            new ToggleIntake(intakeSubsystem, true),
+            //new ToggleIntake(intakeSubsystem, true),
             getAutonSequence(driveTrainSubsystem, autonType)
         );
     }

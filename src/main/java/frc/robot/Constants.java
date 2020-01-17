@@ -23,10 +23,10 @@ public final class Constants {
         public static final int DRIVE_R2 = 13;
         public static final int DRIVE_R3 = 14;
 
-        public static final int INTAKE = -1;
+        public static final int INTAKE = 1;
 
-        public static final int SHOOTER_FLYWHEEL = -1;
-        public static final int SHOOTER_TURRET = -1;
+        public static final int SHOOTER_FLYWHEEL = 1;
+        public static final int SHOOTER_TURRET = 1;
 
         public static final int CONTROL_PANEL_SPINNER = 11;
     }
