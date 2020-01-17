@@ -46,7 +46,7 @@ public class AutoShoot extends CommandBase {
         shooter.setGoalAngle(aimAngle);
 
         SmartDashboard.putString("Shooter Goal Velocity", ballVelocity.toString());
-        SmartDashboard.putNumber("Shooter Goal Angle", aimAngle);
+        SmartDashboard.putNumber("Shooter Goal Angle", Math.round(aimAngle));
     }
 
     private Vector3 getOptimalBallVelocity(Vector3 targetDisplacement) {
