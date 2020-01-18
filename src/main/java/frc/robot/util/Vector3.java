@@ -34,9 +34,9 @@ public class Vector3 {
         setMagnitude(1);
         return this;
     }
-	public Vector3 invert() {
-		return applyFunction(n -> -n);
-	}
+    public Vector3 invert() {
+        return applyFunction(n -> -n);
+    }
 
 
     public Vector3 setZ(double z) {
@@ -91,19 +91,19 @@ public class Vector3 {
     }
 
     
-	public Vector3 applyFunction(Function<Double, Double> function) {
+    public Vector3 applyFunction(Function<Double, Double> function) {
         x = function.apply(x);
         y = function.apply(y);
         z = function.apply(z);
         return this;
-	}
-	public static Vector3 applyFunction(BiFunction<Double, Double, Double> function, Vector3 a, Vector3 b) {
+    }
+    public static Vector3 applyFunction(BiFunction<Double, Double, Double> function, Vector3 a, Vector3 b) {
         return new Vector3(
             function.apply(a.x, b.x),
             function.apply(a.y, b.y),
             function.apply(a.z, b.z)
         );
-	}
+    }
 
 
     private double roundTenths(double n) {
