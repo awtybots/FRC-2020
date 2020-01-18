@@ -39,6 +39,14 @@ public class Vector3 {
     }
 
 
+    public Vector3 setX(double x) {
+        this.x = x;
+        return this;
+    }
+    public Vector3 setY(double y) {
+        this.y = y;
+        return this;
+    }
     public Vector3 setZ(double z) {
         this.z = z;
         return this;
@@ -57,37 +65,26 @@ public class Vector3 {
     }
 
 
-    public static Vector3 add(Vector3 a, Vector3 b) {
-        return applyFunction((m, n) -> m + n, a, b);
-    }
-    public static Vector3 subtract(Vector3 a, Vector3 b) {
-        return applyFunction((m, n) -> m - n, a, b);
-    }
-    public static Vector3 multiply(Vector3 a, Vector3 b) {
-        return applyFunction((m, n) -> m * n, a, b);
-    }
-    public static Vector3 divide(Vector3 a, Vector3 b) {
-        return applyFunction((m, n) -> m / n, a, b);
-    }
-    public static double dot(Vector3 a, Vector3 b) {
-        Vector3 prod = multiply(a, b);
-        return prod.x + prod.y + prod.z;
-    }
-
     public Vector3 add(Vector3 b) {
-        return add(this, b);
+        return VectorMath.add(this, b);
     }
     public Vector3 subtract(Vector3 b) {
-        return subtract(this, b);
+        return VectorMath.subtract(this, b);
     }
     public Vector3 multiply(Vector3 b) {
-        return multiply(this, b);
+        return VectorMath.multiply(this, b);
+    }
+    public Vector3 multiply(double b) {
+        return VectorMath.multiply(this, new Vector3(b));
     }
     public Vector3 divide(Vector3 b) {
-        return divide(this, b);
+        return VectorMath.divide(this, b);
+    }
+    public Vector3 divide(double b) {
+        return VectorMath.divide(this, new Vector3(b));
     }
     public double dot(Vector3 b) {
-        return dot(this, b);
+        return VectorMath.dot(this, b);
     }
 
     
@@ -97,25 +94,42 @@ public class Vector3 {
         z = function.apply(z);
         return this;
     }
-    public static Vector3 applyFunction(BiFunction<Double, Double, Double> function, Vector3 a, Vector3 b) {
-        return new Vector3(
-            function.apply(a.x, b.x),
-            function.apply(a.y, b.y),
-            function.apply(a.z, b.z)
-        );
-    }
 
 
-    private double roundTenths(double n) {
-        return Math.round(n * 10) / 10;
-    }
     @Override
     public String toString() {
-        Vector3 rounded = clone().applyFunction(this::roundTenths);
+        Vector3 rounded = clone().applyFunction((n) -> ((double)Math.round(n * 10)) / 10);
         return "( "+rounded.x+", "+rounded.y+", "+rounded.z+" )";
     }
     @Override
     public Vector3 clone() {
         return new Vector3(x, y, z);
+    }
+
+
+    public static class VectorMath {
+        public static Vector3 add(Vector3 a, Vector3 b) {
+            return applyFunction((m, n) -> m + n, a, b);
+        }
+        public static Vector3 subtract(Vector3 a, Vector3 b) {
+            return applyFunction((m, n) -> m - n, a, b);
+        }
+        public static Vector3 multiply(Vector3 a, Vector3 b) {
+            return applyFunction((m, n) -> m * n, a, b);
+        }
+        public static Vector3 divide(Vector3 a, Vector3 b) {
+            return applyFunction((m, n) -> m / n, a, b);
+        }
+        public static double dot(Vector3 a, Vector3 b) {
+            Vector3 prod = multiply(a, b);
+            return prod.x + prod.y + prod.z;
+        }
+        public static Vector3 applyFunction(BiFunction<Double, Double, Double> function, Vector3 a, Vector3 b) {
+            return new Vector3(
+                function.apply(a.x, b.x),
+                function.apply(a.y, b.y),
+                function.apply(a.z, b.z)
+            );
+        }
     }
 }
