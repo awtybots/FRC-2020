@@ -16,12 +16,13 @@ import frc.robot.util.Vector3;
 public final class Constants {
 
     public final static class MotorIDs {
-        public static final int DRIVE_L1 = 1;
-        public static final int DRIVE_L2 = 3;
-        public static final int DRIVE_L3 = 4;
-        public static final int DRIVE_R1 = 12;
-        public static final int DRIVE_R2 = 13;
-        public static final int DRIVE_R3 = 14;
+        public static final int DRIVE_L1 = 8;
+        public static final int DRIVE_L2 = 10;
+        public static final int DRIVE_L3 = 11;
+        
+        public static final int DRIVE_R1 = 7;
+        public static final int DRIVE_R2 = 9;
+        public static final int DRIVE_R3 = 12;
 
         public static final int INTAKE = 1;
 
