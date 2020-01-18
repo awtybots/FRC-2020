@@ -29,6 +29,11 @@ public class TeleopDrive extends CommandBase {
 			SmartDashboard.setDefaultNumber("Test Speed", 0);
 		}
 	}
+
+	private double smooth(double x) {
+		if(Math.abs(x) < DEADZONE) return 0;
+		return Math.pow(x, 2) * Math.signum(x);
+	}
 	
 	@Override
 	public void execute() {
@@ -45,9 +50,9 @@ public class TeleopDrive extends CommandBase {
 		}
 	}
 
-	private double smooth(double x) {
-		if(Math.abs(x) < DEADZONE) return 0;
-		return Math.pow(x, 2) * Math.signum(x);
+	@Override
+	public void end(boolean interrupted) {
+		driveTrainSubsystem.smoothStop();
 	}
 
 	@Override

@@ -129,6 +129,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		goalVelocityLeft = left;
 		goalVelocityRight = right;
 	}
+	public void smoothStop() {
+		setGoalVelocity(0, 0);
+	}
 
 
 

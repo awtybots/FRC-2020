@@ -44,7 +44,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         currentVelocity = flywheel.getSelectedSensorVelocity() / 409.6 * FLYWHEEL_RATIO;
-        currentAngle = turret.getSelectedSensorPosition() / 4096 * TURRET_RATIO * 360;
+        currentAngle = TURRET_START_ANGLE + (turret.getSelectedSensorPosition() / 4096 * 360 * TURRET_RATIO);
         boolean velocityAtGoal = Math.abs(currentVelocity - goalVelocity) <= GOAL_VELOCITY_THRESHOLD;;
         boolean angleAtGoal = Math.abs(currentAngle - goalAngle) <= GOAL_ANGLE_THRESHOLD;
         readyToShoot = velocityAtGoal && angleAtGoal;

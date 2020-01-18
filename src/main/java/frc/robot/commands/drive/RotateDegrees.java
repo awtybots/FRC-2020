@@ -53,6 +53,11 @@ public class RotateDegrees extends CommandBase {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        driveTrainSubsystem.smoothStop();
+    }
+
+    @Override
 	public boolean isFinished() {
 		return currentDistance >= goalDistance - GOAL_TOLERANCE;
 	}
