@@ -112,6 +112,10 @@ public final class Constants {
     }
 
     public final static class NavX {
+        // all positions must be relative to the center of the field and based on red alliance
+        // from the center of the field, increasing X goes closer to the red driver stations
+        // and increasing Y goes closer to the red trench run
+        // the code will automatically invert these values if we're on the blue alliance
         public final static Vector3 POWER_PORT_POSITION = new Vector3(0, 48, 98.25);
     }
 

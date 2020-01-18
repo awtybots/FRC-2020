@@ -1,5 +1,6 @@
 package frc.robot.util;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class Vector3 {
@@ -10,7 +11,10 @@ public class Vector3 {
 
 
     public Vector3() {
-        new Vector3(0, 0, 0);
+        this(0);
+    }
+    public Vector3(double n) {
+        this(n, n, n);
     }
     public Vector3(double x, double y, double z) {
         this.x = x;
@@ -30,6 +34,9 @@ public class Vector3 {
         setMagnitude(1);
         return this;
     }
+	public Vector3 invert() {
+		return applyFunction(n -> -n);
+	}
 
 
     public Vector3 setZ(double z) {
@@ -51,10 +58,20 @@ public class Vector3 {
 
 
     public static Vector3 add(Vector3 a, Vector3 b) {
-        return new Vector3(a.x+b.x, a.y+b.y, a.z+b.z);
+        return applyFunction((m, n) -> m + n, a, b);
     }
     public static Vector3 subtract(Vector3 a, Vector3 b) {
-        return new Vector3(a.x-b.x, a.y-b.y, a.z-b.z);
+        return applyFunction((m, n) -> m - n, a, b);
+    }
+    public static Vector3 multiply(Vector3 a, Vector3 b) {
+        return applyFunction((m, n) -> m * n, a, b);
+    }
+    public static Vector3 divide(Vector3 a, Vector3 b) {
+        return applyFunction((m, n) -> m / n, a, b);
+    }
+    public static double dot(Vector3 a, Vector3 b) {
+        Vector3 prod = multiply(a, b);
+        return prod.x + prod.y + prod.z;
     }
 
     public Vector3 add(Vector3 b) {
@@ -63,14 +80,29 @@ public class Vector3 {
     public Vector3 subtract(Vector3 b) {
         return subtract(this, b);
     }
+    public Vector3 multiply(Vector3 b) {
+        return multiply(this, b);
+    }
+    public Vector3 divide(Vector3 b) {
+        return divide(this, b);
+    }
+    public double dot(Vector3 b) {
+        return dot(this, b);
+    }
 
     
 	public Vector3 applyFunction(Function<Double, Double> function) {
         x = function.apply(x);
         y = function.apply(y);
         z = function.apply(z);
-
         return this;
+	}
+	public static Vector3 applyFunction(BiFunction<Double, Double, Double> function, Vector3 a, Vector3 b) {
+        return new Vector3(
+            function.apply(a.x, b.x),
+            function.apply(a.y, b.y),
+            function.apply(a.z, b.z)
+        );
 	}
 
 
@@ -86,5 +118,4 @@ public class Vector3 {
     public Vector3 clone() {
         return new Vector3(x, y, z);
     }
-
 }

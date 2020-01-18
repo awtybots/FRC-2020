@@ -7,8 +7,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -39,10 +41,12 @@ public class Robot extends TimedRobot {
 	private SendableChooser<AutonType> autonChooser;
 
 	private static double period;
+	private static Alliance alliance;
 
 	@Override
 	public void robotInit() {
 		period = getPeriod();
+		alliance = DriverStation.getInstance().getAlliance();
 
 		// Auton chooser
 		autonChooser = new SendableChooser<>();
@@ -150,5 +154,8 @@ public class Robot extends TimedRobot {
 
 	public static double getTimePeriod() {
 		return period;
+	}
+	public static Alliance getAlliance() {
+		return alliance;
 	}
 }

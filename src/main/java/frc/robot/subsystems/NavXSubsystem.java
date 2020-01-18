@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.NavX.*;
+
+import frc.robot.Robot;
 import frc.robot.util.Vector3;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -60,7 +63,7 @@ public class NavXSubsystem extends SubsystemBase {
 
         private final Vector3 position;
         private FieldObject(Vector3 position) {
-            this.position = position;
+            this.position = Robot.getAlliance() == Alliance.Red ? position : position.rotateZ(180);
         }
 
         public Vector3 getPosition() {

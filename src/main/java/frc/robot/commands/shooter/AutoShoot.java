@@ -47,15 +47,25 @@ public class AutoShoot extends CommandBase {
     }
 
     private boolean calculateTrajectory() {
-        Vector3 targetVector = limelight.getRelativeTargetVector();
         Vector3 robotVelocity = navX.getVelocity().setZ(0);
-
         double robotAngle = navX.getDirection();
-        aimAngle = toDegrees(atan2(targetVector.y, targetVector.x)) - robotAngle;
+
+        Vector3 visionTargetDisplacement = limelight.getRelativeTargetVector();
+        Vector3 navXTargetDisplacement = navX.getDisplacement(FieldObject.POWER_PORT);
         
-        Vector3 targetDisplacement = targetVector == null ? navX.getDisplacement(FieldObject.POWER_PORT) : targetVector.rotateZ(robotAngle);
+        // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
+        boolean useNavX = visionTargetDisplacement == null || visionTargetDisplacement.dot(navXTargetDisplacement) < 0;
+        Vector3 targetDisplacement =
+            useNavX
+            ?
+            navXTargetDisplacement
+            :
+            visionTargetDisplacement.rotateZ(robotAngle);
+        
         targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
+
         Vector3 ballVelocity = getOptimalBallVelocity(targetDisplacement).subtract(robotVelocity);
+        aimAngle = toDegrees(atan2(targetDisplacement.y, targetDisplacement.x)) - robotAngle;
 
         if(ballVelocity == null) {
             revsPerSecond = 0;
@@ -72,7 +82,7 @@ public class AutoShoot extends CommandBase {
         SmartDashboard.putString("Shooter Goal Velocity", ballVelocity.toString());
         SmartDashboard.putNumber("Shooter Goal Angle", Math.round(aimAngle));
 
-        return true;
+        return !useNavX; // don't shoot if we used the NavX for displacement, wait for the camera to see the power port
     }
 
     private Vector3 getOptimalBallVelocity(Vector3 targetDisplacement) {
