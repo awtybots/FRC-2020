@@ -55,12 +55,9 @@ public class AutoShoot extends CommandBase {
         
         // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
         boolean useNavX = visionTargetDisplacement == null || visionTargetDisplacement.dot(navXTargetDisplacement) < 0;
-        Vector3 targetDisplacement =
-            useNavX
-            ?
-            navXTargetDisplacement
-            :
-            visionTargetDisplacement.rotateZ(robotAngle);
+        Vector3 targetDisplacement = useNavX
+            ? navXTargetDisplacement
+            : visionTargetDisplacement.rotateZ(robotAngle);
         
         targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
 
