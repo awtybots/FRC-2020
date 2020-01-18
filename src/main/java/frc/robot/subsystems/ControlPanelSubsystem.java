@@ -21,7 +21,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
     private final ColorMatch colorMatcher = new ColorMatch();
     
     private PanelColor detectedColor;
-    private PanelColor currentColor;
+    private PanelColor currentColor = PanelColor.NONE;
     private PanelColor pendingColor;
     
     private Timer verifyColorTimer = new Timer();
@@ -71,15 +71,15 @@ public class ControlPanelSubsystem extends SubsystemBase {
         Color detectedColorRaw = colorSensor.getColor();
         SmartDashboard.putString("Detected color", (int)(detectedColorRaw.red*100) + ", " + (int)(detectedColorRaw.green*100) + ", " + (int)(detectedColorRaw.blue*100));
         ColorMatchResult colorMatchResult = colorMatcher.matchClosestColor(detectedColorRaw);
-        for(PanelColor color : PanelColor.values()) {
+        if(colorMatchResult.confidence < ColorSensor.MINIMUM_COLOR_CONFIDENCE) return PanelColor.NONE;
+        for(PanelColor color : PanelColor.getColors()) {
             if(colorMatchResult.color == color.getColor()) {
                 return color;
             }
         }
-        return null;
+        return PanelColor.NONE;
     }
     public PanelColor getCurrentColor() {
-        //return detectedColor;
         return currentColor;
     }
 
@@ -87,7 +87,8 @@ public class ControlPanelSubsystem extends SubsystemBase {
         RED     (ColorSensor.RED),
         GREEN   (ColorSensor.GREEN),
         BLUE    (ColorSensor.BLUE),
-        YELLOW  (ColorSensor.YELLOW);
+        YELLOW  (ColorSensor.YELLOW),
+        NONE    (new double[]{0, 0, 0});
 
         private Color color;
         private String name;
@@ -102,6 +103,10 @@ public class ControlPanelSubsystem extends SubsystemBase {
         }
         public String getName() {
             return name;
+        }
+
+        public static PanelColor[] getColors() {
+            return new PanelColor[]{RED, GREEN, BLUE, YELLOW};
         }
 
         public static PanelColor fromChar(char c) {
