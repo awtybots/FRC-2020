@@ -24,15 +24,14 @@ public class Vector3 {
     }
     public Vector3 setMagnitude(double mag) {
         double factor = mag/getMagnitude();
-        x *= factor;
-        y *= factor;
-        z *= factor;
-        return this;
+        return applyFunction(n -> n*factor);
     }
     public Vector3 normalize() {
         setMagnitude(1);
         return this;
     }
+
+
     public Vector3 setZ(double z) {
         this.z = z;
         return this;
@@ -59,11 +58,12 @@ public class Vector3 {
     }
 
     public Vector3 add(Vector3 b) {
-        return Vector3.add(this, b);
+        return add(this, b);
     }
     public Vector3 subtract(Vector3 b) {
-        return Vector3.subtract(this, b);
+        return subtract(this, b);
     }
+
     
 	public Vector3 applyFunction(Function<Double, Double> function) {
         x = function.apply(x);
@@ -74,12 +74,13 @@ public class Vector3 {
 	}
 
 
-    private double round(double n, double amt) {
-        return Math.round(n * Math.pow(10, amt)) / Math.pow(10, amt);
+    private double roundTenths(double n) {
+        return Math.round(n * 10) / 10;
     }
     @Override
     public String toString() {
-        return "( "+round(x,1)+", "+round(y,1)+", "+round(z,1)+" )";
+        Vector3 rounded = clone().applyFunction(this::roundTenths);
+        return "( "+rounded.x+", "+rounded.y+", "+rounded.z+" )";
     }
     @Override
     public Vector3 clone() {
