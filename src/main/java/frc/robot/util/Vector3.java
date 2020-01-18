@@ -1,5 +1,7 @@
 package frc.robot.util;
 
+import java.util.function.Function;
+
 public class Vector3 {
 
     public double x;
@@ -62,6 +64,14 @@ public class Vector3 {
     public Vector3 subtract(Vector3 b) {
         return Vector3.subtract(this, b);
     }
+    
+	public Vector3 applyFunction(Function<Double, Double> function) {
+        x = function.apply(x);
+        y = function.apply(y);
+        z = function.apply(z);
+
+        return this;
+	}
 
 
     private double round(double n, double amt) {
