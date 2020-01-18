@@ -95,6 +95,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		return (PID_P * velocityError) + (PID_I * integralError.get(motorGroup)) + (PID_D * accelerationError);
 	}
 
+    @SuppressWarnings("unused")
 	private double calculateFF(MotorGroup motorGroup, double goalVelocity) {
 		double constrainedGoalVelocity = clamp(goalVelocity, -MAX_VELOCITY, MAX_VELOCITY);
 		double currentVelocity = getVelocity(motorGroup, false);
@@ -120,6 +121,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 	
 
+	public void setMotorOutput(double left, double right) {
+		speedLeft.set(left);
+		speedRight.set(right);
+	}
 	public void setGoalVelocity(double left, double right) {
 		goalVelocityLeft = left;
 		goalVelocityRight = right;

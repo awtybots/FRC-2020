@@ -38,7 +38,10 @@ public class TeleopDrive extends CommandBase {
 		} else {
 			double speed = smooth(-xboxController.getY(SPEED_HAND));
 			double rotation = smooth(xboxController.getX(ROTATION_HAND));
-			driveTrainSubsystem.setGoalVelocity((speed + rotation) * MAX_VELOCITY, (speed - rotation) * MAX_VELOCITY);
+			double left = speed + rotation;
+			double right = speed - rotation;
+			driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
+			//driveTrainSubsystem.setGoalVelocity((speed + rotation) * MAX_VELOCITY, (speed - rotation) * MAX_VELOCITY);
 		}
 	}
 

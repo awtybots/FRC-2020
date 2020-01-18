@@ -37,6 +37,7 @@ public final class Constants {
         public final static boolean TUNING_MODE = false;
 
         public final static double DEADZONE = 0.1;
+        public final static double MAX_TELEOP_MOTOR_OUTPUT = 0.5;
         
         public final static double GEAR_RATIO = 1/8;
         public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI;
