@@ -54,7 +54,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @SuppressWarnings("unused")
     private void flywheelBangBang() {
         if(currentVelocity < goalVelocity - GOAL_VELOCITY_THRESHOLD) {
-            flywheel.set(BANG_BANG_OUTPUT);
+            flywheel.set(SHOOTER_BANG_BANG_SPEED);
         } else if(currentVelocity > goalVelocity + GOAL_VELOCITY_THRESHOLD){
             flywheel.set(0);
         }
@@ -73,7 +73,7 @@ public class ShooterSubsystem extends SubsystemBase {
         this.goalVelocity = goalVelocity;
     }
     public void spinTurret(double relativeGoalAngle) {
-        //turret.set(Math.signum(relativeGoalAngle) * TURRET_SPEED);
+        //turret.set(clamp(relativeGoalAngle * TURRET_SPEED * TURRET_P, -TURRET_SPEED, TURRET_SPEED));
         turretAtGoal = relativeGoalAngle == 0.0;
     }
 
