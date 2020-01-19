@@ -32,8 +32,8 @@ public class Robot extends TimedRobot {
 	private IntakeSubsystem intakeSubsystem;
 	private ShooterSubsystem shooterSubsystem;
 	private ControlPanelSubsystem controlPanelSubsystem;
-	private LimelightSubsystem limelightSubsystem;
-	private NavXSubsystem navXSubsystem;
+	@SuppressWarnings("unused") private LimelightSubsystem limelightSubsystem;
+	@SuppressWarnings("unused") private NavXSubsystem navXSubsystem;
 
 	private Teleop teleopCommand;
 	private Auton autonCommand;
@@ -68,15 +68,6 @@ public class Robot extends TimedRobot {
 		controlPanelSubsystem = new ControlPanelSubsystem();
 		limelightSubsystem = new LimelightSubsystem();
 		navXSubsystem = new NavXSubsystem();
-		
-		CommandScheduler.getInstance().registerSubsystem(
-			driveTrainSubsystem,
-			intakeSubsystem,
-			shooterSubsystem,
-			controlPanelSubsystem,
-			limelightSubsystem,
-			navXSubsystem
-		);
 
 		// Button Mappings
 		getButton("Y")
