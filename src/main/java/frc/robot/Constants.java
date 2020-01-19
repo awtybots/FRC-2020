@@ -72,13 +72,12 @@ public final class Constants {
 
         public final static double SHOOTER_HEIGHT = 24;
         public final static double SHOOTER_ANGLE = 45;
-        public final static double TURRET_START_ANGLE = 0;
+        
         public final static double TURRET_SPEED = 0.3;
 
         public final static double GRAVITY = 16.1 * 12.0; // inches per second per second
 
         public final static double FLYWHEEL_RATIO = 1/4;
-        public final static double TURRET_RATIO = 1/4;
 
         public final static double MAX_REVS_PER_SECOND = 100;
         public final static double MAX_ACCELERATION = 10;
@@ -86,7 +85,7 @@ public final class Constants {
         public final static double BANG_BANG_OUTPUT = 0.3;
         public final static double SHOOTER_TELEOP_SPEED = 60;
         public final static double GOAL_VELOCITY_THRESHOLD = 5;
-        public final static double GOAL_ANGLE_THRESHOLD = 2;
+        public final static double TURRET_ANGLE_THRESHOLD = 3;
 
         // PID
         public final static double PID_P = 0.02;

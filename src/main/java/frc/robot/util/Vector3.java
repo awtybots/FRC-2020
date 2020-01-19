@@ -95,7 +95,11 @@ public class Vector3 {
         return this;
     }
 
-
+    
+    public Vector3 print(String name) {
+        System.out.println(String.format("Vector3 '%s': ", name) + toString());
+        return this;
+    }
     @Override
     public String toString() {
         Vector3 rounded = clone().applyFunction((n) -> ((double)Math.round(n * 10)) / 10);

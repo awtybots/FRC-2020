@@ -16,13 +16,15 @@ public class NavXSubsystem extends SubsystemBase {
     private final AHRS board = new AHRS(SPI.Port.kMXP);
 
     private Vector3 initialDisplacement = new Vector3();
+    private double startAngle;
 
 
 
-    public void set(Vector3 displacement, double direction) {
+    public void set(Vector3 displacement, double startAngle) {
         board.reset();
-        board.setAngleAdjustment(direction);
+        board.setAngleAdjustment(startAngle);
         this.initialDisplacement = displacement;
+        this.startAngle = startAngle;
     }
 
     public Vector3 getDisplacement() {
@@ -33,6 +35,7 @@ public class NavXSubsystem extends SubsystemBase {
             board.getDisplacementZ()
         )
         .applyFunction(Units::metersToInches)
+        .rotateZ(-startAngle)
         .add(initialDisplacement);
     }
 

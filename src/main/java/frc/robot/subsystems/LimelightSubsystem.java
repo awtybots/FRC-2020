@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.Limelight.*;
 
+import javax.annotation.CheckForNull;
+
 import frc.robot.util.Vector3;
 
 public class LimelightSubsystem extends SubsystemBase {
@@ -40,30 +42,26 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
 
-
-    public Vector3 getRelativeTargetVector() {
+    @CheckForNull
+    public Vector3 getTargetInfo() {
         boolean targetExists = getDouble("tv") == 1.0;
         if(!targetExists) {
             return null;
         }
 
-        double targetOffsetAngleHorizontal = getDouble("tx");
-        double targetOffsetAngleVertical = getDouble("ty");
+        double tx = getDouble("tx");
+        double ty = getDouble("ty");
         //double targetArea = getDouble("ta");
         //double targetSkew = getDouble("ts");
 
         double targetHeight = currentPipeline.getTargetHeight();
 
-        double yOffset = targetHeight / Math.tan(CAMERA_MOUNTING_ANGLE + targetOffsetAngleVertical);
-        double forwardOffset = (new Vector3(0, yOffset, targetHeight)).getMagnitude();
-        double xOffset = forwardOffset * Math.tan(targetOffsetAngleHorizontal);
         return new Vector3(
-            xOffset,
-            yOffset,
-            0
+            tx, // horizontal offset angle
+            CAMERA_MOUNTING_ANGLE + ty, // vertical offset angle
+            targetHeight // inches
         );
     }
-
 
 
     public void setPipeline(Pipeline pipeline) {

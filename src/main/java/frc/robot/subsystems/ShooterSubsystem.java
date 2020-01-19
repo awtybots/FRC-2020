@@ -19,11 +19,9 @@ public class ShooterSubsystem extends SubsystemBase {
 	private double PERIOD;
 
     private double goalVelocity;
-    private double goalAngle;
-
     private double currentVelocity;
-    private double currentAngle;
 
+    private boolean turretAtGoal = false;
     private boolean readyToShoot;
     
     public ShooterSubsystem() {
@@ -44,18 +42,16 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         currentVelocity = flywheel.getSelectedSensorVelocity() / 409.6 * FLYWHEEL_RATIO;
-        currentAngle = TURRET_START_ANGLE + (turret.getSelectedSensorPosition() / 4096 * 360 * TURRET_RATIO);
         boolean velocityAtGoal = Math.abs(currentVelocity - goalVelocity) <= GOAL_VELOCITY_THRESHOLD;;
-        boolean angleAtGoal = Math.abs(currentAngle - goalAngle) <= GOAL_ANGLE_THRESHOLD;
-        readyToShoot = velocityAtGoal && angleAtGoal;
+        readyToShoot = velocityAtGoal && turretAtGoal;
 
         SmartDashboard.putBoolean("Shooter velocity at goal", velocityAtGoal);
-        SmartDashboard.putBoolean("Shooter angle at goal", angleAtGoal);
+        SmartDashboard.putBoolean("Shooter angle at goal", turretAtGoal);
 
-        flywheelBangBang();
-        spinTurret();
+        //flywheelBangBang();
     }
 
+    @SuppressWarnings("unused")
     private void flywheelBangBang() {
         if(currentVelocity < goalVelocity - GOAL_VELOCITY_THRESHOLD) {
             flywheel.set(BANG_BANG_OUTPUT);
@@ -73,23 +69,12 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheel.setVoltage(voltage);
     }
 
-    private void spinTurret() {
-        if(currentAngle > goalAngle + GOAL_ANGLE_THRESHOLD) {
-            turret.set(-TURRET_SPEED);
-        } else if(currentAngle < goalAngle - GOAL_ANGLE_THRESHOLD) {
-            turret.set(TURRET_SPEED);
-        } else {
-            turret.set(0);
-        }
-    }
-
-
-
     public void setGoalFlywheelRevsPerSecond(double goalVelocity) {
         this.goalVelocity = goalVelocity;
     }
-    public void setGoalTurretAngle(double goalAngle) {
-        this.goalAngle = goalAngle;
+    public void spinTurret(double relativeGoalAngle) {
+        //turret.set(Math.signum(relativeGoalAngle) * TURRET_SPEED);
+        turretAtGoal = relativeGoalAngle == 0.0;
     }
 
     public boolean readyToShoot() {

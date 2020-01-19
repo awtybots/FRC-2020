@@ -11,14 +11,16 @@ import frc.robot.util.Vector3;
 import static frc.robot.Constants.Shooter.*;
 import static java.lang.Math.*;
 
+import javax.annotation.CheckForNull;
+
 public class AutoShoot extends CommandBase {
 
     private final ShooterSubsystem shooter;
     private final LimelightSubsystem limelight;
     private final NavXSubsystem navX;
 
-    private double revsPerSecond = 0;
-    private double aimAngle = TURRET_START_ANGLE;
+    private double optimalRevsPerSecond = 0;
+    private double spinTurret = 0;
 
     public AutoShoot(ShooterSubsystem shooter, LimelightSubsystem limelight, NavXSubsystem navX) {
         addRequirements(shooter, limelight);
@@ -36,8 +38,8 @@ public class AutoShoot extends CommandBase {
     public void execute() {
         boolean canShoot = calculateTrajectory();
         
-        shooter.setGoalFlywheelRevsPerSecond(revsPerSecond);
-        shooter.setGoalTurretAngle(aimAngle);
+        shooter.setGoalFlywheelRevsPerSecond(optimalRevsPerSecond);
+        shooter.spinTurret(spinTurret);
 
         SmartDashboard.putBoolean("Shooter trajectory possible", canShoot);
 
@@ -46,43 +48,71 @@ public class AutoShoot extends CommandBase {
         }
     }
 
-    private boolean calculateTrajectory() {
-        Vector3 robotVelocity = navX.getVelocity().setZ(0);
-        double robotAngle = navX.getDirection();
+    @Override
+    public void end(boolean interrupted) {
+        shooter.setGoalFlywheelRevsPerSecond(0.0);
+        shooter.spinTurret(0.0);
+    }
 
-        Vector3 visionTargetDisplacement = limelight.getRelativeTargetVector();
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
+    
+    
+
+    @CheckForNull
+    private boolean calculateTrajectory() {
+        double robotAngle = navX.getDirection();
+        Vector3 visionTargetInfo = limelight.getTargetInfo();
+        
+        Vector3 visionTargetDisplacement = calculateVisionTargetOffset(visionTargetInfo);
         Vector3 navXTargetDisplacement = navX.getDisplacement(FieldObject.POWER_PORT);
         
         // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
-        boolean useNavX = visionTargetDisplacement == null || visionTargetDisplacement.dot(navXTargetDisplacement) < 0;
+        boolean useNavX = visionTargetDisplacement == null || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
+
+        spinTurret = useNavX
+            ? toDegrees(atan2(navXTargetDisplacement.y, navXTargetDisplacement.x) + Math.PI) - robotAngle
+            : abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD
+                ? 0.0
+                : visionTargetInfo.x;
+
         Vector3 targetDisplacement = useNavX
             ? navXTargetDisplacement
-            : visionTargetDisplacement.rotateZ(robotAngle);
-        
+            : visionTargetDisplacement.rotateZ(robotAngle); // vision displacement vector is relative to front of robot, so rotate it
         targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
 
-        Vector3 ballVelocity = getOptimalBallVelocity(targetDisplacement).subtract(robotVelocity);
-        aimAngle = toDegrees(atan2(targetDisplacement.y, targetDisplacement.x)) - robotAngle;
+        Vector3 optimalBallVelocity = calculateOptimalBallVelocity(targetDisplacement);
 
-        if(ballVelocity == null) {
-            revsPerSecond = 0;
-            return false;
-        }
-        
-        revsPerSecond = ballVelocity.getMagnitude() / WHEEL_CIRCUMFERENCE;
-
-        if(revsPerSecond > MAX_REVS_PER_SECOND) {
-            revsPerSecond = 0;
+        if(optimalBallVelocity == null) { // shot is impossible from this point
+            optimalRevsPerSecond = 0;
             return false;
         }
 
-        SmartDashboard.putString("Shooter Goal Velocity", ballVelocity.toString());
-        SmartDashboard.putNumber("Shooter Goal Angle", Math.round(aimAngle));
+        optimalBallVelocity = optimalBallVelocity.subtract(navX.getVelocity().setZ(0)); // subtract robot velocity from goal velocity (for moving shots)
+        optimalRevsPerSecond = optimalBallVelocity.getMagnitude() / WHEEL_CIRCUMFERENCE;
+
+        if(optimalRevsPerSecond > MAX_REVS_PER_SECOND) { // shooting from this point requires too much speed
+            optimalRevsPerSecond = 0;
+            return false;
+        }
+
+        SmartDashboard.putString("Shooter goal velocity", optimalBallVelocity.toString());
+        SmartDashboard.putNumber("Turret spin direction", spinTurret);
 
         return !useNavX; // don't shoot if we used the NavX for displacement, wait for the camera to see the power port
     }
 
-    private Vector3 getOptimalBallVelocity(Vector3 targetDisplacement) {
+    private Vector3 calculateVisionTargetOffset(Vector3 visionTargetInfo) {
+        if(visionTargetInfo == null) return null;
+        double yOffset = visionTargetInfo.z / tan(visionTargetInfo.y);
+        double forwardOffset = (new Vector3(0, yOffset, visionTargetInfo.z)).getMagnitude();
+        double xOffset = forwardOffset * tan(visionTargetInfo.x);
+        return new Vector3(xOffset, yOffset, 0);
+    }
+
+    private Vector3 calculateOptimalBallVelocity(Vector3 targetDisplacement) {
         double x = targetDisplacement.clone().setZ(0).getMagnitude();
         double z = targetDisplacement.z;
         double xr = targetDisplacement.x / x;
@@ -110,16 +140,6 @@ public class AutoShoot extends CommandBase {
         //    https://www.desmos.com/calculator/on4xzwtdwz
         //    https://demonstrations.wolfram.com/ProjectileWithAirDrag/
         
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        shooter.setGoalFlywheelRevsPerSecond(0);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
     }
 
 }
