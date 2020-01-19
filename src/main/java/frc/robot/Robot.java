@@ -18,9 +18,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.*;
 import frc.robot.commands.controlpanel.AutoSpinControlPanel;
 import frc.robot.commands.controlpanel.ToggleControlPanelSpinner;
-import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.main.*;
 import frc.robot.commands.main.Auton.AutonType;
+import frc.robot.commands.shooter.AutoShoot;
 import frc.robot.commands.shooter.ToggleShooter;
 import frc.robot.subsystems.*;
 
@@ -32,8 +32,8 @@ public class Robot extends TimedRobot {
 	private IntakeSubsystem intakeSubsystem;
 	private ShooterSubsystem shooterSubsystem;
 	private ControlPanelSubsystem controlPanelSubsystem;
-	@SuppressWarnings("unused") private LimelightSubsystem limelightSubsystem;
-	@SuppressWarnings("unused") private NavXSubsystem navXSubsystem;
+	private LimelightSubsystem limelightSubsystem;
+	private NavXSubsystem navXSubsystem;
 
 	private Teleop teleopCommand;
 	private Auton autonCommand;
@@ -45,10 +45,11 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void robotInit() {
+		// runtime constants
 		period = getPeriod();
 		alliance = DriverStation.getInstance().getAlliance();
 
-		// Auton chooser
+		// auton chooser
 		autonChooser = new SendableChooser<>();
 		AutonType[] autonTypes = AutonType.values();
 		for(AutonType autonType : autonTypes) {
@@ -60,7 +61,7 @@ public class Robot extends TimedRobot {
 		}
 		SmartDashboard.putData(autonChooser);
 
-		// Subsystems
+		// subsystems
 		xboxController = new XboxController(Controller.PORT);
 		driveTrainSubsystem = new DriveTrainSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
@@ -69,17 +70,11 @@ public class Robot extends TimedRobot {
 		limelightSubsystem = new LimelightSubsystem();
 		navXSubsystem = new NavXSubsystem();
 
-		// Button Mappings
-		getButton("Y")
-			.whenPressed(new ToggleControlPanelSpinner(controlPanelSubsystem, true))
-			.whenReleased(new ToggleControlPanelSpinner(controlPanelSubsystem, false));
-		getButton("X")
-			.whenPressed(new ToggleShooter(shooterSubsystem, true))
-			.whenReleased(new ToggleShooter(shooterSubsystem, false));
-		getButton("A")
-			.whenPressed(new AutoSpinControlPanel(controlPanelSubsystem));
-		getButton("B")
-			.whenPressed(new ToggleIntake(intakeSubsystem));
+		// button mappings
+		getButton("A").whenHeld(new ToggleShooter(shooterSubsystem));
+		getButton("B").whenHeld(new AutoShoot(shooterSubsystem, limelightSubsystem, navXSubsystem));
+		getButton("X").whenPressed(new AutoSpinControlPanel(controlPanelSubsystem));
+		getButton("Y").whenHeld(new ToggleControlPanelSpinner(controlPanelSubsystem));
 	}
 
 	/**
