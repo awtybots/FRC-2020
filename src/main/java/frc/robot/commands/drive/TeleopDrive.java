@@ -9,7 +9,6 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.util.Vector3;
 
 import static frc.robot.Constants.Controller.*;
 import static frc.robot.Constants.DriveTrain.*;
@@ -24,7 +23,6 @@ public class TeleopDrive extends CommandBase {
 		if(TUNING_MODE) {
 			SmartDashboard.setDefaultNumber("Test Speed", 0);
 		}
-		navXSubsystem.set(new Vector3(), 0);
 	}
 
 	private double smooth(double x) {

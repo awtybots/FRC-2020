@@ -3,6 +3,7 @@ package frc.robot.util;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Vector3 {
@@ -17,6 +18,9 @@ public class Vector3 {
     }
     public Vector3(double n) {
         this(n, n, n);
+    }
+    public Vector3(Pose2d pose) {
+        this(pose.getTranslation().getX(), pose.getTranslation().getY(), 0);
     }
     public Vector3(double x, double y, double z) {
         this.x = x;

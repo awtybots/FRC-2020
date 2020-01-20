@@ -21,6 +21,7 @@ import frc.robot.commands.controlpanel.ToggleControlPanelSpinner;
 import frc.robot.commands.main.*;
 import frc.robot.commands.main.Auton.AutonType;
 import frc.robot.commands.shooter.AutoShoot;
+import frc.robot.commands.shooter.ResetNavX;
 import frc.robot.commands.shooter.ToggleShooter;
 import frc.robot.subsystems.*;
 
@@ -75,6 +76,7 @@ public class Robot extends TimedRobot {
 		getButton("B").whenHeld(new AutoShoot());
 		getButton("X").whenPressed(new AutoSpinControlPanel());
 		getButton("Y").whenHeld(new ToggleControlPanelSpinner());
+		getButton("BumperRight").whenPressed(new ResetNavX());
 	}
 
 	/**

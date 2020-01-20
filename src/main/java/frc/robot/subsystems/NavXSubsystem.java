@@ -23,7 +23,7 @@ public class NavXSubsystem extends SubsystemBase {
     public void set(Vector3 displacement, double startAngle) {
         board.reset();
         this.initialDisplacement = allianceCondition(displacement);
-        this.startAngle = allianceCondition(startAngle);
+        this.startAngle = allianceCondition(Math.floorMod((int)startAngle, 360));
     }
 
     public Vector3 getDisplacement() {
