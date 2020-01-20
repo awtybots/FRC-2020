@@ -40,7 +40,7 @@ public class TeleopDrive extends CommandBase {
 			double left = speed + rotation;
 			double right = speed - rotation;
 			driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
-			//driveTrainSubsystem.setGoalVelocity((speed + rotation) * MAX_VELOCITY, (speed - rotation) * MAX_VELOCITY);
+			//driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
 		}
 	}
 

@@ -29,7 +29,7 @@ public final class Constants {
         public static final int SHOOTER_FLYWHEEL = 1;
         public static final int SHOOTER_TURRET = 1;
 
-        public static final int CONTROL_PANEL_SPINNER = 11;
+        public static final int CONTROL_PANEL_SPINNER = 1;
     }
 
     public final static class DriveTrain {
@@ -128,7 +128,7 @@ public final class Constants {
         public final static double[] YELLOW  = new double[]{.31, .55, .12};
 
         public final static double VERIFY_COLOR_TIME = 0.03; // time (seconds) to verify color is really there (0.125 is 60 RPM)
-        public final static double MINIMUM_COLOR_CONFIDENCE = 0.8;
+        public final static double MINIMUM_COLOR_CONFIDENCE = 0.95;
     }
 
     public final static class ControlPanelSpinner {
