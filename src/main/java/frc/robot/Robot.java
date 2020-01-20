@@ -26,14 +26,14 @@ import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
 
-	private XboxController xboxController;
+	public static XboxController xboxController1;
 
-	private DriveTrainSubsystem driveTrainSubsystem;
-	private IntakeSubsystem intakeSubsystem;
-	private ShooterSubsystem shooterSubsystem;
-	private ControlPanelSubsystem controlPanelSubsystem;
-	private LimelightSubsystem limelightSubsystem;
-	private NavXSubsystem navXSubsystem;
+	public static DriveTrainSubsystem driveTrainSubsystem;
+	public static IntakeSubsystem intakeSubsystem;
+	public static ShooterSubsystem shooterSubsystem;
+	public static ControlPanelSubsystem controlPanelSubsystem;
+	public static LimelightSubsystem limelightSubsystem;
+	public static NavXSubsystem navXSubsystem;
 
 	private Teleop teleopCommand;
 	private Auton autonCommand;
@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData(autonChooser);
 
 		// subsystems
-		xboxController = new XboxController(Controller.PORT);
+		xboxController1 = new XboxController(Controller.PORT);
 		driveTrainSubsystem = new DriveTrainSubsystem();
 		intakeSubsystem = new IntakeSubsystem();
 		shooterSubsystem = new ShooterSubsystem();
@@ -71,10 +71,10 @@ public class Robot extends TimedRobot {
 		navXSubsystem = new NavXSubsystem();
 
 		// button mappings
-		getButton("A").whenHeld(new ToggleShooter(shooterSubsystem));
-		getButton("B").whenHeld(new AutoShoot(shooterSubsystem, limelightSubsystem, navXSubsystem));
-		getButton("X").whenPressed(new AutoSpinControlPanel(controlPanelSubsystem));
-		getButton("Y").whenHeld(new ToggleControlPanelSpinner(controlPanelSubsystem));
+		getButton("A").whenHeld(new ToggleShooter());
+		getButton("B").whenHeld(new AutoShoot());
+		getButton("X").whenPressed(new AutoSpinControlPanel());
+		getButton("Y").whenHeld(new ToggleControlPanelSpinner());
 	}
 
 	/**
@@ -102,8 +102,8 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
-		autonCommand = new Auton(driveTrainSubsystem, intakeSubsystem, autonChooser.getSelected()); // get chosen AutonType
-		if(autonCommand != null) autonCommand.schedule(); // start auton
+		autonCommand = new Auton(autonChooser.getSelected()); // get chosen AutonType
+		autonCommand.schedule(); // start auton
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		if(autonCommand != null) autonCommand.cancel(); // finish auton
 
-		teleopCommand = new Teleop(xboxController, driveTrainSubsystem, intakeSubsystem); // overlaying teleop command for the teleop period
+		teleopCommand = new Teleop(); // overlaying teleop command for the teleop period
 		teleopCommand.schedule(); // start teleop
 	}
 
@@ -135,7 +135,7 @@ public class Robot extends TimedRobot {
 	}
 
 	private JoystickButton getButton(String name) {
-		return new JoystickButton(xboxController, XboxController.Button.valueOf("k"+name).value);
+		return new JoystickButton(xboxController1, XboxController.Button.valueOf("k"+name).value);
 	}
 
 	public static double getTimePeriod() {

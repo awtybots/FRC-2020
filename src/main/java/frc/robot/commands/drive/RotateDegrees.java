@@ -4,20 +4,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import static frc.robot.Constants.DriveTrain.*;
-import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem.MotorGroup;
+import static frc.robot.Robot.*;
 
 public class RotateDegrees extends CommandBase {
-
-    private final DriveTrainSubsystem driveTrainSubsystem;
 
     private final double goalDistance;
     private double goalVelocity;
     private double currentDistance = 0;
     private double multiplier;
 
-    public RotateDegrees(DriveTrainSubsystem driveTrainSubsystem, double degrees) {
-        this.driveTrainSubsystem = driveTrainSubsystem;
+    public RotateDegrees(double degrees) {
+        addRequirements(driveTrainSubsystem);
         this.goalDistance = Math.abs(degrees)/360 * ROBOT_CIRMCUMFERENCE;
         this.multiplier = Math.signum(degrees);
         this.goalVelocity = multiplier * MAX_VELOCITY;

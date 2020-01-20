@@ -13,10 +13,10 @@ public class Teleop extends ParallelCommandGroup {
     // this is the overlaying command group for everything that happens in the teleop period
     // see https://docs.wpilib.org/en/latest/docs/software/commandbased/command-groups.html
 
-    public Teleop(XboxController xboxController, DriveTrainSubsystem driveTrainSubsystem, IntakeSubsystem intakeSubsystem) {
+    public Teleop() {
         addCommands(
             //new ToggleIntake(intakeSubsystem, true),
-            new TeleopDrive(xboxController, driveTrainSubsystem)
+            new TeleopDrive()
         );
     }
 

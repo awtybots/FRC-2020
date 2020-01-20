@@ -2,56 +2,47 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.subsystems.NavXSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.LimelightSubsystem.Pipeline;
 import frc.robot.subsystems.NavXSubsystem.FieldObject;
 import frc.robot.util.Vector3;
 import static frc.robot.Constants.Shooter.*;
 import static java.lang.Math.*;
+import static frc.robot.Robot.*;
 
 import javax.annotation.CheckForNull;
 
 public class AutoShoot extends CommandBase {
 
-    private final ShooterSubsystem shooter;
-    private final LimelightSubsystem limelight;
-    private final NavXSubsystem navX;
-
     private double optimalRevsPerSecond = 0;
     private double spinTurret = 0;
 
-    public AutoShoot(ShooterSubsystem shooter, LimelightSubsystem limelight, NavXSubsystem navX) {
-        addRequirements(shooter, limelight);
-        this.shooter = shooter;
-        this.limelight = limelight;
-        this.navX = navX;
+    public AutoShoot() {
+        addRequirements(shooterSubsystem, limelightSubsystem);
     }
 
     @Override
     public void initialize() {
-        limelight.setPipeline(Pipeline.POWER_PORT);
+        limelightSubsystem.setPipeline(Pipeline.POWER_PORT);
     }
 
     @Override
     public void execute() {
         boolean canShoot = calculateTrajectory();
         
-        shooter.setGoalFlywheelRevsPerSecond(optimalRevsPerSecond);
-        shooter.spinTurret(spinTurret);
+        shooterSubsystem.setGoalFlywheelRevsPerSecond(optimalRevsPerSecond);
+        shooterSubsystem.spinTurret(spinTurret);
 
         SmartDashboard.putBoolean("Shooter trajectory possible", canShoot);
 
-        if(canShoot && shooter.readyToShoot()) {
+        if(canShoot && shooterSubsystem.readyToShoot()) {
             // actually shoot a ball
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        shooter.setGoalFlywheelRevsPerSecond(0.0);
-        shooter.spinTurret(0.0);
+        shooterSubsystem.setGoalFlywheelRevsPerSecond(0.0);
+        shooterSubsystem.spinTurret(0.0);
     }
 
     @Override
@@ -63,11 +54,11 @@ public class AutoShoot extends CommandBase {
 
     @CheckForNull
     private boolean calculateTrajectory() {
-        double robotAngle = navX.getDirection();
-        Vector3 visionTargetInfo = limelight.getTargetInfo();
+        double robotAngle = navXSubsystem.getDirection();
+        Vector3 visionTargetInfo = limelightSubsystem.getTargetInfo();
         
         Vector3 visionTargetDisplacement = calculateVisionTargetOffset(visionTargetInfo);
-        Vector3 navXTargetDisplacement = navX.getDisplacement(FieldObject.POWER_PORT);
+        Vector3 navXTargetDisplacement = navXSubsystem.getDisplacement(FieldObject.POWER_PORT);
         
         // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
         boolean useNavX = visionTargetDisplacement == null || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
@@ -90,7 +81,7 @@ public class AutoShoot extends CommandBase {
             return false;
         }
 
-        optimalBallVelocity = optimalBallVelocity.subtract(navX.getVelocity().setZ(0)); // subtract robot velocity from goal velocity (for moving shots)
+        optimalBallVelocity = optimalBallVelocity.subtract(navXSubsystem.getVelocity().setZ(0)); // subtract robot velocity from goal velocity (for moving shots)
         optimalRevsPerSecond = optimalBallVelocity.getMagnitude() / WHEEL_CIRCUMFERENCE;
 
         if(optimalRevsPerSecond > MAX_REVS_PER_SECOND) { // shooting from this point requires too much speed

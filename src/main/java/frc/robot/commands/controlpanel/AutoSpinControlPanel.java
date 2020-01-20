@@ -3,13 +3,11 @@ package frc.robot.commands.controlpanel;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import static frc.robot.Robot.*;
 import frc.robot.Constants.ControlPanelSpinner;
-import frc.robot.subsystems.ControlPanelSubsystem;
 import frc.robot.subsystems.ControlPanelSubsystem.PanelColor;
 
 public class AutoSpinControlPanel extends CommandBase {
-
-    private final ControlPanelSubsystem controlPanelSubsystem;
 
     private ControlType controlType;
 
@@ -19,9 +17,8 @@ public class AutoSpinControlPanel extends CommandBase {
     private PanelColor startColor;
     private PanelColor lastColor;
 
-    public AutoSpinControlPanel(ControlPanelSubsystem controlPanelSubsystem) {
+    public AutoSpinControlPanel() {
         addRequirements(controlPanelSubsystem);
-        this.controlPanelSubsystem = controlPanelSubsystem;
     }
 
     @Override

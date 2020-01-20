@@ -7,24 +7,18 @@
 
 package frc.robot.commands.drive;
 
-import frc.robot.subsystems.DriveTrainSubsystem;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import static frc.robot.Constants.Controller.*;
 import static frc.robot.Constants.DriveTrain.*;
+import static frc.robot.Robot.*;
 
 public class TeleopDrive extends CommandBase {
 
 	// this command runs the entire teleop period
 
-	private final XboxController xboxController;
-	private final DriveTrainSubsystem driveTrainSubsystem;
-
-	public TeleopDrive(XboxController xboxController, DriveTrainSubsystem driveTrainSubsystem) {
+	public TeleopDrive() {
 		addRequirements(driveTrainSubsystem);
-		this.xboxController = xboxController;
-		this.driveTrainSubsystem = driveTrainSubsystem;
 		if(TUNING_MODE) {
 			SmartDashboard.setDefaultNumber("Test Speed", 0);
 		}
@@ -41,8 +35,8 @@ public class TeleopDrive extends CommandBase {
 			double speed = SmartDashboard.getNumber("Test Speed", 0);
 			driveTrainSubsystem.set(speed);
 		} else {
-			double speed = smooth(-xboxController.getY(SPEED_HAND));
-			double rotation = smooth(xboxController.getX(ROTATION_HAND));
+			double speed = smooth(-xboxController1.getY(SPEED_HAND));
+			double rotation = smooth(xboxController1.getX(ROTATION_HAND));
 			double left = speed + rotation;
 			double right = speed - rotation;
 			driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
