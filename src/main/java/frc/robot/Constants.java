@@ -104,19 +104,24 @@ public final class Constants {
 		public final static double CAMERA_MOUNTING_ANGLE = 20;
         public final static double CAMERA_HEIGHT = 20;
         
-        public final static double SHOOTER_VISION_HEIGHT = 95;
-        public final static double LOADING_STATION_VISION_HEIGHT = 95;
+        public final static double SHOOTER_VISION_HEIGHT = 89.75;
+        public final static double LOADING_STATION_VISION_HEIGHT = 16.5;
         
         public final static double SHOOTER_VISION_HEIGHT_OFFSET = SHOOTER_VISION_HEIGHT - CAMERA_HEIGHT;
         public final static double LOADING_STATION_VISION_HEIGHT_OFFSET = LOADING_STATION_VISION_HEIGHT - CAMERA_HEIGHT;
     }
 
     public final static class NavX {
-        // all positions must be relative to the center of the field and based on red alliance
-        // from the center of the field, increasing X goes closer to the red driver stations
-        // and increasing Y goes closer to the red trench run
-        // the code will automatically invert these values if we're on the blue alliance
-        public final static Vector3 POWER_PORT_POSITION = new Vector3(0, 48, 98.25);
+        // all positions must be relative to the center of the middle blue alliance driver station wall and based on blue alliance
+        // increasing X goes closer to the red driver stations
+        // increasing Y goes closer to the red trench run
+        // yaw 0 is facing the red alliance stations
+        // increasing yaw turns counter clockwise
+        // the code will automatically invert these values if we're on the red alliance
+        public final static double FIELD_WIDTH = 648;
+
+        public final static Vector3 POWER_PORT_POSITION = new Vector3(648, -67.34, 98.25);
+        public final static Vector3 LOADING_STATION_POSITION = new Vector3(0, -61.34, 29);
     }
 
     public final static class ColorSensor {

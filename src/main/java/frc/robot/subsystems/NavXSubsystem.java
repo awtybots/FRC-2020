@@ -22,9 +22,8 @@ public class NavXSubsystem extends SubsystemBase {
 
     public void set(Vector3 displacement, double startAngle) {
         board.reset();
-        board.setAngleAdjustment(startAngle);
-        this.initialDisplacement = displacement;
-        this.startAngle = startAngle;
+        this.initialDisplacement = allianceCondition(displacement);
+        this.startAngle = allianceCondition(startAngle);
     }
 
     public Vector3 getDisplacement() {
@@ -35,7 +34,7 @@ public class NavXSubsystem extends SubsystemBase {
             board.getDisplacementZ()
         )
         .applyFunction(Units::metersToInches)
-        .rotateZ(-startAngle)
+        .rotateZ(startAngle)
         .add(initialDisplacement);
     }
 
@@ -46,7 +45,7 @@ public class NavXSubsystem extends SubsystemBase {
     }
 
     public double getDirection() {
-        return Math.floorMod((int)-board.getAngle(), 360);
+        return Math.floorMod((int)(-board.getAngle()+startAngle), 360);
     }
 
     public Vector3 getVelocity() {
@@ -59,6 +58,13 @@ public class NavXSubsystem extends SubsystemBase {
         .applyFunction(Units::metersToInches);
     }
 
+    private static Vector3 allianceCondition(Vector3 blue) {
+        return Robot.getAlliance() == Alliance.Blue ? blue : blue.rotateZ(180).add(new Vector3(FIELD_WIDTH, 0, 0));
+    }
+    private static double allianceCondition(double blue) {
+        return Robot.getAlliance() == Alliance.Blue ? blue : blue + 180;
+    }
+
 
 
     public enum FieldObject {
@@ -66,7 +72,7 @@ public class NavXSubsystem extends SubsystemBase {
 
         private final Vector3 position;
         private FieldObject(Vector3 position) {
-            this.position = Robot.getAlliance() == Alliance.Red ? position : position.rotateZ(180);
+            this.position = allianceCondition(position);
         }
 
         public Vector3 getPosition() {
