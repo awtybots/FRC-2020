@@ -15,7 +15,7 @@ public class Teleop extends ParallelCommandGroup {
 
     public Teleop() {
         addCommands(
-            //new ToggleIntake(intakeSubsystem, true),
+            //new ToggleIntake(),
             new TeleopDrive()
         );
     }

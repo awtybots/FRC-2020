@@ -22,7 +22,7 @@ public class Auton extends ParallelCommandGroup {
 
     public Auton(AutonType autonType) {
         addCommands(
-            //new ToggleIntake(intakeSubsystem, true),
+            //new ToggleIntake(),
             getAutonSequence(autonType)
         );
     }

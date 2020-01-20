@@ -1,23 +1,26 @@
 package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import static frc.robot.Robot.*;
 
-public class ToggleIntake extends InstantCommand {
+public class ToggleIntake extends CommandBase {
 
-    private final boolean on;
-
-    public ToggleIntake(boolean on) {
-        addRequirements(intakeSubsystem);
-        this.on = on;
-    }
     public ToggleIntake() {
         addRequirements(intakeSubsystem);
-        this.on = !intakeSubsystem.getOn();
     }
 
     @Override
     public void initialize() {
-        intakeSubsystem.toggle(on);
+        intakeSubsystem.toggle(true);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        intakeSubsystem.toggle(false);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 }

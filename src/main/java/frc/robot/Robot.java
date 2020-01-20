@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.*;
 import frc.robot.commands.controlpanel.AutoSpinControlPanel;
 import frc.robot.commands.controlpanel.ToggleControlPanelSpinner;
+import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.main.*;
 import frc.robot.commands.main.Auton.AutonType;
 import frc.robot.commands.shooter.AutoShoot;
@@ -76,7 +77,8 @@ public class Robot extends TimedRobot {
 		getButton("B").whenHeld(new AutoShoot());
 		getButton("X").whenPressed(new AutoSpinControlPanel());
 		getButton("Y").whenHeld(new ToggleControlPanelSpinner());
-		getButton("BumperRight").whenPressed(new ResetNavX());
+		getButton("BumperLeft").whenPressed(new ResetNavX());
+		getButton("BumperRight").whenHeld(new ToggleIntake());
 	}
 
 	/**
