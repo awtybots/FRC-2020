@@ -20,9 +20,6 @@ public class TeleopDrive extends CommandBase {
 
 	public TeleopDrive() {
 		addRequirements(driveTrainSubsystem);
-		if(TUNING_MODE) {
-			SmartDashboard.setDefaultNumber("Test Speed", 0);
-		}
 	}
 
 	private double smooth(double x) {
@@ -32,21 +29,16 @@ public class TeleopDrive extends CommandBase {
 	
 	@Override
 	public void execute() {
-		if(TUNING_MODE) {
-			double speed = SmartDashboard.getNumber("Test Speed", 0);
-			driveTrainSubsystem.set(speed);
-		} else {
-			double speed = smooth(-xboxController1.getY(SPEED_HAND));
-			double rotation = smooth(xboxController1.getX(ROTATION_HAND));
-			double left = speed + rotation;
-			double right = speed - rotation;
-			driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
-			//driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
+		double speed = smooth(-xboxController1.getY(SPEED_HAND));
+		double rotation = smooth(xboxController1.getX(ROTATION_HAND));
+		double left = speed + rotation;
+		double right = speed - rotation;
+		driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
+		//driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
 
-			SmartDashboard.putNumber("NavX Direction", navXSubsystem.getDirection());
-			navXSubsystem.getVelocity().print("NavX Velocity");
-			navXSubsystem.getDisplacement().print("NavX Displacement");
-		}
+		SmartDashboard.putNumber("NavX Direction", navXSubsystem.getDirection());
+		navXSubsystem.getVelocity().print("NavX Velocity");
+		navXSubsystem.getDisplacement().print("NavX Displacement");
 	}
 
 	@Override

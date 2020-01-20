@@ -70,13 +70,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		if(!TUNING_MODE) {
-			outputLeft = calculateFF(MotorGroup.LEFT, goalVelocityLeft);
-			outputRight = calculateFF(MotorGroup.RIGHT, goalVelocityRight);
-			
-			//speedLeft.setVoltage(outputLeft);
-			//speedRight.setVoltage(outputRight);
-		}
+		outputLeft = calculateFF(MotorGroup.LEFT, goalVelocityLeft);
+		outputRight = calculateFF(MotorGroup.RIGHT, goalVelocityRight);
+		
+		//speedLeft.setVoltage(outputLeft);
+		//speedRight.setVoltage(outputRight);
 	}
 	public void set(double speed) {
 		speedLeft.set(speed);
@@ -121,6 +119,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	
 
 	public void setMotorOutput(double left, double right) {
+		System.out.println(left + ", " + right);
 		speedLeft.set(left);
 		speedRight.set(right);
 	}

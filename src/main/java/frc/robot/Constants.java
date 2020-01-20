@@ -35,8 +35,6 @@ public final class Constants {
     public final static class DriveTrain {
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
 
-        public final static boolean TUNING_MODE = false;
-
         public final static double DEADZONE = 0.1;
         public final static double MAX_TELEOP_MOTOR_OUTPUT = 0.5;
         
