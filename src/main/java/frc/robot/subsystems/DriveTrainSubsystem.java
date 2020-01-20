@@ -10,7 +10,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -40,8 +39,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	private double goalVelocityLeft = 0;
 	private double goalVelocityRight = 0;
 	
-	@SuppressWarnings("unused") private double outputLeft = 0;
-	@SuppressWarnings("unused") private double outputRight = 0;
+	private double outputLeft = 0;
+	private double outputRight = 0;
 
 	private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
 	private HashMap<MotorGroup, Double> integralError = new HashMap<>();
@@ -72,15 +71,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	public void periodic() {
 		outputLeft = calculateFF(MotorGroup.LEFT, goalVelocityLeft);
 		outputRight = calculateFF(MotorGroup.RIGHT, goalVelocityRight);
+		SmartDashboard.putNumber("Voltage left", outputLeft);
+		SmartDashboard.putNumber("Voltage right", outputRight);
 		
 		//speedLeft.setVoltage(outputLeft);
 		//speedRight.setVoltage(outputRight);
-	}
-	public void set(double speed) {
-		speedLeft.set(speed);
-		speedRight.set(speed);
-		SmartDashboard.putNumber("Voltage", speed * RobotController.getBatteryVoltage());
-		SmartDashboard.putNumber("Velocity", getVelocity(MotorGroup.ALL, true));
 	}
 
     @SuppressWarnings("unused")
@@ -111,7 +106,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("FF_S", S);
 		SmartDashboard.putNumber("FF_V", V);
 		SmartDashboard.putNumber("FF_A", A);
-		SmartDashboard.putNumber("Voltage", voltage);
 		
 		return voltage;
 	}

@@ -21,7 +21,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private double goalVelocity;
     private double currentVelocity;
 
-    private boolean turretAtGoal = false;
+    private boolean turretAtGoal = true;
     private boolean readyToShoot;
     
     public ShooterSubsystem() {

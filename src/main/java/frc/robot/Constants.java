@@ -24,12 +24,12 @@ public final class Constants {
         public static final int DRIVE_R2 = 9;
         public static final int DRIVE_R3 = 12;
 
-        public static final int INTAKE = 1;
+        public static final int INTAKE = 2;
 
         public static final int SHOOTER_FLYWHEEL = 1;
-        public static final int SHOOTER_TURRET = 1;
+        public static final int SHOOTER_TURRET = 2;
 
-        public static final int CONTROL_PANEL_SPINNER = 1;
+        public static final int CONTROL_PANEL_SPINNER = 2;
     }
 
     public final static class DriveTrain {
@@ -83,7 +83,7 @@ public final class Constants {
         public final static double TURRET_SPEED = 0.3;
         public final static double TURRET_P = 0.1;
         public final static double GOAL_VELOCITY_THRESHOLD = 5;
-        public final static double TURRET_ANGLE_THRESHOLD = 3;
+        public final static double TURRET_ANGLE_THRESHOLD = 5;
 
         // PID
         public final static double PID_P = 0.02;

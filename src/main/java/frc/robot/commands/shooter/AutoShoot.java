@@ -2,6 +2,7 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.subsystems.LimelightSubsystem.Pipeline;
 import frc.robot.subsystems.NavXSubsystem.FieldObject;
 import frc.robot.util.Vector3;
@@ -14,7 +15,7 @@ import javax.annotation.CheckForNull;
 public class AutoShoot extends CommandBase {
 
     private double optimalRevsPerSecond = 0;
-    private double spinTurret = 0;
+    private double spinTurret = 0.0;
 
     public AutoShoot() {
         addRequirements(shooterSubsystem, limelightSubsystem);
@@ -30,7 +31,9 @@ public class AutoShoot extends CommandBase {
         boolean canShoot = calculateTrajectory();
         
         shooterSubsystem.setGoalFlywheelRevsPerSecond(optimalRevsPerSecond);
-        shooterSubsystem.spinTurret(spinTurret);
+        //shooterSubsystem.spinTurret(spinTurret); // TODO change to this
+        double turnSpeed = MathUtil.clamp(spinTurret, -TURRET_ANGLE_THRESHOLD, TURRET_ANGLE_THRESHOLD)/TURRET_ANGLE_THRESHOLD * 0.3;
+        driveTrainSubsystem.setMotorOutput(turnSpeed, -turnSpeed);
 
         SmartDashboard.putBoolean("Shooter trajectory possible", canShoot);
 
@@ -61,11 +64,11 @@ public class AutoShoot extends CommandBase {
         Vector3 navXTargetDisplacement = navXSubsystem.getDisplacement(FieldObject.POWER_PORT);
         
         // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
-        boolean useNavX = visionTargetDisplacement == null || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
+        boolean useNavX = visionTargetDisplacement == null;// TODO add this: || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
 
         spinTurret = useNavX
             ? toDegrees(atan2(navXTargetDisplacement.y, navXTargetDisplacement.x) + Math.PI) - robotAngle
-            : abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD
+            : visionTargetDisplacement == null || abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD // TODO fix
                 ? 0.0
                 : visionTargetInfo.x;
 

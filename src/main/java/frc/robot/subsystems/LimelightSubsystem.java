@@ -60,7 +60,7 @@ public class LimelightSubsystem extends SubsystemBase {
             tx, // horizontal offset angle
             CAMERA_MOUNTING_ANGLE + ty, // vertical offset angle
             targetHeight // inches
-        );
+        ).print("Limelight data");
     }
 
 
