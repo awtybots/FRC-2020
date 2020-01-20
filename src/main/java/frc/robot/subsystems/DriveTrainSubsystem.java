@@ -119,7 +119,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	
 
 	public void setMotorOutput(double left, double right) {
-		System.out.println(left + ", " + right);
 		speedLeft.set(left);
 		speedRight.set(right);
 	}
