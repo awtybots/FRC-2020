@@ -3,6 +3,8 @@ package frc.robot.util;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class Vector3 {
 
     public double x;
@@ -97,7 +99,8 @@ public class Vector3 {
 
     
     public Vector3 print(String name) {
-        System.out.println(String.format("Vector3 '%s': ", name) + toString());
+        SmartDashboard.putString(name, toString());
+        //System.out.println(String.format("Vector3 '%s': ", name) + toString());
         return this;
     }
     @Override

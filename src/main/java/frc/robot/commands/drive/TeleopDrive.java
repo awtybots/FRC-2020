@@ -9,6 +9,8 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.util.Vector3;
+
 import static frc.robot.Constants.Controller.*;
 import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.Robot.*;
@@ -22,6 +24,7 @@ public class TeleopDrive extends CommandBase {
 		if(TUNING_MODE) {
 			SmartDashboard.setDefaultNumber("Test Speed", 0);
 		}
+		navXSubsystem.set(new Vector3(), 0);
 	}
 
 	private double smooth(double x) {
@@ -41,6 +44,10 @@ public class TeleopDrive extends CommandBase {
 			double right = speed - rotation;
 			driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
 			//driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
+
+			SmartDashboard.putNumber("NavX Direction", navXSubsystem.getDirection());
+			navXSubsystem.getVelocity().print("NavX Velocity");
+			navXSubsystem.getDisplacement().print("NavX Displacement");
 		}
 	}
 

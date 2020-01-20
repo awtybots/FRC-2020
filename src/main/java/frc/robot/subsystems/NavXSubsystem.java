@@ -30,8 +30,8 @@ public class NavXSubsystem extends SubsystemBase {
     public Vector3 getDisplacement() {
         return
         new Vector3(
+            -board.getDisplacementY(),
             board.getDisplacementX(),
-            board.getDisplacementY(),
             board.getDisplacementZ()
         )
         .applyFunction(Units::metersToInches)
@@ -46,14 +46,14 @@ public class NavXSubsystem extends SubsystemBase {
     }
 
     public double getDirection() {
-        return board.getAngle() % 360;
+        return Math.floorMod((int)-board.getAngle(), 360);
     }
 
     public Vector3 getVelocity() {
         return
         new Vector3(
+            -board.getVelocityY(),
             board.getVelocityX(),
-            board.getVelocityY(),
             board.getVelocityZ()
         )
         .applyFunction(Units::metersToInches);
