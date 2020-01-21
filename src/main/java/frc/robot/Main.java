@@ -14,7 +14,7 @@ public final class Main {
     // do not touch anything here, WPILib said so
 
     private Main() {
-        
+
     }
 
     public static void main(String... args) {

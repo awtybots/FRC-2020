@@ -25,7 +25,7 @@ public class TeleopDrive extends CommandBase {
 		if(Math.abs(x) < DEADZONE) return 0;
 		return Math.pow(x, 2) * Math.signum(x);
 	}
-	
+
 	@Override
 	public void execute() {
 		double speed = smooth(-xboxController1.getY(SPEED_HAND));

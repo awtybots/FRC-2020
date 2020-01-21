@@ -16,22 +16,22 @@ import frc.robot.Constants.MotorIDs;
 public class ControlPanelSubsystem extends SubsystemBase {
 
     private final WPI_TalonSRX spinner = new WPI_TalonSRX(MotorIDs.CONTROL_PANEL_SPINNER);
-    
+
     private final ColorSensorV3 colorSensor = new ColorSensorV3(ColorSensor.PORT);
     private final ColorMatch colorMatcher = new ColorMatch();
-    
+
     private PanelColor detectedColor;
     private PanelColor currentColor = PanelColor.NONE;
     private PanelColor pendingColor;
-    
+
     private Timer verifyColorTimer = new Timer();
 
     public ControlPanelSubsystem() {
         spinner.configFactoryDefault();
         spinner.setNeutralMode(ControlPanelSpinner.BRAKE_MODE);
-        
+
         toggle(false);
-        
+
         for(PanelColor color : PanelColor.values()) {
             colorMatcher.addColorMatch(color.getColor());
         }
@@ -40,11 +40,11 @@ public class ControlPanelSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         detectedColor = getDetectedColor();
-        
+
         if(detectedColor == pendingColor) {
             if(verifyColorTimer.get() >= ColorSensor.VERIFY_COLOR_TIME) {
                 verifyColorTimer.stop();
-                
+
                 currentColor = pendingColor;
                 pendingColor = null;
             }
@@ -58,7 +58,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
                 pendingColor = detectedColor;
             }
         }
-        
+
         if(currentColor != null)
             SmartDashboard.putString("Current color", currentColor.getName());
     }
@@ -67,7 +67,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Control panel spinner motor", on);
         //spinner.set(on ? ControlPanelSpinner.MOTOR_SPEED : 0);
     }
-    
+
     private PanelColor getDetectedColor() {
         Color detectedColorRaw = colorSensor.getColor();
         SmartDashboard.putString("Detected color", (int)(detectedColorRaw.red*100) + ", " + (int)(detectedColorRaw.green*100) + ", " + (int)(detectedColorRaw.blue*100));

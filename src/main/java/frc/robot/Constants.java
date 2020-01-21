@@ -23,7 +23,7 @@ public final class Constants {
         public static final int DRIVE_L1 = 8;
         public static final int DRIVE_L2 = 10;
         public static final int DRIVE_L3 = 11;
-        
+
         public static final int DRIVE_R1 = 7;
         public static final int DRIVE_R2 = 9;
         public static final int DRIVE_R3 = 12;
@@ -45,7 +45,7 @@ public final class Constants {
         public final static double DEADZONE = 0.1;
         public final static double MIN_MOTOR_OUTPUT = 0.2;
         public final static double MAX_TELEOP_MOTOR_OUTPUT = 0.3;
-        
+
         public final static double GEAR_RATIO = 1/8;
         public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI;
         public final static double ROBOT_CIRMCUMFERENCE = 100; // this the the distance (in inches) each wheel travels when the robot spins one time around its center
@@ -113,10 +113,10 @@ public final class Constants {
     public final static class Limelight {
         public final static double CAMERA_MOUNTING_ANGLE = 20;
         public final static double CAMERA_HEIGHT = 20;
-        
+
         public final static double SHOOTER_VISION_HEIGHT = 89.75;
         public final static double LOADING_STATION_VISION_HEIGHT = 16.5;
-        
+
         public final static double SHOOTER_VISION_HEIGHT_OFFSET = SHOOTER_VISION_HEIGHT - CAMERA_HEIGHT;
         public final static double LOADING_STATION_VISION_HEIGHT_OFFSET = LOADING_STATION_VISION_HEIGHT - CAMERA_HEIGHT;
     }
@@ -157,7 +157,7 @@ public final class Constants {
 
     public final static class Controller {
         public static final int PORT = 0;
-        
+
         public static final Hand SPEED_HAND = Hand.kLeft; // which stick (left or right) to use for each control of arcade drive (speed and rotation)
         public static final Hand ROTATION_HAND = Hand.kRight;
     }

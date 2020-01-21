@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
 		shooterSubsystem = new ShooterSubsystem();
 		controlPanelSubsystem = new ControlPanelSubsystem();
 		limelightSubsystem = new LimelightSubsystem();
-		
+
 		// button mappings
 		getButton("A").whenHeld(new ToggleShooter());
 		getButton("B").whenHeld(new AutoShoot());

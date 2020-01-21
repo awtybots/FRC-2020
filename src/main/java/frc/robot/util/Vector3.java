@@ -94,7 +94,7 @@ public class Vector3 {
         return VectorMath.dot(this, b);
     }
 
-    
+
     public Vector3 applyFunction(Function<Double, Double> function) {
         x = function.apply(x);
         y = function.apply(y);
@@ -102,7 +102,7 @@ public class Vector3 {
         return this;
     }
 
-    
+
     public Vector3 print(String name) {
         SmartDashboard.putString(name, toString());
         //System.out.println(String.format("Vector3 '%s': ", name) + toString());

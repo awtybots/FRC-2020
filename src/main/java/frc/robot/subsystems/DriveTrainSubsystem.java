@@ -51,7 +51,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 	private double goalVelocityLeft = 0;
 	private double goalVelocityRight = 0;
-	
+
 	private double outputLeft = 0;
 	private double outputRight = 0;
 
@@ -59,7 +59,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private HashMap<MotorGroup, Double> integralError = new HashMap<>();
 
 	private final AHRS board = new AHRS(SPI.Port.kMXP);
-	
+
 	private DifferentialDriveOdometry odometry;
 	private Vector3 lastPosition = new Vector3();
 	private Vector3 position = new Vector3();
@@ -102,7 +102,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 			speedLeft.setVoltage(outputLeft);
 			speedRight.setVoltage(outputRight);
 		}
-		
+
 		if(odometry != null) {
 			odometry.update(getRawRotation(), getWheelDistance(MotorGroup.LEFT, false), getWheelDistance(MotorGroup.RIGHT, false));
 			lastPosition = position.clone();
@@ -138,7 +138,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("FF_S", S);
 		SmartDashboard.putNumber("FF_V", V);
 		SmartDashboard.putNumber("FF_A", A);
-		
+
 		return voltage;
 	}
 
@@ -216,7 +216,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		}
 	}
 
-	
+
 	// UTILITIES
 
     private static Vector3 allianceCondition(Vector3 blue) {

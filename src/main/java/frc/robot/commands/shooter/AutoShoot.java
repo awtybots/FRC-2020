@@ -29,7 +29,7 @@ public class AutoShoot extends CommandBase {
     @Override
     public void execute() {
         boolean canShoot = calculateTrajectory();
-        
+
         shooterSubsystem.setGoalFlywheelRevsPerSecond(optimalRevsPerSecond);
 
         double turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
@@ -43,7 +43,7 @@ public class AutoShoot extends CommandBase {
                 shooterSubsystem.spinTurret(turnSpeed);
                 break;
         }
-        
+
 
         SmartDashboard.putBoolean("Shooter trajectory possible", canShoot);
 
@@ -62,17 +62,17 @@ public class AutoShoot extends CommandBase {
     public boolean isFinished() {
         return false;
     }
-    
-    
+
+
 
     @CheckForNull
     private boolean calculateTrajectory() {
         double robotAngle = driveTrainSubsystem.getRotation();
         Vector3 visionTargetInfo = limelightSubsystem.getTargetInfo();
-        
+
         Vector3 visionTargetDisplacement = calculateVisionTargetOffset(visionTargetInfo);
         Vector3 navXTargetDisplacement = driveTrainSubsystem.getDisplacement(FieldObject.POWER_PORT);
-        
+
         // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
         boolean useNavX = visionTargetDisplacement == null;// TODO add this: || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
 
@@ -143,7 +143,7 @@ public class AutoShoot extends CommandBase {
         // WITH DRAG:
         //    https://www.desmos.com/calculator/on4xzwtdwz
         //    https://demonstrations.wolfram.com/ProjectileWithAirDrag/
-        
+
     }
 
     public enum AimMode {

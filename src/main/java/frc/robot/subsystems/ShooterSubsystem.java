@@ -23,7 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private boolean turretAtGoal = true;
     private boolean readyToShoot;
-    
+
     public ShooterSubsystem() {
         PERIOD = Robot.getLoopTime();
 
@@ -35,7 +35,7 @@ public class ShooterSubsystem extends SubsystemBase {
         turret.setNeutralMode(TURRET_BRAKE_MODE);
         turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         turret.setSelectedSensorPosition(0);
-            
+
         setGoalFlywheelRevsPerSecond(0);
     }
 

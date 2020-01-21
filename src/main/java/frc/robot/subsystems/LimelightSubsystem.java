@@ -19,7 +19,7 @@ public class LimelightSubsystem extends SubsystemBase {
     public LimelightSubsystem() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         currentPipeline = Pipeline.POWER_PORT;
-        
+
         SmartDashboard.setDefaultBoolean("Limelight LED", true);
     }
     @Override

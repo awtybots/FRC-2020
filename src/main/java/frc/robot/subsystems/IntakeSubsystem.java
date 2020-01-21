@@ -12,7 +12,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final WPI_TalonSRX motor = new WPI_TalonSRX(MotorIDs.INTAKE);
 
     private boolean on;
-    
+
     public IntakeSubsystem() {
         toggle(false);
     }
