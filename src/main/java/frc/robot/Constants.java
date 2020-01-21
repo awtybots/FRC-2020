@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import frc.robot.commands.shooter.AutoShoot.AimMode;
 import frc.robot.util.Vector3;
 
 public final class Constants {
@@ -64,6 +65,8 @@ public final class Constants {
     }
 
     public final static class Shooter {
+        public final static AimMode AIM_MODE = AimMode.DRIVE;
+
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
         public final static double WHEEL_CIRCUMFERENCE = 4 * Math.PI;
@@ -80,10 +83,11 @@ public final class Constants {
 
         public final static double SHOOTER_TELEOP_SPEED = 60;
         public final static double SHOOTER_BANG_BANG_SPEED = 0.3;
-        public final static double TURRET_SPEED = 0.3;
-        public final static double TURRET_P = 0.1;
         public final static double GOAL_VELOCITY_THRESHOLD = 5;
-        public final static double TURRET_ANGLE_THRESHOLD = 5;
+
+        public final static double TURRET_SPEED = 0.3;
+        public final static double TURRET_ANGLE_THRESHOLD = 2;
+        public final static double TURRET_ANGLE_SLOW_THRESHOLD = 5;
 
         // PID
         public final static double PID_P = 0.02;

@@ -15,7 +15,7 @@ import javax.annotation.CheckForNull;
 public class AutoShoot extends CommandBase {
 
     private double optimalRevsPerSecond = 0;
-    private double spinTurret = 0.0;
+    private double angleOffset = 0.0;
 
     public AutoShoot() {
         addRequirements(shooterSubsystem, limelightSubsystem);
@@ -31,9 +31,17 @@ public class AutoShoot extends CommandBase {
         boolean canShoot = calculateTrajectory();
         
         shooterSubsystem.setGoalFlywheelRevsPerSecond(optimalRevsPerSecond);
-        //shooterSubsystem.spinTurret(spinTurret); // TODO change to this
-        double turnSpeed = MathUtil.clamp(spinTurret, -TURRET_ANGLE_THRESHOLD, TURRET_ANGLE_THRESHOLD)/TURRET_ANGLE_THRESHOLD * 0.3;
-        driveTrainSubsystem.setMotorOutput(turnSpeed, -turnSpeed);
+
+        double turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD * TURRET_SPEED;
+        switch(AIM_MODE) {
+            case DRIVE:
+                driveTrainSubsystem.setMotorOutput(turnSpeed, -turnSpeed);
+                break;
+            case TURRET:
+                shooterSubsystem.spinTurret(turnSpeed);
+                break;
+        }
+        
 
         SmartDashboard.putBoolean("Shooter trajectory possible", canShoot);
 
@@ -66,9 +74,9 @@ public class AutoShoot extends CommandBase {
         // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
         boolean useNavX = visionTargetDisplacement == null;// TODO add this: || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
 
-        spinTurret = useNavX
+        angleOffset = useNavX
             ? toDegrees(atan2(navXTargetDisplacement.y, navXTargetDisplacement.x) + Math.PI) - robotAngle
-            : visionTargetDisplacement == null || abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD // TODO fix
+            : visionTargetInfo == null|| abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD
                 ? 0.0
                 : visionTargetInfo.x;
 
@@ -93,7 +101,7 @@ public class AutoShoot extends CommandBase {
         }
 
         SmartDashboard.putString("Shooter goal velocity", optimalBallVelocity.toString());
-        SmartDashboard.putNumber("Turret spin direction", spinTurret);
+        SmartDashboard.putNumber("Shooter angle offset", angleOffset);
 
         return !useNavX; // don't shoot if we used the NavX for displacement, wait for the camera to see the power port
     }
@@ -134,6 +142,11 @@ public class AutoShoot extends CommandBase {
         //    https://www.desmos.com/calculator/on4xzwtdwz
         //    https://demonstrations.wolfram.com/ProjectileWithAirDrag/
         
+    }
+
+    public enum AimMode {
+        TURRET,
+        DRIVE;
     }
 
 }

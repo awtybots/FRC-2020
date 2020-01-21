@@ -72,9 +72,9 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setGoalFlywheelRevsPerSecond(double goalVelocity) {
         this.goalVelocity = goalVelocity;
     }
-    public void spinTurret(double relativeGoalAngle) {
-        //turret.set(clamp(relativeGoalAngle * TURRET_SPEED * TURRET_P, -TURRET_SPEED, TURRET_SPEED));
-        turretAtGoal = relativeGoalAngle == 0.0;
+    public void spinTurret(double turnSpeed) {
+        turret.set(turnSpeed);
+        turretAtGoal = turnSpeed == 0.0;
     }
 
     public boolean readyToShoot() {
