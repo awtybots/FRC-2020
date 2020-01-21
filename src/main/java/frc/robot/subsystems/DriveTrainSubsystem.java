@@ -32,18 +32,18 @@ import java.util.function.BiFunction;
 
 public class DriveTrainSubsystem extends SubsystemBase {
 
-	// this is the subsystem that interacts with the drivetrain motors
+    // this is the subsystem that interacts with the drivetrain motors
 
-	private final static WPI_TalonSRX motorL1 = new WPI_TalonSRX(MotorIDs.DRIVE_L1);
-	private final static WPI_TalonSRX motorL2 = new WPI_TalonSRX(MotorIDs.DRIVE_L2);
-	private final static WPI_TalonSRX motorL3 = new WPI_TalonSRX(MotorIDs.DRIVE_L3);
+    private final static WPI_TalonSRX motorL1 = new WPI_TalonSRX(MotorIDs.DRIVE_L1);
+    private final static WPI_TalonSRX motorL2 = new WPI_TalonSRX(MotorIDs.DRIVE_L2);
+    private final static WPI_TalonSRX motorL3 = new WPI_TalonSRX(MotorIDs.DRIVE_L3);
 
-	private final static WPI_TalonSRX motorR1 = new WPI_TalonSRX(MotorIDs.DRIVE_R1);
-	private final static WPI_TalonSRX motorR2 = new WPI_TalonSRX(MotorIDs.DRIVE_R2);
-	private final static WPI_TalonSRX motorR3 = new WPI_TalonSRX(MotorIDs.DRIVE_R3);
+    private final static WPI_TalonSRX motorR1 = new WPI_TalonSRX(MotorIDs.DRIVE_R1);
+    private final static WPI_TalonSRX motorR2 = new WPI_TalonSRX(MotorIDs.DRIVE_R2);
+    private final static WPI_TalonSRX motorR3 = new WPI_TalonSRX(MotorIDs.DRIVE_R3);
 
-	private final static SpeedControllerGroup speedLeft = new SpeedControllerGroup(motorL1, motorL2, motorL3);
-	private final static SpeedControllerGroup speedRight = new SpeedControllerGroup(motorR1, motorR2, motorR3);
+    private final static SpeedControllerGroup speedLeft = new SpeedControllerGroup(motorL1, motorL2, motorL3);
+    private final static SpeedControllerGroup speedRight = new SpeedControllerGroup(motorR1, motorR2, motorR3);
 
 	private final BiFunction<MotorGroup, Double, Double> motorControlFunction;
 
@@ -53,8 +53,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	private double outputLeft = 0;
 	private double outputRight = 0;
 
-	private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
-	private HashMap<MotorGroup, Double> integralError = new HashMap<>();
+    private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
+    private HashMap<MotorGroup, Double> integralError = new HashMap<>();
 
     private final AHRS board = new AHRS(SPI.Port.kMXP);
 
@@ -70,20 +70,20 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		PERIOD = Robot.getLoopTime();
 		motorControlFunction = MOTOR_CONTROL_MODE == MotorControlMode.FEEDFORWARD ? this::calculateFF : this::calculatePID;
 
-		for (WPI_TalonSRX motor : MotorGroup.ALL.getMotors()) {
-			motor.set(0); // start all motors at 0% speed to stop the blinking
+        for (WPI_TalonSRX motor : MotorGroup.ALL.getMotors()) {
+            motor.set(0); // start all motors at 0% speed to stop the blinking
 
-			motor.configFactoryDefault(); // reset settings
-			motor.setNeutralMode(BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
-			motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); // sets which encoder the motor is using
-		}
+            motor.configFactoryDefault(); // reset settings
+            motor.setNeutralMode(BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
+            motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); // sets which encoder the motor is using
+        }
 
-		for (WPI_TalonSRX motor : MotorGroup.RIGHT.getMotors()) {
-			motor.setSensorPhase(true);
-		}
+        for (WPI_TalonSRX motor : MotorGroup.RIGHT.getMotors()) {
+            motor.setSensorPhase(true);
+        }
 
-		speedRight.setInverted(true);
-	}
+        speedRight.setInverted(true);
+    }
 
 	@Override
 	public void periodic() {

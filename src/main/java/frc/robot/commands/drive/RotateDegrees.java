@@ -56,8 +56,8 @@ public class RotateDegrees extends CommandBase {
     }
 
     @Override
-	public boolean isFinished() {
-		return currentDistance >= goalDistance - GOAL_TOLERANCE;
-	}
+    public boolean isFinished() {
+        return currentDistance >= goalDistance - GOAL_TOLERANCE;
+    }
 
 }
