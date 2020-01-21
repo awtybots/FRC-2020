@@ -28,7 +28,7 @@ public class DriveInches extends CommandBase {
     public void execute() {
         // encoders
         double currentVelocity = driveTrainSubsystem.getWheelVelocity(MotorGroup.ALL, false);
-        currentDistance = driveTrainSubsystem.getDistance(false);
+        currentDistance = driveTrainSubsystem.getWheelDistance(MotorGroup.ALL, false);
 
         // stopping distance
         double remainingDistance = Math.abs(goalDistance - currentDistance);

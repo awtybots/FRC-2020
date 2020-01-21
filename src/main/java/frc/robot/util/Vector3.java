@@ -4,6 +4,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Vector3 {
@@ -106,6 +107,9 @@ public class Vector3 {
         SmartDashboard.putString(name, toString());
         //System.out.println(String.format("Vector3 '%s': ", name) + toString());
         return this;
+    }
+    public Translation2d toTranslation2d() {
+        return new Translation2d(x, y);
     }
     @Override
     public String toString() {

@@ -30,7 +30,7 @@ public class RotateDegrees extends CommandBase {
     public void execute() {
         // encoders
         double currentVelocity = driveTrainSubsystem.getWheelVelocity(MotorGroup.ALL, true);
-        currentDistance = driveTrainSubsystem.getDistance(true);
+        currentDistance = driveTrainSubsystem.getWheelDistance(MotorGroup.ALL, true);
 
         // stopping distance
         double remainingDistance = goalDistance - currentDistance;

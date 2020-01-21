@@ -65,7 +65,7 @@ public class AutoShoot extends CommandBase {
 
     @CheckForNull
     private boolean calculateTrajectory() {
-        double robotAngle = driveTrainSubsystem.getDirection();
+        double robotAngle = driveTrainSubsystem.getRotation();
         Vector3 visionTargetInfo = limelightSubsystem.getTargetInfo();
         
         Vector3 visionTargetDisplacement = calculateVisionTargetOffset(visionTargetInfo);

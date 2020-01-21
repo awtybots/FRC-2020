@@ -13,8 +13,10 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 import edu.wpi.first.wpilibj.SPI;
@@ -56,10 +58,13 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
     private HashMap<MotorGroup, Double> integralError = new HashMap<>();
 
-    private final AHRS board = new AHRS(SPI.Port.kMXP);
+	private final AHRS board = new AHRS(SPI.Port.kMXP);
+	
+	private DifferentialDriveOdometry odometry;
+	private Vector3 lastPosition;
+	private Vector3 position;
 
-    private Vector3 initialDisplacement = new Vector3();
-    private double initialAngle = 0;
+	private double initialAngle;
 
 	private static double PERIOD;
 
@@ -98,6 +103,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
 			speedRight.setVoltage(outputRight);
 		}
 		
+		odometry.update(getRawRotation(), getWheelDistance(MotorGroup.LEFT, false), getWheelDistance(MotorGroup.RIGHT, false));
+		lastPosition = position.clone();
+		position = new Vector3(odometry.getPoseMeters()).print("Position");
+		getVelocity().print("Velocity");
 	}
 
 	private double calculatePID(MotorGroup motorGroup, double goalVelocity) {
@@ -153,57 +162,48 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 	// SENSORS
 
-    public void setDisplacement(Vector3 displacement, double startAngle) {
+    public void setDisplacement(Vector3 displacement, double initialAngle) {
 		resetEncoders();
         board.reset();
-        this.initialDisplacement = allianceCondition(displacement);
-        this.initialAngle = allianceCondition(Math.floorMod((int)startAngle, 360));
+		odometry = new DifferentialDriveOdometry(
+			getRawRotation(),
+			new Pose2d(displacement.toTranslation2d(), Rotation2d.fromDegrees(initialAngle))
+		);
+		this.initialAngle = allianceCondition(initialAngle);
 	}
 	public Vector3 getDisplacement() {
-        return new Vector3(
-            -board.getDisplacementY(),
-            board.getDisplacementX(),
-            board.getDisplacementZ()
-        )
-        .applyFunction(Units::metersToInches)
-        .rotateZ(initialAngle)
-        .add(initialDisplacement);
+		return position;
 	}
 	public Vector3 getDisplacement(FieldObject fieldObject) {
 		return fieldObject.getPosition().subtract(getDisplacement());
 	}
-	
-    public double getDirection() {
-        return Math.floorMod((int)(-board.getAngle()+initialAngle), 360);
-    }
     public Vector3 getVelocity() {
-        return
-        new Vector3(
-            -board.getVelocityY(),
-            board.getVelocityX(),
-            board.getVelocityZ()
-        )
-        .applyFunction(Units::metersToInches);
-    }
-	public double getWheelVelocity(MotorGroup motorGroup, boolean abs) { // utility function to get average inches per second from certain groups of motors
-		double totalUnitsPer100ms = 0;
-		for(WPI_TalonSRX motor : motorGroup.getMotors()) {
-			double motorVelocity = motor.getSelectedSensorVelocity();
-			totalUnitsPer100ms += abs ? Math.abs(motorVelocity) : motorVelocity;
-		}
-		// encoders give motor velocity in units per 100ms, so multiply by 10 for units per second and divide by units per rev for revs per second
-		// multiply revolutions per second by seconds elapsed and wheel circumference for distance traveled
-		double averageUnitsPer100ms = totalUnitsPer100ms / motorGroup.getMotors().length;
-		double revolutionsPerSecond = averageUnitsPer100ms / 409.6 * GEAR_RATIO;
-		return revolutionsPerSecond * WHEEL_CIRCUMFERENCE;
+        return position.subtract(lastPosition).multiply(PERIOD);
 	}
-	public double getDistance(boolean abs) {
+	public double getRotation() {
+		return Math.floorMod((int)(initialAngle - board.getAngle()), 360);
+	}
+
+
+	private Rotation2d getRawRotation() {
+		return Rotation2d.fromDegrees(-board.getAngle());
+	}
+	public double getWheelDistance(MotorGroup motorGroup, boolean abs) {
 		double totalUnits = 0;
-		for(WPI_TalonSRX motor : MotorGroup.ALL.getMotors()) {
+		for(WPI_TalonSRX motor : motorGroup.getMotors()) {
 			double pos = motor.getSelectedSensorPosition();
 			totalUnits += abs ? Math.abs(pos) : pos;
 		}
-		double revolutions = totalUnits / 4096 / MotorGroup.ALL.getMotors().length;
+		double revolutions = totalUnits / 4096 / motorGroup.getMotors().length;
+		return revolutions * WHEEL_CIRCUMFERENCE;
+	}
+	public double getWheelVelocity(MotorGroup motorGroup, boolean abs) {
+		double totalUnits = 0;
+		for(WPI_TalonSRX motor : motorGroup.getMotors()) {
+			double vel = motor.getSelectedSensorVelocity();
+			totalUnits += abs ? Math.abs(vel) : vel;
+		}
+		double revolutions = totalUnits / 409.6 / motorGroup.getMotors().length;
 		return revolutions * WHEEL_CIRCUMFERENCE;
 	}
 	public void resetEncoders() {
