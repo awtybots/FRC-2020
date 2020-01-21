@@ -23,13 +23,13 @@ public class RotateDegrees extends CommandBase {
 
     @Override
     public void initialize() {
-        driveTrainSubsystem.resetDistance();
+        driveTrainSubsystem.resetEncoders();
     }
 
     @Override
     public void execute() {
         // encoders
-        double currentVelocity = driveTrainSubsystem.getVelocity(MotorGroup.ALL, true);
+        double currentVelocity = driveTrainSubsystem.getWheelVelocity(MotorGroup.ALL, true);
         currentDistance = driveTrainSubsystem.getDistance(true);
 
         // stopping distance

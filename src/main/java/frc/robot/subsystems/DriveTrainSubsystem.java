@@ -9,17 +9,26 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
+import edu.wpi.first.wpilibj.SPI;
 
 import frc.robot.Robot;
 import frc.robot.Constants.MotorIDs;
+import frc.robot.Robot.GamePeriod;
+import frc.robot.util.Vector3;
+
 import static frc.robot.Constants.DriveTrain.*;
+import static frc.robot.Constants.NavX.*;
 
 import java.util.HashMap;
+import java.util.function.BiFunction;
 
 public class DriveTrainSubsystem extends SubsystemBase {
 
@@ -36,6 +45,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	private final static SpeedControllerGroup speedLeft = new SpeedControllerGroup(motorL1, motorL2, motorL3);
 	private final static SpeedControllerGroup speedRight = new SpeedControllerGroup(motorR1, motorR2, motorR3);
 
+	private final BiFunction<MotorGroup, Double, Double> motorControlFunction;
+
 	private double goalVelocityLeft = 0;
 	private double goalVelocityRight = 0;
 	
@@ -45,10 +56,19 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
 	private HashMap<MotorGroup, Double> integralError = new HashMap<>();
 
+    private final AHRS board = new AHRS(SPI.Port.kMXP);
+
+    private Vector3 initialDisplacement = new Vector3();
+    private double initialAngle = 0;
+
 	private static double PERIOD;
 
+
+	// DRIVING
+
 	public DriveTrainSubsystem() {
-		PERIOD = Robot.getTimePeriod();
+		PERIOD = Robot.getLoopTime();
+		motorControlFunction = MOTOR_CONTROL_MODE == MotorControlMode.FEEDFORWARD ? this::calculateFF : this::calculatePID;
 
 		for (WPI_TalonSRX motor : MotorGroup.ALL.getMotors()) {
 			motor.set(0); // start all motors at 0% speed to stop the blinking
@@ -65,22 +85,23 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		speedRight.setInverted(true);
 	}
 
-
-
 	@Override
 	public void periodic() {
-		outputLeft = calculateFF(MotorGroup.LEFT, goalVelocityLeft);
-		outputRight = calculateFF(MotorGroup.RIGHT, goalVelocityRight);
-		SmartDashboard.putNumber("Voltage left", outputLeft);
-		SmartDashboard.putNumber("Voltage right", outputRight);
+		if(Robot.getGamePeriod() == GamePeriod.AUTON || DRIVE_MODE == DriveTrainSubsystem.DriveMode.SMOOTH) {
+			outputLeft = motorControlFunction.apply(MotorGroup.LEFT, goalVelocityLeft);
+			outputRight = motorControlFunction.apply(MotorGroup.RIGHT, goalVelocityRight);
+
+			SmartDashboard.putNumber("Voltage left", outputLeft);
+			SmartDashboard.putNumber("Voltage right", outputRight);
+
+			speedLeft.setVoltage(outputLeft);
+			speedRight.setVoltage(outputRight);
+		}
 		
-		//speedLeft.setVoltage(outputLeft);
-		//speedRight.setVoltage(outputRight);
 	}
 
-    @SuppressWarnings("unused")
-	private double calculatePID(MotorGroup motorGroup, double goalVelocity) { // this is my best understanding of PID, not sure how accurate this is
-		double currentVelocity = getVelocity(motorGroup, false);
+	private double calculatePID(MotorGroup motorGroup, double goalVelocity) {
+		double currentVelocity = getWheelVelocity(motorGroup, false);
 		double velocityError = goalVelocity - currentVelocity;
 		double accelerationError = (velocityError - lastVelocityError.getOrDefault(motorGroup, 0.0)) / PERIOD;
 		lastVelocityError.put(motorGroup, velocityError);
@@ -90,7 +111,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
 	private double calculateFF(MotorGroup motorGroup, double goalVelocity) {
 		double constrainedGoalVelocity = clamp(goalVelocity, -MAX_VELOCITY, MAX_VELOCITY);
-		double currentVelocity = getVelocity(motorGroup, false);
+		double currentVelocity = getWheelVelocity(motorGroup, false);
 		double goalAcceleration = constrainedGoalVelocity - currentVelocity;
 		double constrainedGoalAcceleration = clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
 		constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
@@ -110,7 +131,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		return voltage;
 	}
 
-	
+
+	// DRIVE COMMAND FUNCTIONS
 
 	public void setMotorOutput(double left, double right) {
 		speedLeft.set(left);
@@ -129,8 +151,41 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	}
 
 
+	// SENSORS
 
-	public double getVelocity(MotorGroup motorGroup, boolean abs) { // utility function to get average inches per second from certain groups of motors
+    public void setDisplacement(Vector3 displacement, double startAngle) {
+		resetEncoders();
+        board.reset();
+        this.initialDisplacement = allianceCondition(displacement);
+        this.initialAngle = allianceCondition(Math.floorMod((int)startAngle, 360));
+	}
+	public Vector3 getDisplacement() {
+        return new Vector3(
+            -board.getDisplacementY(),
+            board.getDisplacementX(),
+            board.getDisplacementZ()
+        )
+        .applyFunction(Units::metersToInches)
+        .rotateZ(initialAngle)
+        .add(initialDisplacement);
+	}
+	public Vector3 getDisplacement(FieldObject fieldObject) {
+		return fieldObject.getPosition().subtract(getDisplacement());
+	}
+	
+    public double getDirection() {
+        return Math.floorMod((int)(-board.getAngle()+initialAngle), 360);
+    }
+    public Vector3 getVelocity() {
+        return
+        new Vector3(
+            -board.getVelocityY(),
+            board.getVelocityX(),
+            board.getVelocityZ()
+        )
+        .applyFunction(Units::metersToInches);
+    }
+	public double getWheelVelocity(MotorGroup motorGroup, boolean abs) { // utility function to get average inches per second from certain groups of motors
 		double totalUnitsPer100ms = 0;
 		for(WPI_TalonSRX motor : motorGroup.getMotors()) {
 			double motorVelocity = motor.getSelectedSensorVelocity();
@@ -151,10 +206,33 @@ public class DriveTrainSubsystem extends SubsystemBase {
 		double revolutions = totalUnits / 4096 / MotorGroup.ALL.getMotors().length;
 		return revolutions * WHEEL_CIRCUMFERENCE;
 	}
-	public void resetDistance() {
+	public void resetEncoders() {
 		for(WPI_TalonSRX motor : MotorGroup.ALL.getMotors()) {
 			motor.setSelectedSensorPosition(0);
 		}
+	}
+
+	
+	// UTILITIES
+
+    private static Vector3 allianceCondition(Vector3 blue) {
+        return Robot.getAlliance() == Alliance.Blue ? blue : blue.rotateZ(180).add(new Vector3(FIELD_WIDTH, 0, 0));
+    }
+    private static double allianceCondition(double blue) {
+        return Robot.getAlliance() == Alliance.Blue ? blue : blue + 180;
+    }
+
+
+	// ENUMS
+
+	public enum MotorControlMode {
+		FEEDFORWARD,
+		PID;
+	}
+
+	public enum DriveMode {
+		DIRECT,
+		SMOOTH;
 	}
 
 	public enum MotorGroup {
@@ -172,4 +250,18 @@ public class DriveTrainSubsystem extends SubsystemBase {
 			return motorList;
 		}
 	}
+
+    public enum FieldObject {
+		POWER_PORT(POWER_PORT_POSITION),
+		LOADING_BAY(LOADING_BAY_POSITION);
+
+        private final Vector3 position;
+        private FieldObject(Vector3 position) {
+            this.position = allianceCondition(position);
+        }
+
+        public Vector3 getPosition() {
+            return position;
+        }
+    }
 }

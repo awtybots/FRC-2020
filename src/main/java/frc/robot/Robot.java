@@ -35,7 +35,6 @@ public class Robot extends TimedRobot {
 	public static ShooterSubsystem shooterSubsystem;
 	public static ControlPanelSubsystem controlPanelSubsystem;
 	public static LimelightSubsystem limelightSubsystem;
-	public static NavXSubsystem navXSubsystem;
 
 	private Teleop teleopCommand;
 	private Auton autonCommand;
@@ -44,6 +43,7 @@ public class Robot extends TimedRobot {
 
 	private static double period;
 	private static Alliance alliance;
+	private static GamePeriod gamePeriod;
 
 	@Override
 	public void robotInit() {
@@ -70,8 +70,7 @@ public class Robot extends TimedRobot {
 		shooterSubsystem = new ShooterSubsystem();
 		controlPanelSubsystem = new ControlPanelSubsystem();
 		limelightSubsystem = new LimelightSubsystem();
-		navXSubsystem = new NavXSubsystem();
-
+		
 		// button mappings
 		getButton("A").whenHeld(new ToggleShooter());
 		getButton("B").whenHeld(new AutoShoot());
@@ -106,6 +105,8 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
+		gamePeriod = GamePeriod.AUTON;
+
 		autonCommand = new Auton(autonChooser.getSelected()); // get chosen AutonType
 		autonCommand.schedule(); // start auton
 	}
@@ -117,6 +118,8 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		gamePeriod = GamePeriod.TELEOP;
+
 		if(autonCommand != null) autonCommand.cancel(); // finish auton
 
 		teleopCommand = new Teleop(); // overlaying teleop command for the teleop period
@@ -142,10 +145,19 @@ public class Robot extends TimedRobot {
 		return new JoystickButton(xboxController1, XboxController.Button.valueOf("k"+name).value);
 	}
 
-	public static double getTimePeriod() {
+	public static double getLoopTime() {
 		return period;
 	}
 	public static Alliance getAlliance() {
 		return alliance;
 	}
+	public static GamePeriod getGamePeriod() {
+		return gamePeriod;
+	}
+
+	public enum GamePeriod {
+		AUTON,
+		TELEOP;
+	}
+
 }

@@ -7,7 +7,6 @@
 
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import static frc.robot.Constants.Controller.*;
@@ -33,12 +32,14 @@ public class TeleopDrive extends CommandBase {
 		double rotation = smooth(xboxController1.getX(ROTATION_HAND));
 		double left = speed + rotation;
 		double right = speed - rotation;
-		driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
-		//driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
-
-		SmartDashboard.putNumber("NavX Direction", navXSubsystem.getDirection());
-		navXSubsystem.getVelocity().print("NavX Velocity");
-		navXSubsystem.getDisplacement().print("NavX Displacement");
+		switch(DRIVE_MODE) {
+			case DIRECT:
+				driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
+				break;
+			case SMOOTH:
+				driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
+				break;
+		}
 	}
 
 	@Override

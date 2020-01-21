@@ -21,13 +21,13 @@ public class DriveInches extends CommandBase {
 
     @Override
     public void initialize() {
-        driveTrainSubsystem.resetDistance();
+        driveTrainSubsystem.resetEncoders();
     }
 
     @Override
     public void execute() {
         // encoders
-        double currentVelocity = driveTrainSubsystem.getVelocity(MotorGroup.ALL, false);
+        double currentVelocity = driveTrainSubsystem.getWheelVelocity(MotorGroup.ALL, false);
         currentDistance = driveTrainSubsystem.getDistance(false);
 
         // stopping distance

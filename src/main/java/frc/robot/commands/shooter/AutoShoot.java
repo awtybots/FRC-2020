@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.subsystems.LimelightSubsystem.Pipeline;
-import frc.robot.subsystems.NavXSubsystem.FieldObject;
+import frc.robot.subsystems.DriveTrainSubsystem.FieldObject;
 import frc.robot.util.Vector3;
 import static frc.robot.Constants.Shooter.*;
 import static java.lang.Math.*;
@@ -65,11 +65,11 @@ public class AutoShoot extends CommandBase {
 
     @CheckForNull
     private boolean calculateTrajectory() {
-        double robotAngle = navXSubsystem.getDirection();
+        double robotAngle = driveTrainSubsystem.getDirection();
         Vector3 visionTargetInfo = limelightSubsystem.getTargetInfo();
         
         Vector3 visionTargetDisplacement = calculateVisionTargetOffset(visionTargetInfo);
-        Vector3 navXTargetDisplacement = navXSubsystem.getDisplacement(FieldObject.POWER_PORT);
+        Vector3 navXTargetDisplacement = driveTrainSubsystem.getDisplacement(FieldObject.POWER_PORT);
         
         // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
         boolean useNavX = visionTargetDisplacement == null;// TODO add this: || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
@@ -92,7 +92,7 @@ public class AutoShoot extends CommandBase {
             return false;
         }
 
-        optimalBallVelocity = optimalBallVelocity.subtract(navXSubsystem.getVelocity().setZ(0)); // subtract robot velocity from goal velocity (for moving shots)
+        optimalBallVelocity = optimalBallVelocity.subtract(driveTrainSubsystem.getVelocity().setZ(0)); // subtract robot velocity from goal velocity (for moving shots)
         optimalRevsPerSecond = optimalBallVelocity.getMagnitude() / WHEEL_CIRCUMFERENCE;
 
         if(optimalRevsPerSecond > MAX_REVS_PER_SECOND) { // shooting from this point requires too much speed

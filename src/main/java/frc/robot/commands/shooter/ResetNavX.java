@@ -1,7 +1,8 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import static frc.robot.Robot.navXSubsystem;
+import static frc.robot.Robot.driveTrainSubsystem;
+
 import frc.robot.util.Vector3;
 
 public class ResetNavX extends InstantCommand {
@@ -19,7 +20,7 @@ public class ResetNavX extends InstantCommand {
 
     @Override
     public void initialize() {
-        navXSubsystem.set(displacement, startAngle);
+        driveTrainSubsystem.setDisplacement(displacement, startAngle);
     }
 
 }

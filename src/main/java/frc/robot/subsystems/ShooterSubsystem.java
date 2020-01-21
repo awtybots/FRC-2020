@@ -25,7 +25,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private boolean readyToShoot;
     
     public ShooterSubsystem() {
-        PERIOD = Robot.getTimePeriod();
+        PERIOD = Robot.getLoopTime();
 
         flywheel.configFactoryDefault();
         flywheel.setNeutralMode(FLYWHEEL_BRAKE_MODE);

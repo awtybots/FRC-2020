@@ -12,6 +12,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.commands.shooter.AutoShoot.AimMode;
+import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
+import frc.robot.subsystems.DriveTrainSubsystem.MotorControlMode;
 import frc.robot.util.Vector3;
 
 public final class Constants {
@@ -34,6 +37,9 @@ public final class Constants {
     }
 
     public final static class DriveTrain {
+        public final static DriveMode DRIVE_MODE = DriveTrainSubsystem.DriveMode.DIRECT;
+        public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.FEEDFORWARD;
+
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
 
         public final static double DEADZONE = 0.1;
@@ -123,7 +129,7 @@ public final class Constants {
         public final static double FIELD_WIDTH = 648;
 
         public final static Vector3 POWER_PORT_POSITION = new Vector3(648, -67.34, 98.25);
-        public final static Vector3 LOADING_STATION_POSITION = new Vector3(0, -61.34, 29);
+        public final static Vector3 LOADING_BAY_POSITION = new Vector3(0, -61.34, 29);
     }
 
     public final static class ColorSensor {
