@@ -16,7 +16,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final WPI_TalonSRX flywheel = new WPI_TalonSRX(MotorIDs.SHOOTER_FLYWHEEL);
     private final WPI_TalonSRX turret = new WPI_TalonSRX(MotorIDs.SHOOTER_TURRET);
 
-	private double PERIOD;
+    private double PERIOD;
 
     private double goalVelocity;
     private double currentVelocity;
@@ -61,7 +61,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     @SuppressWarnings("unused")
     private void flywheelFeedForward() {
-		double constrainedGoalVelocity = clamp(goalVelocity, -MAX_REVS_PER_SECOND, MAX_REVS_PER_SECOND);
+        double constrainedGoalVelocity = clamp(goalVelocity, -MAX_REVS_PER_SECOND, MAX_REVS_PER_SECOND);
         double constrainedGoalAcceleration = clamp(goalVelocity - currentVelocity, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
         constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
 

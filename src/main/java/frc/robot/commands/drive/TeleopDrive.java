@@ -16,38 +16,38 @@ import static frc.robot.Robot.*;
 
 public class TeleopDrive extends CommandBase {
 
-	// this command runs the entire teleop period
+    // this command runs the entire teleop period
 
-	public TeleopDrive() {
-		addRequirements(driveTrainSubsystem);
-	}
+    public TeleopDrive() {
+        addRequirements(driveTrainSubsystem);
+    }
 
-	private double smooth(double x) {
-		if(Math.abs(x) < DEADZONE) return 0;
-		return Math.pow(x, 2) * Math.signum(x);
-	}
-	
-	@Override
-	public void execute() {
-		double speed = smooth(-xboxController1.getY(SPEED_HAND));
-		double rotation = smooth(xboxController1.getX(ROTATION_HAND));
-		double left = speed + rotation;
-		double right = speed - rotation;
-		driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
-		//driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
+    private double smooth(double x) {
+        if(Math.abs(x) < DEADZONE) return 0;
+        return Math.pow(x, 2) * Math.signum(x);
+    }
+    
+    @Override
+    public void execute() {
+        double speed = smooth(-xboxController1.getY(SPEED_HAND));
+        double rotation = smooth(xboxController1.getX(ROTATION_HAND));
+        double left = speed + rotation;
+        double right = speed - rotation;
+        driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
+        //driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
 
-		SmartDashboard.putNumber("NavX Direction", navXSubsystem.getDirection());
-		navXSubsystem.getVelocity().print("NavX Velocity");
-		navXSubsystem.getDisplacement().print("NavX Displacement");
-	}
+        SmartDashboard.putNumber("NavX Direction", navXSubsystem.getDirection());
+        navXSubsystem.getVelocity().print("NavX Velocity");
+        navXSubsystem.getDisplacement().print("NavX Displacement");
+    }
 
-	@Override
-	public void end(boolean interrupted) {
-		driveTrainSubsystem.smoothStop();
-	}
+    @Override
+    public void end(boolean interrupted) {
+        driveTrainSubsystem.smoothStop();
+    }
 
-	@Override
-	public boolean isFinished() {
-		return false;
-	}
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }
