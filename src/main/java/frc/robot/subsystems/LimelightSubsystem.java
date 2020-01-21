@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.Limelight.*;
@@ -16,19 +15,16 @@ public class LimelightSubsystem extends SubsystemBase {
     private final NetworkTable table;
 
     private Pipeline currentPipeline;
-    private SendableChooser<Number> ledChooser = new SendableChooser<>();
 
     public LimelightSubsystem() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         currentPipeline = Pipeline.POWER_PORT;
         
-        ledChooser.addOption("ON", 3);
-        ledChooser.setDefaultOption("OFF", 1);
-        SmartDashboard.putData(ledChooser);
+        SmartDashboard.setDefaultBoolean("Limelight LED", true);
     }
     @Override
     public void periodic() {
-        Number ledMode = ledChooser.getSelected();
+        Number ledMode = SmartDashboard.getBoolean("Limelight LED", true) ? 3 : 1;
         setNumber("ledMode", ledMode);
     }
 

@@ -32,7 +32,9 @@ public class AutoShoot extends CommandBase {
         
         shooterSubsystem.setGoalFlywheelRevsPerSecond(optimalRevsPerSecond);
 
-        double turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD * TURRET_SPEED;
+        double turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
+        turnSpeed *= TURRET_MAX_SPEED;
+        turnSpeed += signum(turnSpeed) * TURRET_MIN_SPEED;
         switch(AIM_MODE) {
             case DRIVE:
                 driveTrainSubsystem.setMotorOutput(turnSpeed, -turnSpeed);
@@ -74,9 +76,9 @@ public class AutoShoot extends CommandBase {
         // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
         boolean useNavX = visionTargetDisplacement == null;// TODO add this: || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
 
-        angleOffset = useNavX
+        angleOffset = useNavX && false // TODO
             ? toDegrees(atan2(navXTargetDisplacement.y, navXTargetDisplacement.x) + Math.PI) - robotAngle
-            : visionTargetInfo == null|| abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD
+            : visionTargetInfo == null || abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD // TODO remove null check
                 ? 0.0
                 : visionTargetInfo.x;
 
@@ -108,10 +110,10 @@ public class AutoShoot extends CommandBase {
 
     private Vector3 calculateVisionTargetOffset(Vector3 visionTargetInfo) {
         if(visionTargetInfo == null) return null;
-        double yOffset = visionTargetInfo.z / tan(visionTargetInfo.y);
+        double yOffset = visionTargetInfo.z / tan(toRadians(visionTargetInfo.y));
         double forwardOffset = (new Vector3(0, yOffset, visionTargetInfo.z)).getMagnitude();
-        double xOffset = forwardOffset * tan(visionTargetInfo.x);
-        return new Vector3(xOffset, yOffset, 0);
+        double xOffset = forwardOffset * tan(toRadians(visionTargetInfo.x));
+        return new Vector3(xOffset, yOffset, 0).print("Vision offset");
     }
 
     private Vector3 calculateOptimalBallVelocity(Vector3 targetDisplacement) {
@@ -123,15 +125,15 @@ public class AutoShoot extends CommandBase {
         double v0 = sqrt(
             (GRAVITY * x * x)
             /
-            ((x * tan(SHOOTER_ANGLE) - z) * cos(SHOOTER_ANGLE) * cos(SHOOTER_ANGLE) * 2)
+            ((x * tan(toRadians(SHOOTER_ANGLE) - z) * cos(toRadians(SHOOTER_ANGLE)) * cos(toRadians(SHOOTER_ANGLE)) * 2))
         );
 
         if(v0 == Double.NaN) return null;
 
-        double velocityXY = v0 * cos(SHOOTER_ANGLE);
+        double velocityXY = v0 * cos(toRadians(SHOOTER_ANGLE));
         double velocityX = velocityXY * xr;
         double velocityY = velocityXY * yr;
-        double velocityZ = v0 * sin(SHOOTER_ANGLE);
+        double velocityZ = v0 * sin(toRadians(SHOOTER_ANGLE));
 
         return new Vector3(velocityX, velocityY, velocityZ);
 

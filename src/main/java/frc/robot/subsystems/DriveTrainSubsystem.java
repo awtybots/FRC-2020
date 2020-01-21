@@ -61,8 +61,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	private final AHRS board = new AHRS(SPI.Port.kMXP);
 	
 	private DifferentialDriveOdometry odometry;
-	private Vector3 lastPosition;
-	private Vector3 position;
+	private Vector3 lastPosition = new Vector3();
+	private Vector3 position = new Vector3();
 
 	private double initialAngle;
 
@@ -103,10 +103,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
 			speedRight.setVoltage(outputRight);
 		}
 		
-		odometry.update(getRawRotation(), getWheelDistance(MotorGroup.LEFT, false), getWheelDistance(MotorGroup.RIGHT, false));
-		lastPosition = position.clone();
-		position = new Vector3(odometry.getPoseMeters()).print("Position");
-		getVelocity().print("Velocity");
+		if(odometry != null) {
+			odometry.update(getRawRotation(), getWheelDistance(MotorGroup.LEFT, false), getWheelDistance(MotorGroup.RIGHT, false));
+			lastPosition = position.clone();
+			position = new Vector3(odometry.getPoseMeters()).print("Position");
+			getVelocity().print("Velocity");
+		}
 	}
 
 	private double calculatePID(MotorGroup motorGroup, double goalVelocity) {
@@ -144,6 +146,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 	// DRIVE COMMAND FUNCTIONS
 
 	public void setMotorOutput(double left, double right) {
+		if(Math.abs(left) < MIN_MOTOR_OUTPUT) left = 0;
+		if(Math.abs(right) < MIN_MOTOR_OUTPUT) right = 0;
 		speedLeft.set(left);
 		speedRight.set(right);
 	}
