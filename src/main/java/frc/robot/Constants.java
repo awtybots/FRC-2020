@@ -111,10 +111,10 @@ public final class Constants {
     }
 
     public final static class Limelight {
-        public final static double CAMERA_MOUNTING_ANGLE = 20;
-        public final static double CAMERA_HEIGHT = 20;
+        public final static double CAMERA_MOUNTING_ANGLE = 2;
+        public final static double CAMERA_HEIGHT = 5.1;
 
-        public final static double SHOOTER_VISION_HEIGHT = 89.75;
+        public final static double SHOOTER_VISION_HEIGHT = 44;//89.75 TODO;
         public final static double LOADING_STATION_VISION_HEIGHT = 16.5;
 
         public final static double SHOOTER_VISION_HEIGHT_OFFSET = SHOOTER_VISION_HEIGHT - CAMERA_HEIGHT;
@@ -130,7 +130,7 @@ public final class Constants {
         // the code will automatically invert these values if we're on the red alliance
         public final static double FIELD_WIDTH = 648;
 
-        public final static Vector3 POWER_PORT_POSITION = new Vector3(648, -67.34, 98.25);
+        public final static Vector3 POWER_PORT_POSITION = new Vector3(648, -67.34, 50);//98.25 TODO);
         public final static Vector3 LOADING_BAY_POSITION = new Vector3(0, -61.34, 29);
     }
 

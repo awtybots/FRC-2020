@@ -112,6 +112,7 @@ public class AutoShoot extends CommandBase {
     private Vector3 calculateVisionTargetOffset(Vector3 visionTargetInfo) {
         if(visionTargetInfo == null) return null;
         double yOffset = visionTargetInfo.z / tan(toRadians(visionTargetInfo.y));
+        //yOffset = 95.4 - 1.64*yOffset + 0.008*yOffset*yOffset;
         double forwardOffset = (new Vector3(0, yOffset, visionTargetInfo.z)).getMagnitude();
         double xOffset = forwardOffset * tan(toRadians(visionTargetInfo.x));
         return new Vector3(xOffset, yOffset, 0).print("Vision offset");

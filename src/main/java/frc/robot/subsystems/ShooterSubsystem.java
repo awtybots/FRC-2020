@@ -74,7 +74,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     public void spinTurret(double turnSpeed) {
         turret.set(turnSpeed);
-        turretAtGoal = turnSpeed == 0.0;
+        turretAtGoal = (turnSpeed == 0.0);
     }
 
     public boolean readyToShoot() {
