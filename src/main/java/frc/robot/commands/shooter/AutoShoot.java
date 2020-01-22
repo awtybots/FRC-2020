@@ -16,6 +16,7 @@ public class AutoShoot extends CommandBase {
 
     private double optimalRevsPerSecond = 0;
     private double angleOffset = 0.0;
+    private double shooterAngle = toRadians(SHOOTER_ANGLE);
 
     public AutoShoot() {
         addRequirements(shooterSubsystem, limelightSubsystem);
@@ -77,7 +78,7 @@ public class AutoShoot extends CommandBase {
         boolean useNavX = visionTargetDisplacement == null;// TODO add this: || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
 
         angleOffset = useNavX && false // TODO
-            ? toDegrees(atan2(navXTargetDisplacement.y, navXTargetDisplacement.x) + Math.PI) - robotAngle
+            ? floorMod((int)toDegrees(atan2(navXTargetDisplacement.y, navXTargetDisplacement.x)), 360) - robotAngle
             : visionTargetInfo == null || abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD // TODO remove null check
                 ? 0.0
                 : visionTargetInfo.x;
@@ -125,15 +126,15 @@ public class AutoShoot extends CommandBase {
         double v0 = sqrt(
             (GRAVITY * x * x)
             /
-            ((x * tan(toRadians(SHOOTER_ANGLE) - z) * cos(toRadians(SHOOTER_ANGLE)) * cos(toRadians(SHOOTER_ANGLE)) * 2))
+            ((x * tan(shooterAngle) - z) * cos(shooterAngle) * cos(shooterAngle) * 2)
         );
 
-        if(v0 == Double.NaN) return null;
+        if(Double.isNaN(v0)) return null;
 
-        double velocityXY = v0 * cos(toRadians(SHOOTER_ANGLE));
+        double velocityXY = v0 * cos(shooterAngle);
         double velocityX = velocityXY * xr;
         double velocityY = velocityXY * yr;
-        double velocityZ = v0 * sin(toRadians(SHOOTER_ANGLE));
+        double velocityZ = v0 * sin(shooterAngle);
 
         return new Vector3(velocityX, velocityY, velocityZ);
 
