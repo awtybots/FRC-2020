@@ -81,7 +81,7 @@ public final class Constants {
         public final static double SHOOTER_HEIGHT = 24;
         public final static double SHOOTER_ANGLE = 45;
 
-        public final static double GRAVITY = 16.1 * 12.0; // inches per second per second
+        public final static double GRAVITY = 32.2 * 12.0; // inches per second per second
 
         public final static double FLYWHEEL_RATIO = 1/4;
 
