@@ -38,17 +38,8 @@ public class AutoShoot extends CommandBase {
         boolean canShoot = calculateTrajectory();
         SmartDashboard.putBoolean("Shooter trajectory possible", canShoot);
 
-        // get average revs per second from previous N frames
-        rpsList.add(optimalRevsPerSecond);
-        while(rpsList.size() > SHOOTER_GOAL_RPS_AVERAGE_COUNT) rpsList.remove(0);
-        double total = 0;
-        for(double rps : rpsList) {
-            total += rps;
-        }
-        double averageRevsPerSecond = total/rpsList.size();
-
         // set motor speeds
-        shooterSubsystem.setGoalFlywheelRevsPerSecond(averageRevsPerSecond);
+        shooterSubsystem.setGoalFlywheelRevsPerSecond(optimalRevsPerSecond);
         switch(AIM_MODE) {
             case DRIVE:
                 double turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
@@ -57,21 +48,20 @@ public class AutoShoot extends CommandBase {
                 driveTrainSubsystem.setMotorOutput(turnSpeed, -turnSpeed);
                 break;
             case TURRET:
-                shooterSubsystem.spinTurret(angleOffset);
+                shooterSubsystem.setGoalTurretAngle(angleOffset);
                 break;
         }
 
-
-
+        // if ready to shoot then shoot balls
         if(canShoot && shooterSubsystem.readyToShoot()) {
-            // actually shoot a ball
+            // TODO actually shoot a ball
         }
     }
 
     @Override
     public void end(boolean interrupted) {
         shooterSubsystem.setGoalFlywheelRevsPerSecond(0);
-        shooterSubsystem.spinTurret(0);
+        shooterSubsystem.setGoalTurretAngle(0);
     }
 
     @Override
@@ -90,29 +80,40 @@ public class AutoShoot extends CommandBase {
         // get displacements from limelight and navx
         Vector3 visionTargetDisplacement = calculateVisionTargetOffset(visionTargetInfo);
         Vector3 navXTargetDisplacement = driveTrainSubsystem.getDisplacement(FieldObject.POWER_PORT);
+        Vector3 targetDisplacement = null;
 
-        // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
-        boolean useNavX = visionTargetDisplacement == null;// TODO add this: || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
+        // calculate angle offset and displacement of goal from robot from navx or limelight
+        boolean useNavX = false;
+        switch(TRAJECTORY_CALCULATION_MODE) {
+            case VISION_AND_NAVX:
+                // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
+                useNavX = visionTargetDisplacement == null || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
+                angleOffset = useNavX
+                    ? floorMod((int)toDegrees(atan2(navXTargetDisplacement.y, navXTargetDisplacement.x)), 360) - robotAngle
+                    : abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD
+                        ? 0.0
+                        : visionTargetInfo.x;
+                targetDisplacement = useNavX
+                    ? navXTargetDisplacement
+                    : visionTargetDisplacement.rotateZ(robotAngle); // vision displacement vector is relative to front of robot, so rotate it
+                break;
+            case VISION_ONLY:
+                angleOffset = visionTargetInfo == null
+                    ? 0.0
+                    : visionTargetInfo.x;
+                targetDisplacement = visionTargetDisplacement.rotateZ(robotAngle);
+                break;
+        }
 
-        // calculate angle offset from navx or limelight, then calculate necessary turn speed
-        angleOffset = useNavX && false // TODO
-            ? floorMod((int)toDegrees(atan2(navXTargetDisplacement.y, navXTargetDisplacement.x)), 360) - robotAngle
-            : visionTargetInfo == null || abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD // TODO remove null check
-                ? 0.0
-                : visionTargetInfo.x;
-
-        // calculate absolute displacement of goal from robot from navx or limelight
-        Vector3 targetDisplacement = useNavX
-            ? navXTargetDisplacement
-            : visionTargetDisplacement.rotateZ(robotAngle); // vision displacement vector is relative to front of robot, so rotate it
-        targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
 
         // calculate optimal ball velocity from displacement
+        if(targetDisplacement != null) targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
         Vector3 optimalBallVelocity = calculateOptimalBallVelocity(targetDisplacement);
 
         // if shot is impossible from this point, stop motor
         if(optimalBallVelocity == null) {
             optimalRevsPerSecond = 0;
+            rpsList.clear();
             return false;
         }
 
@@ -123,6 +124,7 @@ public class AutoShoot extends CommandBase {
         // if shooting from this point requires too much RPM, stop motor
         if(optimalRevsPerSecond > MAX_REVS_PER_SECOND) {
             optimalRevsPerSecond = 0;
+            rpsList.clear();
             return false;
         }
 
@@ -139,7 +141,6 @@ public class AutoShoot extends CommandBase {
     private Vector3 calculateVisionTargetOffset(Vector3 visionTargetInfo) {
         if(visionTargetInfo == null) return null;
         double yOffset = visionTargetInfo.z / tan(toRadians(visionTargetInfo.y));
-        //yOffset = 95.4 - 1.64*yOffset + 0.008*yOffset*yOffset;
         double forwardOffset = (new Vector3(0, yOffset, visionTargetInfo.z)).getMagnitude();
         double xOffset = forwardOffset * tan(toRadians(visionTargetInfo.x));
         return new Vector3(xOffset, yOffset, 0).print("Vision offset");
@@ -176,12 +177,23 @@ public class AutoShoot extends CommandBase {
     }
 
     private double calculateOptimalRevsPerSecond(double velocity) {
-        return velocity * 10; // TODO
+        double rpsNow = velocity * 10; // TODO
+        rpsList.add(rpsNow);
+        while(rpsList.size() > SHOOTER_GOAL_RPS_AVERAGE_COUNT) rpsList.remove(0);
+        double total = 0;
+        for(double rps : rpsList) {
+            total += rps;
+        }
+        return total/rpsList.size();
     }
 
     public enum AimMode {
         TURRET,
         DRIVE;
+    }
+    public enum TrajectoryCalculationMode {
+        VISION_ONLY,
+        VISION_AND_NAVX;
     }
 
 }

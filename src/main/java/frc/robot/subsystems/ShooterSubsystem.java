@@ -44,8 +44,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // get encoder measurements
-        currentVelocity = flywheel.getSelectedSensorVelocity() / 409.6 * FLYWHEEL_RATIO;
-        boolean velocityAtGoal = Math.abs(currentVelocity - goalVelocity) <= GOAL_VELOCITY_THRESHOLD;;
+        boolean velocityAtGoal = Math.abs(getFlywheelRevsPerSecond() - goalVelocity) <= GOAL_VELOCITY_THRESHOLD;;
         boolean turretAtGoal = Math.abs(getTurretAngle() - goalAngle) <= TURRET_ANGLE_THRESHOLD;
         readyToShoot = velocityAtGoal && turretAtGoal;
 
@@ -62,8 +61,10 @@ public class ShooterSubsystem extends SubsystemBase {
         }
 
         // turret motor
+        SmartDashboard.putNumber("Turret detected angle", getTurretAngle());
         if(!turretAtGoal) {
             double angleOffset = goalAngle - getTurretAngle();
+            SmartDashboard.putNumber("Turret angle offset", angleOffset);
             double turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
             turnSpeed *= TURRET_MAX_SPEED;
             if(Math.abs(turnSpeed) < TURRET_MIN_SPEED) turnSpeed = TURRET_MIN_SPEED * Math.signum(turnSpeed);
@@ -94,10 +95,13 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setGoalFlywheelRevsPerSecond(double goalVelocity) {
         this.goalVelocity = goalVelocity;
     }
-    public void spinTurret(double angleOffset) {
-        goalAngle = Math.floorMod((int)(getTurretAngle() + angleOffset), 360);
+    private double getFlywheelRevsPerSecond() {
+        return flywheel.getSelectedSensorVelocity() / 409.6 * FLYWHEEL_RATIO;
     }
 
+    public void setGoalTurretAngle(double angleOffset) {
+        goalAngle = Math.floorMod((int)(getTurretAngle() + angleOffset), 360);
+    }
     private double getTurretAngle() {
         return ((double)turret.getSelectedSensorPosition()) / angleFactor;
     }

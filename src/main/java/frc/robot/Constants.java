@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.commands.shooter.AutoShoot.AimMode;
+import frc.robot.commands.shooter.AutoShoot.TrajectoryCalculationMode;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
@@ -73,6 +74,7 @@ public final class Constants {
     }
 
     public final static class Shooter {
+        public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.VISION_ONLY;
         public final static AimMode AIM_MODE = AimMode.DRIVE;
         public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.BANGBANG;
 
