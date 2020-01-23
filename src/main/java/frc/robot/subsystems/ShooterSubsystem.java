@@ -95,9 +95,7 @@ public class ShooterSubsystem extends SubsystemBase {
         this.goalVelocity = goalVelocity;
     }
     public void spinTurret(double angleOffset) {
-        goalAngle = getTurretAngle() + angleOffset;
-        while(goalAngle > TURRET_MAX_ANGLE) goalAngle -= 360;
-        while(goalAngle < TURRET_MIN_ANGLE) goalAngle += 360;
+        goalAngle = Math.floorMod((int)(getTurretAngle() + angleOffset), 360);
     }
 
     private double getTurretAngle() {

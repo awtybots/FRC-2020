@@ -99,9 +99,7 @@ public final class Constants {
         public final static double TURRET_MAX_SPEED = 0.3;
         public final static double TURRET_ANGLE_THRESHOLD = 3;
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 10;
-        public final static double TURRET_START_ANGLE = 0;
-        public final static double TURRET_MIN_ANGLE = -180;
-        public final static double TURRET_MAX_ANGLE = 180;
+        public final static double TURRET_START_ANGLE = 180; // from 0 to 360
 
         // PID
         public final static double PID_P = 0.02;
