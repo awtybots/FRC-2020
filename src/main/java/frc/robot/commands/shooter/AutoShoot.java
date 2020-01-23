@@ -18,7 +18,7 @@ import javax.annotation.CheckForNull;
 public class AutoShoot extends CommandBase {
 
     private double optimalRevsPerSecond = 0;
-    private double turnSpeed = 0.0;
+    private double angleOffset = 0;
     private double shooterAngle = toRadians(SHOOTER_ANGLE);
 
     private ArrayList<Double> rpsList = new ArrayList<>(SHOOTER_GOAL_RPS_AVERAGE_COUNT);
@@ -40,7 +40,7 @@ public class AutoShoot extends CommandBase {
 
         // get average revs per second from previous N frames
         rpsList.add(optimalRevsPerSecond);
-        while(rpsList.size() > SHOOTER_GOAL_RPS_AVERAGE_COUNT) {rpsList.remove(0);}
+        while(rpsList.size() > SHOOTER_GOAL_RPS_AVERAGE_COUNT) rpsList.remove(0);
         double total = 0;
         for(double rps : rpsList) {
             total += rps;
@@ -51,10 +51,13 @@ public class AutoShoot extends CommandBase {
         shooterSubsystem.setGoalFlywheelRevsPerSecond(averageRevsPerSecond);
         switch(AIM_MODE) {
             case DRIVE:
+                double turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
+                turnSpeed *= TURRET_MAX_SPEED;
+                if(Math.abs(turnSpeed) < TURRET_MIN_SPEED) turnSpeed = TURRET_MIN_SPEED * Math.signum(turnSpeed);
                 driveTrainSubsystem.setMotorOutput(turnSpeed, -turnSpeed);
                 break;
             case TURRET:
-                shooterSubsystem.spinTurret(turnSpeed);
+                shooterSubsystem.spinTurret(angleOffset);
                 break;
         }
 
@@ -67,8 +70,8 @@ public class AutoShoot extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        shooterSubsystem.setGoalFlywheelRevsPerSecond(0.0);
-        shooterSubsystem.spinTurret(0.0);
+        shooterSubsystem.setGoalFlywheelRevsPerSecond(0);
+        shooterSubsystem.spinTurret(0);
     }
 
     @Override
@@ -92,14 +95,11 @@ public class AutoShoot extends CommandBase {
         boolean useNavX = visionTargetDisplacement == null;// TODO add this: || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
 
         // calculate angle offset from navx or limelight, then calculate necessary turn speed
-        double angleOffset = useNavX && false // TODO
+        angleOffset = useNavX && false // TODO
             ? floorMod((int)toDegrees(atan2(navXTargetDisplacement.y, navXTargetDisplacement.x)), 360) - robotAngle
             : visionTargetInfo == null || abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD // TODO remove null check
                 ? 0.0
                 : visionTargetInfo.x;
-        turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
-        turnSpeed *= TURRET_MAX_SPEED;
-        if(abs(turnSpeed) < TURRET_MIN_SPEED) turnSpeed = TURRET_MIN_SPEED * signum(turnSpeed);
 
         // calculate absolute displacement of goal from robot from navx or limelight
         Vector3 targetDisplacement = useNavX

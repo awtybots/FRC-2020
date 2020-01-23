@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.commands.shooter.AutoShoot.AimMode;
 import frc.robot.subsystems.DriveTrainSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 import frc.robot.subsystems.DriveTrainSubsystem.MotorControlMode;
 import frc.robot.util.Vector3;
@@ -73,6 +74,7 @@ public final class Constants {
 
     public final static class Shooter {
         public final static AimMode AIM_MODE = AimMode.DRIVE;
+        public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.BANGBANG;
 
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
@@ -83,6 +85,7 @@ public final class Constants {
         public final static double GRAVITY = 32.2 * 12.0; // inches per second per second
 
         public final static double FLYWHEEL_RATIO = 1/4;
+        public final static double TURRET_RATIO = 1/32;
 
         public final static double MAX_REVS_PER_SECOND = 100;
         public final static double MAX_ACCELERATION = 10;
@@ -96,6 +99,9 @@ public final class Constants {
         public final static double TURRET_MAX_SPEED = 0.3;
         public final static double TURRET_ANGLE_THRESHOLD = 3;
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 10;
+        public final static double TURRET_START_ANGLE = 0;
+        public final static double TURRET_MIN_ANGLE = -180;
+        public final static double TURRET_MAX_ANGLE = 180;
 
         // PID
         public final static double PID_P = 0.02;
