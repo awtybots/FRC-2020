@@ -90,6 +90,7 @@ public final class Constants {
         public final static double SHOOTER_TELEOP_SPEED = 60;
         public final static double SHOOTER_BANG_BANG_SPEED = 0.3;
         public final static double GOAL_VELOCITY_THRESHOLD = 5;
+        public final static int SHOOTER_GOAL_RPS_AVERAGE_COUNT = 10;
 
         public final static double TURRET_MIN_SPEED = 0;
         public final static double TURRET_MAX_SPEED = 0.3;

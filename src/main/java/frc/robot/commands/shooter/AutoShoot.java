@@ -8,6 +8,9 @@ import frc.robot.subsystems.DriveTrainSubsystem.FieldObject;
 import frc.robot.util.Vector3;
 import static frc.robot.Constants.Shooter.*;
 import static java.lang.Math.*;
+
+import java.util.ArrayList;
+
 import static frc.robot.Robot.*;
 
 import javax.annotation.CheckForNull;
@@ -15,8 +18,10 @@ import javax.annotation.CheckForNull;
 public class AutoShoot extends CommandBase {
 
     private double optimalRevsPerSecond = 0;
-    private double angleOffset = 0.0;
+    private double turnSpeed = 0.0;
     private double shooterAngle = toRadians(SHOOTER_ANGLE);
+
+    private ArrayList<Double> rpsList = new ArrayList<>(SHOOTER_GOAL_RPS_AVERAGE_COUNT);
 
     public AutoShoot() {
         addRequirements(shooterSubsystem, limelightSubsystem);
@@ -29,13 +34,21 @@ public class AutoShoot extends CommandBase {
 
     @Override
     public void execute() {
+        // calculate trajectory (required turret angle, initial velocity, and flywheel revs per second)
         boolean canShoot = calculateTrajectory();
+        SmartDashboard.putBoolean("Shooter trajectory possible", canShoot);
 
-        shooterSubsystem.setGoalFlywheelRevsPerSecond(optimalRevsPerSecond);
+        // get average revs per second from previous N frames
+        rpsList.add(optimalRevsPerSecond);
+        while(rpsList.size() > SHOOTER_GOAL_RPS_AVERAGE_COUNT) {rpsList.remove(0);}
+        double total = 0;
+        for(double rps : rpsList) {
+            total += rps;
+        }
+        double averageRevsPerSecond = total/rpsList.size();
 
-        double turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
-        turnSpeed *= TURRET_MAX_SPEED;
-        turnSpeed += signum(turnSpeed) * TURRET_MIN_SPEED;
+        // set motor speeds
+        shooterSubsystem.setGoalFlywheelRevsPerSecond(averageRevsPerSecond);
         switch(AIM_MODE) {
             case DRIVE:
                 driveTrainSubsystem.setMotorOutput(turnSpeed, -turnSpeed);
@@ -46,7 +59,6 @@ public class AutoShoot extends CommandBase {
         }
 
 
-        SmartDashboard.putBoolean("Shooter trajectory possible", canShoot);
 
         if(canShoot && shooterSubsystem.readyToShoot()) {
             // actually shoot a ball
@@ -68,45 +80,60 @@ public class AutoShoot extends CommandBase {
 
     @CheckForNull
     private boolean calculateTrajectory() {
+        // get angle and vision info
         double robotAngle = driveTrainSubsystem.getRotation();
         Vector3 visionTargetInfo = limelightSubsystem.getTargetInfo();
 
+        // get displacements from limelight and navx
         Vector3 visionTargetDisplacement = calculateVisionTargetOffset(visionTargetInfo);
         Vector3 navXTargetDisplacement = driveTrainSubsystem.getDisplacement(FieldObject.POWER_PORT);
 
         // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
         boolean useNavX = visionTargetDisplacement == null;// TODO add this: || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
 
-        angleOffset = useNavX && false // TODO
+        // calculate angle offset from navx or limelight, then calculate necessary turn speed
+        double angleOffset = useNavX && false // TODO
             ? floorMod((int)toDegrees(atan2(navXTargetDisplacement.y, navXTargetDisplacement.x)), 360) - robotAngle
             : visionTargetInfo == null || abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD // TODO remove null check
                 ? 0.0
                 : visionTargetInfo.x;
+        turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
+        turnSpeed *= TURRET_MAX_SPEED;
+        if(abs(turnSpeed) < TURRET_MIN_SPEED) turnSpeed = TURRET_MIN_SPEED * signum(turnSpeed);
 
+        // calculate absolute displacement of goal from robot from navx or limelight
         Vector3 targetDisplacement = useNavX
             ? navXTargetDisplacement
             : visionTargetDisplacement.rotateZ(robotAngle); // vision displacement vector is relative to front of robot, so rotate it
         targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
 
+        // calculate optimal ball velocity from displacement
         Vector3 optimalBallVelocity = calculateOptimalBallVelocity(targetDisplacement);
 
-        if(optimalBallVelocity == null) { // shot is impossible from this point
+        // if shot is impossible from this point, stop motor
+        if(optimalBallVelocity == null) {
             optimalRevsPerSecond = 0;
             return false;
         }
 
-        optimalBallVelocity = optimalBallVelocity.subtract(driveTrainSubsystem.getVelocity().setZ(0)); // subtract robot velocity from goal velocity (for moving shots)
+        // subtract robot velocity from goal velocity (for moving shots)
+        optimalBallVelocity = optimalBallVelocity.subtract(driveTrainSubsystem.getVelocity().setZ(0));
         optimalRevsPerSecond = calculateOptimalRevsPerSecond(optimalBallVelocity.getMagnitude());
 
-        if(optimalRevsPerSecond > MAX_REVS_PER_SECOND) { // shooting from this point requires too much speed
+        // if shooting from this point requires too much RPM, stop motor
+        if(optimalRevsPerSecond > MAX_REVS_PER_SECOND) {
             optimalRevsPerSecond = 0;
             return false;
         }
 
+        // SmartDashboard
         SmartDashboard.putString("Shooter goal velocity", optimalBallVelocity.toString());
+        SmartDashboard.putNumber("Shooter optimal revs per second", optimalRevsPerSecond);
         SmartDashboard.putNumber("Shooter angle offset", angleOffset);
+        SmartDashboard.putBoolean("Shooter using NavX", useNavX);
 
-        return !useNavX; // don't shoot if we used the NavX for displacement, wait for the camera to see the power port
+        // don't shoot if we used the NavX for displacement, wait for the camera to see the power port
+        return !useNavX;
     }
 
     private Vector3 calculateVisionTargetOffset(Vector3 visionTargetInfo) {
