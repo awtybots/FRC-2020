@@ -96,7 +96,7 @@ public class AutoShoot extends CommandBase {
         }
 
         optimalBallVelocity = optimalBallVelocity.subtract(driveTrainSubsystem.getVelocity().setZ(0)); // subtract robot velocity from goal velocity (for moving shots)
-        optimalRevsPerSecond = optimalBallVelocity.getMagnitude() / WHEEL_CIRCUMFERENCE;
+        optimalRevsPerSecond = calculateOptimalRevsPerSecond(optimalBallVelocity.getMagnitude());
 
         if(optimalRevsPerSecond > MAX_REVS_PER_SECOND) { // shooting from this point requires too much speed
             optimalRevsPerSecond = 0;
@@ -146,6 +146,10 @@ public class AutoShoot extends CommandBase {
         //    https://www.desmos.com/calculator/on4xzwtdwz
         //    https://demonstrations.wolfram.com/ProjectileWithAirDrag/
 
+    }
+
+    private double calculateOptimalRevsPerSecond(double velocity) {
+        return velocity * 10; // TODO
     }
 
     public enum AimMode {

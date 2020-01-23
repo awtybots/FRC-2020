@@ -76,7 +76,6 @@ public final class Constants {
 
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
-        public final static double WHEEL_CIRCUMFERENCE = 4 * Math.PI;
 
         public final static double SHOOTER_HEIGHT = 24;
         public final static double SHOOTER_ANGLE = 45;
