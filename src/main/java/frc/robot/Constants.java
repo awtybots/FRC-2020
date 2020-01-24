@@ -128,7 +128,7 @@ public final class Constants {
     }
 
     public final static class NavX {
-        // all positions must be relative to the center of the middle blue alliance driver station wall and based on blue alliance
+        // all positions must be relative to the center of the middle blue alliance driver station wall and based on blue alliance objects
         // increasing X goes closer to the red driver stations
         // increasing Y goes closer to the red trench run
         // yaw 0 is facing the red alliance stations
