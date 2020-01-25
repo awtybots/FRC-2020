@@ -45,7 +45,7 @@ public final class Constants {
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
 
         public final static double DEADZONE = 0.1;
-        public final static double MIN_MOTOR_OUTPUT = 0.25;
+        public final static double MIN_MOTOR_OUTPUT = 0.2;
         public final static double MAX_TELEOP_MOTOR_OUTPUT = 0.3;
 
         public final static double GEAR_RATIO = 1/8;
@@ -89,18 +89,18 @@ public final class Constants {
         public final static double FLYWHEEL_RATIO = 1/4;
         public final static double TURRET_RATIO = 1/32;
 
-        public final static double MAX_REVS_PER_SECOND = 100;
-        public final static double MAX_ACCELERATION = 10;
+        public final static double MAX_REVS_PER_SECOND = 3000;
+        public final static double MAX_ACCELERATION = 300;
 
         public final static double SHOOTER_TELEOP_SPEED = 60;
         public final static double SHOOTER_BANG_BANG_SPEED = 0.3;
         public final static double GOAL_VELOCITY_THRESHOLD = 5;
         public final static int SHOOTER_GOAL_RPS_AVERAGE_COUNT = 10;
 
-        public final static double TURRET_MIN_SPEED = 0.15;
+        public final static double TURRET_MIN_SPEED = 0.2;
         public final static double TURRET_MAX_SPEED = 0.3;
         public final static double TURRET_ANGLE_THRESHOLD = 3;
-        public final static double TURRET_ANGLE_SLOW_THRESHOLD = 10;
+        public final static double TURRET_ANGLE_SLOW_THRESHOLD = 6;
         public final static double TURRET_START_ANGLE = 180; // from 0 to 360
 
         // PID

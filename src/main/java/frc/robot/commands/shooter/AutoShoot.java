@@ -42,9 +42,14 @@ public class AutoShoot extends CommandBase {
         shooterSubsystem.setGoalFlywheelRevsPerSecond(optimalRevsPerSecond);
         switch(AIM_MODE) {
             case DRIVE:
-                double turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
-                turnSpeed *= TURRET_MAX_SPEED;
-                if(Math.abs(turnSpeed) < TURRET_MIN_SPEED) turnSpeed = TURRET_MIN_SPEED * Math.signum(turnSpeed);
+                double turnSpeed;
+                if(abs(angleOffset) > TURRET_ANGLE_THRESHOLD) {
+                    turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
+                    turnSpeed *= TURRET_MAX_SPEED;
+                    if(abs(turnSpeed) < TURRET_MIN_SPEED) turnSpeed = TURRET_MIN_SPEED * signum(turnSpeed);
+                } else {
+                    turnSpeed = 0;
+                }
                 driveTrainSubsystem.setMotorOutput(turnSpeed, -turnSpeed);
                 break;
             case TURRET:
@@ -152,6 +157,7 @@ public class AutoShoot extends CommandBase {
     }
 
     private Vector3 calculateOptimalBallVelocity(Vector3 targetDisplacement) {
+        if(targetDisplacement == null) return null;
         double x = targetDisplacement.clone().setZ(0).getMagnitude();
         double z = targetDisplacement.z;
         double xr = targetDisplacement.x / x;
