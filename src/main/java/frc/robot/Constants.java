@@ -86,8 +86,8 @@ public final class Constants {
 
         public final static double GRAVITY = 32.2 * 12.0; // inches per second per second
 
-        public final static double FLYWHEEL_RATIO = 1/4;
-        public final static double TURRET_RATIO = 1/32;
+        public final static double FLYWHEEL_RATIO = 1;
+        public final static double TURRET_RATIO = 1/3;
 
         public final static double MAX_REVS_PER_SECOND = 3000;
         public final static double MAX_ACCELERATION = 300;
