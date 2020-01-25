@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,7 +14,7 @@ import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-    private final WPI_TalonFX flywheel = new WPI_TalonFX(MotorIDs.SHOOTER_FLYWHEEL);
+    private final WPI_TalonSRX flywheel = new WPI_TalonSRX(MotorIDs.SHOOTER_FLYWHEEL);
     private final WPI_TalonSRX turret = new WPI_TalonSRX(MotorIDs.SHOOTER_TURRET);
 
     private double PERIOD;

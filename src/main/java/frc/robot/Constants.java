@@ -30,12 +30,12 @@ public final class Constants {
         public static final int DRIVE_R2 = 9;
         public static final int DRIVE_R3 = 12;
 
-        public static final int INTAKE = 2;
+        public static final int INTAKE = 3; // TODO
 
         public static final int SHOOTER_FLYWHEEL = 1;
         public static final int SHOOTER_TURRET = 2;
 
-        public static final int CONTROL_PANEL_SPINNER = 2;
+        public static final int CONTROL_PANEL_SPINNER = 4; // TODO
     }
 
     public final static class DriveTrain {
@@ -92,7 +92,7 @@ public final class Constants {
         public final static double MAX_REVS_PER_SECOND = 3000;
         public final static double MAX_ACCELERATION = 300;
 
-        public final static double SHOOTER_TELEOP_SPEED = 60;
+        public final static double SHOOTER_TELEOP_SPEED = 1000;
         public final static double SHOOTER_BANG_BANG_SPEED = 0.3;
         public final static double GOAL_VELOCITY_THRESHOLD = 5;
         public final static int SHOOTER_GOAL_RPS_AVERAGE_COUNT = 10;
