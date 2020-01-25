@@ -75,7 +75,7 @@ public final class Constants {
 
     public final static class Shooter {
         public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.VISION_ONLY;
-        public final static AimMode AIM_MODE = AimMode.DRIVE;
+        public final static AimMode AIM_MODE = AimMode.TURRET;
         public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.BANGBANG;
 
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
@@ -101,7 +101,7 @@ public final class Constants {
         public final static double TURRET_MAX_SPEED = 0.3;
         public final static double TURRET_ANGLE_THRESHOLD = 3;
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 6;
-        public final static double TURRET_START_ANGLE = 180; // from 0 to 360
+        public final static double TURRET_START_ANGLE = 0; // from 0 to 360
 
         // PID
         public final static double PID_P = 0.02;
