@@ -28,6 +28,9 @@ public class Vector3 {
         this.y = y;
         this.z = z;
     }
+    public Vector3(Vector3 b) {
+        set(b);
+    }
 
 
     public double getMagnitude() {
@@ -46,6 +49,12 @@ public class Vector3 {
     }
 
 
+    public Vector3 set(Vector3 b) {
+        this.x = b.x;
+        this.y = b.y;
+        this.x = b.z;
+        return this;
+    }
     public Vector3 setX(double x) {
         this.x = x;
         return this;
@@ -70,36 +79,37 @@ public class Vector3 {
 
         return this;
     }
-
-
-    public Vector3 add(Vector3 b) {
-        return VectorMath.add(this, b);
-    }
-    public Vector3 subtract(Vector3 b) {
-        return VectorMath.subtract(this, b);
-    }
-    public Vector3 multiply(Vector3 b) {
-        return VectorMath.multiply(this, b);
-    }
-    public Vector3 multiply(double b) {
-        return VectorMath.multiply(this, new Vector3(b));
-    }
-    public Vector3 divide(Vector3 b) {
-        return VectorMath.divide(this, b);
-    }
-    public Vector3 divide(double b) {
-        return VectorMath.divide(this, new Vector3(b));
+    public double getZAngle() {
+        return Math.floorMod((int)Math.toDegrees(Math.atan2(y, x)), 360);
     }
     public double dot(Vector3 b) {
         return VectorMath.dot(this, b);
     }
-
-
     public Vector3 applyFunction(Function<Double, Double> function) {
         x = function.apply(x);
         y = function.apply(y);
         z = function.apply(z);
         return this;
+    }
+
+
+    public Vector3 add(Vector3 b) {
+        return set(VectorMath.add(this, b));
+    }
+    public Vector3 subtract(Vector3 b) {
+        return set(VectorMath.subtract(this, b));
+    }
+    public Vector3 multiply(Vector3 b) {
+        return set(VectorMath.multiply(this, b));
+    }
+    public Vector3 multiply(double b) {
+        return set(VectorMath.multiply(this, new Vector3(b)));
+    }
+    public Vector3 divide(Vector3 b) {
+        return set(VectorMath.divide(this, b));
+    }
+    public Vector3 divide(double b) {
+        return set(VectorMath.divide(this, new Vector3(b)));
     }
 
 

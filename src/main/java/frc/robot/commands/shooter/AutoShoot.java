@@ -35,8 +35,8 @@ public class AutoShoot extends CommandBase {
     @Override
     public void execute() {
         // calculate trajectory (required turret angle, initial velocity, and flywheel revs per second)
-        boolean canShoot = calculateTrajectory();
-        SmartDashboard.putBoolean("Shooter trajectory possible", canShoot);
+        boolean accurateTrajectory = calculateTrajectory();
+        SmartDashboard.putBoolean("Shooter trajectory possible", accurateTrajectory);
 
         // set motor speeds
         shooterSubsystem.setGoalFlywheelRevsPerSecond(optimalRevsPerSecond);
@@ -53,7 +53,7 @@ public class AutoShoot extends CommandBase {
         }
 
         // if ready to shoot then shoot balls
-        if(canShoot && shooterSubsystem.readyToShoot()) {
+        if(accurateTrajectory && shooterSubsystem.readyToShoot()) {
             // TODO actually shoot a ball
         }
     }
@@ -73,41 +73,40 @@ public class AutoShoot extends CommandBase {
 
     @CheckForNull
     private boolean calculateTrajectory() {
-        // get angle and vision info
+        // gather navx and vision info
         double robotAngle = driveTrainSubsystem.getRotation();
         Vector3 visionTargetInfo = limelightSubsystem.getTargetInfo();
-
-        // get displacements from limelight and navx
         Vector3 visionTargetDisplacement = calculateVisionTargetOffset(visionTargetInfo);
         Vector3 navXTargetDisplacement = driveTrainSubsystem.getDisplacement(FieldObject.POWER_PORT);
-        Vector3 targetDisplacement = null;
 
-        // calculate angle offset and displacement of goal from robot from navx or limelight
+        // choose displacement of goal from navx or limelight
+        Vector3 targetDisplacement = null;
         boolean useNavX = false;
         switch(TRAJECTORY_CALCULATION_MODE) {
             case VISION_AND_NAVX:
                 // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
                 useNavX = visionTargetDisplacement == null || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
-                angleOffset = useNavX
-                    ? floorMod((int)toDegrees(atan2(navXTargetDisplacement.y, navXTargetDisplacement.x)), 360) - robotAngle
-                    : abs(visionTargetInfo.x) <= TURRET_ANGLE_THRESHOLD
-                        ? 0.0
-                        : visionTargetInfo.x;
+                // calculate the NavX offset angle, it will be changed if we see a target
+                angleOffset = navXTargetDisplacement.getZAngle() - robotAngle;
                 targetDisplacement = useNavX
                     ? navXTargetDisplacement
-                    : visionTargetDisplacement.rotateZ(robotAngle); // vision displacement vector is relative to front of robot, so rotate it
+                    : visionTargetDisplacement.clone().rotateZ(robotAngle);
                 break;
             case VISION_ONLY:
-                angleOffset = visionTargetInfo == null
-                    ? 0.0
-                    : visionTargetInfo.x;
-                targetDisplacement = visionTargetDisplacement.rotateZ(robotAngle);
+                angleOffset = 0;
+                if(visionTargetDisplacement == null) {
+                    // if we don't see a target then just rotate the turret
+                    angleOffset = 90;
+                    optimalRevsPerSecond = 0;
+                    rpsList.clear();
+                    return false;
+                }
+                targetDisplacement = visionTargetDisplacement.clone().rotateZ(robotAngle);
                 break;
         }
 
-
         // calculate optimal ball velocity from displacement
-        if(targetDisplacement != null) targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
+        targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
         Vector3 optimalBallVelocity = calculateOptimalBallVelocity(targetDisplacement);
 
         // if shot is impossible from this point, stop motor
@@ -118,8 +117,14 @@ public class AutoShoot extends CommandBase {
         }
 
         // subtract robot velocity from goal velocity (for moving shots)
-        optimalBallVelocity = optimalBallVelocity.subtract(driveTrainSubsystem.getVelocity().setZ(0));
+        optimalBallVelocity.subtract(driveTrainSubsystem.getVelocity().setZ(0));
         optimalRevsPerSecond = calculateOptimalRevsPerSecond(optimalBallVelocity.getMagnitude());
+
+        // get aim angle for new velocity
+        double desiredAngleOffset = optimalBallVelocity.getZAngle() - robotAngle;
+        angleOffset = abs(desiredAngleOffset) <= TURRET_ANGLE_THRESHOLD
+            ? 0.0
+            : desiredAngleOffset;
 
         // if shooting from this point requires too much RPM, stop motor
         if(optimalRevsPerSecond > MAX_REVS_PER_SECOND) {

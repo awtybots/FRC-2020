@@ -61,7 +61,7 @@ public class ShooterSubsystem extends SubsystemBase {
         }
 
         // turret motor
-        SmartDashboard.putNumber("Turret detected angle", getTurretAngle());
+        SmartDashboard.putNumber("Turret detected angle", getTurretAngle()); // TODO temp
         if(!turretAtGoal) {
             double angleOffset = goalAngle - getTurretAngle();
             SmartDashboard.putNumber("Turret angle offset", angleOffset);

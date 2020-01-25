@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj.SPI;
 
 import frc.robot.Robot;
 import frc.robot.Constants.MotorIDs;
-import frc.robot.Robot.GamePeriod;
 import frc.robot.util.Vector3;
 
 import static frc.robot.Constants.DriveTrain.*;
@@ -92,7 +91,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(Robot.getGamePeriod() == GamePeriod.AUTON || DRIVE_MODE == DriveTrainSubsystem.DriveMode.SMOOTH) {
+        if(DRIVE_MODE == DriveTrainSubsystem.DriveMode.SMOOTH) { // TODO change
             outputLeft = motorControlFunction.apply(MotorGroup.LEFT, goalVelocityLeft);
             outputRight = motorControlFunction.apply(MotorGroup.RIGHT, goalVelocityRight);
 
@@ -176,13 +175,13 @@ public class DriveTrainSubsystem extends SubsystemBase {
         this.initialAngle = allianceCondition(initialAngle);
     }
     public Vector3 getDisplacement() {
-        return position;
+        return position.clone();
     }
     public Vector3 getDisplacement(FieldObject fieldObject) {
         return fieldObject.getPosition().subtract(getDisplacement());
     }
     public Vector3 getVelocity() {
-        return position.subtract(lastPosition).multiply(PERIOD);
+        return position.clone().subtract(lastPosition).multiply(PERIOD);
     }
     public double getRotation() {
         return Math.floorMod((int)(initialAngle - board.getAngle()), 360);
@@ -220,7 +219,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     // UTILITIES
 
     private static Vector3 allianceCondition(Vector3 blue) {
-        return Robot.getAlliance() == Alliance.Blue ? blue : blue.rotateZ(180).add(new Vector3(FIELD_WIDTH, 0, 0));
+        return Robot.getAlliance() == Alliance.Blue ? blue : blue.clone().rotateZ(180).add(new Vector3(FIELD_WIDTH, 0, 0));
     }
     private static double allianceCondition(double blue) {
         return Robot.getAlliance() == Alliance.Blue ? blue : blue + 180;
@@ -265,7 +264,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
         }
 
         public Vector3 getPosition() {
-            return position;
+            return position.clone();
         }
     }
 }
