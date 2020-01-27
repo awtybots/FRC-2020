@@ -67,7 +67,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
     public enum Pipeline {
         POWER_PORT(0, SHOOTER_VISION_HEIGHT_OFFSET),
-        LOADING_STATION(1, LOADING_STATION_VISION_HEIGHT_OFFSET);
+        LOADING_STATION(1, LOADING_STATION_VISION_HEIGHT_OFFSET); // TODO no need to use vision for loading station
 
         private int num;
         private double height;

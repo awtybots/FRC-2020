@@ -21,7 +21,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.on = on;
         motor.set(ControlMode.PercentOutput, on ? MOTOR_SPEED : 0);
     }
-    public boolean getOn() {
+    public boolean getOn() { // TODO never used
         return on;
     }
 }

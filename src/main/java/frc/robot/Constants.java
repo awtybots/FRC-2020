@@ -121,10 +121,10 @@ public final class Constants {
         public final static double CAMERA_HEIGHT = 5.1;
 
         public final static double SHOOTER_VISION_HEIGHT = 44;//89.75 TODO;
-        public final static double LOADING_STATION_VISION_HEIGHT = 16.5;
+        public final static double LOADING_STATION_VISION_HEIGHT = 16.5; // TODO no need for vision on loading station
 
         public final static double SHOOTER_VISION_HEIGHT_OFFSET = SHOOTER_VISION_HEIGHT - CAMERA_HEIGHT;
-        public final static double LOADING_STATION_VISION_HEIGHT_OFFSET = LOADING_STATION_VISION_HEIGHT - CAMERA_HEIGHT;
+        public final static double LOADING_STATION_VISION_HEIGHT_OFFSET = LOADING_STATION_VISION_HEIGHT - CAMERA_HEIGHT; // TODO no need for vision on loading station
     }
 
     public final static class NavX {
