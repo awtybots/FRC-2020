@@ -156,7 +156,7 @@ public final class Constants {
         public final static double COLOR_PASSES = 7;
 
         public final static double MOTOR_SPEED = 0.3;
-        public final static double ENCODER_UNITS = 4096;
+        public final static double ENCODER_UNITS = 4096; // TODO switch to 2048 for Falcon500 encoders
 
         public final static NeutralMode BRAKE_MODE = NeutralMode.Brake;
     }

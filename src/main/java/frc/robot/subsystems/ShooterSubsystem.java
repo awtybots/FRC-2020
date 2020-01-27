@@ -23,7 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private double currentVelocity;
 
     private double goalAngle = TURRET_START_ANGLE;
-    private double angleFactor = 4096.0/360.0 * TURRET_RATIO;
+    private double angleFactor = 4096.0/360.0 * TURRET_RATIO; // TODO switch to 2048 for Falcon500 encoders
 
     private boolean readyToShoot;
 

@@ -197,7 +197,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
             double pos = motor.getSelectedSensorPosition();
             totalUnits += abs ? Math.abs(pos) : pos;
         }
-        double revolutions = totalUnits / 4096 / motorGroup.getMotors().length;
+        double revolutions = totalUnits / 4096 / motorGroup.getMotors().length; // TODO switch to 2048 for Falcon500 encoders
         return revolutions * WHEEL_CIRCUMFERENCE;
     }
     public double getWheelVelocity(MotorGroup motorGroup, boolean abs) {
@@ -206,7 +206,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
             double vel = motor.getSelectedSensorVelocity();
             totalUnits += abs ? Math.abs(vel) : vel;
         }
-        double revolutions = totalUnits / 409.6 / motorGroup.getMotors().length;
+        double revolutions = totalUnits / 409.6 / motorGroup.getMotors().length; // TODO switch to 2048 for Falcon500 encoders
         return revolutions * WHEEL_CIRCUMFERENCE;
     }
     public void resetEncoders() {
