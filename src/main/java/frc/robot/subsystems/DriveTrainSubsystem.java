@@ -90,7 +90,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {
+    public void periodic() { // TODO no default option
         if(DRIVE_MODE == DriveTrainSubsystem.DriveMode.SMOOTH) { // TODO change
             outputLeft = motorControlFunction.apply(MotorGroup.LEFT, goalVelocityLeft);
             outputRight = motorControlFunction.apply(MotorGroup.RIGHT, goalVelocityRight);

@@ -53,7 +53,7 @@ public final class Constants {
         public final static double ROBOT_CIRMCUMFERENCE = 100; // this the the distance (in inches) each wheel travels when the robot spins one time around its center
 
         public final static double MAX_VELOCITY = 36; // inches per second
-        public final static double MAX_ACCELERATION = 6; // inches per second per second
+        public final static double MAX_ACCELERATION = 6; // inches per second^2
         public final static double GOAL_TOLERANCE = 0.5; // how many inches away do we stop
 
         // PID
@@ -81,18 +81,18 @@ public final class Constants {
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
 
-        public final static double SHOOTER_HEIGHT = 24;
-        public final static double SHOOTER_ANGLE = 45;
+        public final static double SHOOTER_HEIGHT = 24; // TODO change to actual height
+        public final static double SHOOTER_ANGLE = 45; // TODO change to actual angle
 
-        public final static double GRAVITY = 32.2 * 12.0; // inches per second per second
+        public final static double GRAVITY = 32.2 * 12.0; // inches/second^2
 
-        public final static double FLYWHEEL_RATIO = 1;
-        public final static double TURRET_RATIO = 1/3;
+        public final static double FLYWHEEL_RATIO = 1; // TODO change to actual ratio
+        public final static double TURRET_RATIO = 1/3; // TODO change to actual ratio
 
         public final static double MAX_REVS_PER_SECOND = 3000;
         public final static double MAX_ACCELERATION = 300;
 
-        public final static double SHOOTER_TELEOP_SPEED = 1000;
+        public final static double SHOOTER_TELEOP_SPEED = 1000; // TODO way too slow
         public final static double SHOOTER_BANG_BANG_SPEED = 0.3;
         public final static double GOAL_VELOCITY_THRESHOLD = 5;
         public final static int SHOOTER_GOAL_RPS_AVERAGE_COUNT = 10;

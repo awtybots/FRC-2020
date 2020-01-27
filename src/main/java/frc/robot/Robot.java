@@ -148,14 +148,14 @@ public class Robot extends TimedRobot {
     public static double getLoopTime() {
         return period;
     }
-    public static Alliance getAlliance() {
+    public static Alliance getAlliance() { // TODO deprecate + remove
         return alliance;
     }
-    public static GamePeriod getGamePeriod() {
+    public static GamePeriod getGamePeriod() { // TODO unnecessary + not used
         return gamePeriod;
     }
 
-    public enum GamePeriod {
+    public enum GamePeriod { // TODO unnecessary
         AUTON,
         TELEOP;
     }
