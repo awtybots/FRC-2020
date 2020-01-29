@@ -52,7 +52,7 @@ public class RotateDegrees extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        driveTrainSubsystem.smoothStop();
+        driveTrainSubsystem.hardStop();
     }
 
     @Override

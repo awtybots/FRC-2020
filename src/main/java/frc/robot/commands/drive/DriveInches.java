@@ -50,7 +50,7 @@ public class DriveInches extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        driveTrainSubsystem.smoothStop();
+        driveTrainSubsystem.hardStop();
     }
 
     @Override

@@ -12,7 +12,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
@@ -172,7 +171,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
             getRawRotation(),
             new Pose2d(displacement.toTranslation2d(), Rotation2d.fromDegrees(initialAngle))
         );
-        this.initialAngle = allianceCondition(initialAngle);
+        this.initialAngle = initialAngle;
     }
     public Vector3 getDisplacement() {
         return position.clone();
@@ -216,15 +215,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
     }
 
 
-    // UTILITIES
-
-    private static Vector3 allianceCondition(Vector3 blue) {
-        return Robot.getAlliance() == Alliance.Blue ? blue : blue.clone().rotateZ(180).add(new Vector3(FIELD_WIDTH, 0, 0));
-    }
-    private static double allianceCondition(double blue) {
-        return Robot.getAlliance() == Alliance.Blue ? blue : blue + 180;
-    }
-
 
     // ENUMS
 
@@ -260,7 +250,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
         private final Vector3 position;
         private FieldObject(Vector3 position) {
-            this.position = allianceCondition(position);
+            this.position = position;
         }
 
         public Vector3 getPosition() {
