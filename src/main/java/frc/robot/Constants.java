@@ -50,7 +50,7 @@ public final class Constants {
 
         public final static double DEADZONE = 0.1;
         public final static double MIN_MOTOR_OUTPUT = 0.2;
-        public final static double MAX_TELEOP_MOTOR_OUTPUT = 0.3;
+        public final static double MAX_TELEOP_MOTOR_OUTPUT = 0.4;
 
         public final static double GEAR_RATIO = 1/8;
         public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI;

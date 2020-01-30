@@ -22,6 +22,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private double goalVelocity = 0;
     private double currentVelocity;
+    private double currentAngle;
 
     private double goalAngle = TURRET_START_ANGLE;
     private double angleFactor = 4096.0/360.0 * TURRET_RATIO;
@@ -44,8 +45,10 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // get encoder measurements
-        boolean velocityAtGoal = Math.abs(getFlywheelRevsPerSecond() - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;;
-        boolean turretAtGoal = Math.abs(getTurretAngle() - goalAngle) <= TURRET_ANGLE_THRESHOLD;
+        currentVelocity = getFlywheelRevsPerSecond();
+        currentAngle = getTurretAngle();
+        boolean velocityAtGoal = Math.abs(currentVelocity - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;;
+        boolean turretAtGoal = Math.abs(currentAngle - goalAngle) <= TURRET_ANGLE_THRESHOLD;
         readyToShoot = velocityAtGoal && turretAtGoal;
 
         // shooter motor
@@ -61,9 +64,9 @@ public class ShooterSubsystem extends SubsystemBase {
         }
 
         // turret motor
-        SmartDashboard.putNumber("Turret detected angle", getTurretAngle()); // TODO temp
+        SmartDashboard.putNumber("Turret detected angle", currentAngle); // TODO temp
         if(!turretAtGoal) {
-            double angleOffset = goalAngle - getTurretAngle();
+            double angleOffset = goalAngle - currentAngle;
             SmartDashboard.putNumber("Turret angle offset", angleOffset);
             double turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
             turnSpeed *= TURRET_MAX_SPEED;
@@ -98,8 +101,6 @@ public class ShooterSubsystem extends SubsystemBase {
         this.goalVelocity = goalVelocity;
     }
     private double getFlywheelRevsPerSecond() {
-        System.out.println("vel: "+flywheel.getSelectedSensorVelocity());
-        System.out.println("pos: "+flywheel.getSelectedSensorPosition());
         return flywheel.getSelectedSensorVelocity() * 10.0 / FLYWHEEL_MOTOR_TYPE.getEncoderUnits() * FLYWHEEL_RATIO;
     }
 
