@@ -64,8 +64,8 @@ public final class Constants {
         public final static double PID_P = 0.02;
         public final static double PID_I = 0;
         public final static double PID_D = 0;
-        public final static double INTEGRAL_MIN = -100;
-        public final static double INTEGRAL_MAX = 100;
+        public final static double INTEGRAL_MIN = -0.5;
+        public final static double INTEGRAL_MAX = 0.5;
 
         // FEEDFORWARD FORMULA: FF_S + (FF_V * velocity) + (FF_A * acceleration)
         public final static double FF_S = 1.3; // voltage required to move a wheel any amount
@@ -97,10 +97,10 @@ public final class Constants {
         public final static double MAX_REVS_PER_SECOND = 3000;
         public final static double MAX_ACCELERATION = 300;
 
-        public final static double SHOOTER_TELEOP_SPEED = 1000; // TODO way too slow
-        public final static double SHOOTER_BANG_BANG_SPEED = 0.3;
-        public final static double GOAL_VELOCITY_THRESHOLD = 5;
-        public final static int SHOOTER_GOAL_RPS_AVERAGE_COUNT = 10;
+        public final static double FLYWHEEL_TELEOP_SPEED = 1000; // TODO way too slow
+        public final static double FLYWHEEL_BANG_BANG_SPEED = 0.3;
+        public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 5;
+        public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10;
 
         public final static double TURRET_MIN_SPEED = 0.2;
         public final static double TURRET_MAX_SPEED = 0.3;
@@ -108,12 +108,15 @@ public final class Constants {
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 6;
         public final static double TURRET_START_ANGLE = 0; // from 0 to 360
 
+        public final static double FLYWHEEL_CIRCUMFERENCE = 4 * Math.PI;
+        public final static double FLYWHEEL_SLIPPING_FACTOR = 0.9;
+
         // PID
         public final static double PID_P = 0.02;
         public final static double PID_I = 0;
         public final static double PID_D = 0;
-        public final static double INTEGRAL_MIN = -100;
-        public final static double INTEGRAL_MAX = 100;
+        public final static double INTEGRAL_MIN = -0.5;
+        public final static double INTEGRAL_MAX = 0.5;
 
         // FEEDFORWARD FORMULA: FF_S + (FF_V * velocity) + (FF_A * acceleration)
         public final static double FF_S = 3.0; // voltage required to move the flywheel any amount

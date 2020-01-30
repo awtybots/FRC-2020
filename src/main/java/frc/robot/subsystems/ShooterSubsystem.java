@@ -44,7 +44,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // get encoder measurements
-        boolean velocityAtGoal = Math.abs(getFlywheelRevsPerSecond() - goalVelocity) <= GOAL_VELOCITY_THRESHOLD;;
+        boolean velocityAtGoal = Math.abs(getFlywheelRevsPerSecond() - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;;
         boolean turretAtGoal = Math.abs(getTurretAngle() - goalAngle) <= TURRET_ANGLE_THRESHOLD;
         readyToShoot = velocityAtGoal && turretAtGoal;
 
@@ -76,9 +76,9 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     private void flywheelBangBang() {
-        if(currentVelocity < goalVelocity - GOAL_VELOCITY_THRESHOLD) {
-            flywheel.set(SHOOTER_BANG_BANG_SPEED);
-        } else if(currentVelocity > goalVelocity + GOAL_VELOCITY_THRESHOLD){
+        if(currentVelocity < goalVelocity - FLYWHEEL_GOAL_VELOCITY_THRESHOLD) {
+            flywheel.set(FLYWHEEL_BANG_BANG_SPEED);
+        } else if(currentVelocity > goalVelocity + FLYWHEEL_GOAL_VELOCITY_THRESHOLD){
             flywheel.set(0);
         }
     }

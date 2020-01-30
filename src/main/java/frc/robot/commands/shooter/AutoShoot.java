@@ -20,8 +20,9 @@ public class AutoShoot extends CommandBase {
     private double optimalRevsPerSecond = 0;
     private double angleOffset = 0;
     private double shooterAngle = toRadians(SHOOTER_ANGLE);
+    private final double shooterVelocityToRPSFactor = 2 / FLYWHEEL_CIRCUMFERENCE / FLYWHEEL_SLIPPING_FACTOR;
 
-    private ArrayList<Double> rpsList = new ArrayList<>(SHOOTER_GOAL_RPS_AVERAGE_COUNT);
+    private ArrayList<Double> rpsList = new ArrayList<>(FLYWHEEL_GOAL_RPS_AVERAGE_COUNT);
 
     public AutoShoot() {
         addRequirements(shooterSubsystem, limelightSubsystem);
@@ -188,9 +189,9 @@ public class AutoShoot extends CommandBase {
     }
 
     private double calculateOptimalRevsPerSecond(double velocity) {
-        double rpsNow = velocity * 10; // TODO
+        double rpsNow = velocity * shooterVelocityToRPSFactor;
         rpsList.add(rpsNow);
-        while(rpsList.size() > SHOOTER_GOAL_RPS_AVERAGE_COUNT) rpsList.remove(0);
+        while(rpsList.size() > FLYWHEEL_GOAL_RPS_AVERAGE_COUNT) rpsList.remove(0);
         double total = 0;
         for(double rps : rpsList) {
             total += rps;

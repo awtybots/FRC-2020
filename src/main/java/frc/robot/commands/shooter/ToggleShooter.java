@@ -13,7 +13,7 @@ public class ToggleShooter extends CommandBase {
 
     @Override
     public void initialize() {
-        shooterSubsystem.setGoalFlywheelRevsPerSecond(SHOOTER_TELEOP_SPEED);
+        shooterSubsystem.setGoalFlywheelRevsPerSecond(FLYWHEEL_TELEOP_SPEED);
     }
 
     @Override
