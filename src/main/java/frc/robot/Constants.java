@@ -97,7 +97,7 @@ public final class Constants {
         public final static double MAX_REVS_PER_SECOND = 3000;
         public final static double MAX_ACCELERATION = 300;
 
-        public final static double FLYWHEEL_TELEOP_SPEED = 1000; // TODO way too slow
+        public final static double FLYWHEEL_TELEOP_SPEED = 100; // TODO way too slow
         public final static double FLYWHEEL_BANG_BANG_SPEED = 0.3;
         public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 5;
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10;

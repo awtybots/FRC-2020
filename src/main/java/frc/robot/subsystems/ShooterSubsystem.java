@@ -80,6 +80,8 @@ public class ShooterSubsystem extends SubsystemBase {
             flywheel.set(FLYWHEEL_BANG_BANG_SPEED);
         } else if(currentVelocity > goalVelocity + FLYWHEEL_GOAL_VELOCITY_THRESHOLD){
             flywheel.set(0);
+        } else if(goalVelocity == 0) {
+            flywheel.set(0);
         }
     }
 
@@ -96,7 +98,9 @@ public class ShooterSubsystem extends SubsystemBase {
         this.goalVelocity = goalVelocity;
     }
     private double getFlywheelRevsPerSecond() {
-        return flywheel.getSelectedSensorVelocity() * 10 / FLYWHEEL_MOTOR_TYPE.getEncoderUnits() * FLYWHEEL_RATIO;
+        System.out.println("vel: "+flywheel.getSelectedSensorVelocity());
+        System.out.println("pos: "+flywheel.getSelectedSensorPosition());
+        return flywheel.getSelectedSensorVelocity() * 10.0 / FLYWHEEL_MOTOR_TYPE.getEncoderUnits() * FLYWHEEL_RATIO;
     }
 
     public void setGoalTurretAngle(double angleOffset) {
