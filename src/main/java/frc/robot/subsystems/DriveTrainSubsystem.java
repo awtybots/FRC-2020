@@ -34,13 +34,13 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     // this is the subsystem that interacts with the drivetrain motors
 
-    private static TalonWrapper<?> motorL1;
-    private static TalonWrapper<?> motorL2;
-    private static TalonWrapper<?> motorL3;
+    private static TalonWrapper motorL1;
+    private static TalonWrapper motorL2;
+    private static TalonWrapper motorL3;
 
-    private static TalonWrapper<?> motorR1;
-    private static TalonWrapper<?> motorR2;
-    private static TalonWrapper<?> motorR3;
+    private static TalonWrapper motorR1;
+    private static TalonWrapper motorR2;
+    private static TalonWrapper motorR3;
 
     private static SpeedControllerGroup speedLeft;
     private static SpeedControllerGroup speedRight;
@@ -69,8 +69,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     public DriveTrainSubsystem() {
         PERIOD = Robot.getLoopTime();
-        Function<Integer, TalonWrapper<?>> motorCreateFunction = MOTOR_TYPE.getMotorCreateFunction();
-        
+        Function<Integer, TalonWrapper> motorCreateFunction = MOTOR_TYPE.getMotorCreateFunction();
+
         motorL1 = motorCreateFunction.apply(MotorIDs.DRIVE_L1);
         motorL2 = motorCreateFunction.apply(MotorIDs.DRIVE_L2);
         motorL3 = motorCreateFunction.apply(MotorIDs.DRIVE_L3);
@@ -78,11 +78,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
         motorR1 = motorCreateFunction.apply(MotorIDs.DRIVE_R1);
         motorR2 = motorCreateFunction.apply(MotorIDs.DRIVE_R2);
         motorR3 = motorCreateFunction.apply(MotorIDs.DRIVE_R3);
-        
+
         speedLeft = new SpeedControllerGroup(motorL1, motorL2, motorL3);
         speedRight = new SpeedControllerGroup(motorL1, motorL2, motorL3);
 
-        for (TalonWrapper<?> motor : MotorGroup.ALL.getMotors()) {
+        for (TalonWrapper motor : MotorGroup.ALL.getMotors()) {
             motor.set(0); // start all motors at 0% speed to stop the blinking
 
             motor.configFactoryDefault(); // reset settings
@@ -90,7 +90,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
             motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); // sets which encoder the motor is using
         }
 
-        for (TalonWrapper<?> motor : MotorGroup.RIGHT.getMotors()) {
+        for (TalonWrapper motor : MotorGroup.RIGHT.getMotors()) {
             motor.setSensorPhase(true);
         }
 
@@ -201,24 +201,24 @@ public class DriveTrainSubsystem extends SubsystemBase {
     }
     public double getWheelDistance(MotorGroup motorGroup, boolean abs) {
         double totalUnits = 0;
-        for(TalonWrapper<?> motor : motorGroup.getMotors()) {
+        for(TalonWrapper motor : motorGroup.getMotors()) {
             double pos = motor.getSelectedSensorPosition();
             totalUnits += abs ? Math.abs(pos) : pos;
         }
-        double revolutions = totalUnits / MOTOR_TYPE.getEncoderUnits() / motorGroup.getMotors().length; // TODO switch to 2048 for Falcon500 encoders
+        double revolutions = totalUnits / MOTOR_TYPE.getEncoderUnits() / motorGroup.getMotors().length;
         return revolutions * WHEEL_CIRCUMFERENCE;
     }
     public double getWheelVelocity(MotorGroup motorGroup, boolean abs) {
         double totalUnits = 0;
-        for(TalonWrapper<?> motor : motorGroup.getMotors()) {
+        for(TalonWrapper motor : motorGroup.getMotors()) {
             double vel = motor.getSelectedSensorVelocity();
             totalUnits += abs ? Math.abs(vel) : vel;
         }
-        double revolutions = totalUnits / MOTOR_TYPE.getEncoderUnits() / 10 / motorGroup.getMotors().length; // TODO switch to 2048 for Falcon500 encoders
+        double revolutions = totalUnits / MOTOR_TYPE.getEncoderUnits() / 10 / motorGroup.getMotors().length;
         return revolutions * WHEEL_CIRCUMFERENCE;
     }
     public void resetEncoders() {
-        for(TalonWrapper<?> motor : MotorGroup.ALL.getMotors()) {
+        for(TalonWrapper motor : MotorGroup.ALL.getMotors()) {
             motor.setSelectedSensorPosition(0);
         }
     }
@@ -247,36 +247,18 @@ public class DriveTrainSubsystem extends SubsystemBase {
         SMOOTH;
     }
 
-    public enum MotorType {
-        TALON_SRX(TalonWrapper::getTalonSRX, 4096),
-        TALON_FX(TalonWrapper::getTalonFX, 2048);
-
-        private Function<Integer, TalonWrapper<?>> f;
-        private double u;
-        private MotorType(Function<Integer, TalonWrapper<?>> f, double u) {
-            this.f = f;
-            this.u = u;
-        }
-		public Function<Integer, TalonWrapper<?>> getMotorCreateFunction() {
-            return f;
-        }
-        public double getEncoderUnits() {
-			return u;
-		}
-    }
-
     public enum MotorGroup {
-        LEFT(new TalonWrapper<?>[]{ motorL1, motorL2, motorL3 }),
-        RIGHT(new TalonWrapper<?>[]{ motorR1, motorR2, motorR3 }),
-        ALL(new TalonWrapper<?>[]{ motorL1, motorL2, motorL3, motorR1, motorR2, motorR3 });
+        LEFT(new TalonWrapper[]{ motorL1, motorL2, motorL3 }),
+        RIGHT(new TalonWrapper[]{ motorR1, motorR2, motorR3 }),
+        ALL(new TalonWrapper[]{ motorL1, motorL2, motorL3, motorR1, motorR2, motorR3 });
 
-        private TalonWrapper<?>[] motorList;
+        private TalonWrapper[] motorList;
 
-        private MotorGroup(TalonWrapper<?>[] motorList) {
+        private MotorGroup(TalonWrapper[] motorList) {
             this.motorList = motorList;
         }
 
-        public TalonWrapper<?>[] getMotors() {
+        public TalonWrapper[] getMotors() {
             return motorList;
         }
     }

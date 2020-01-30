@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import java.util.function.Function;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.I2C;
@@ -17,7 +19,7 @@ import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 import frc.robot.subsystems.DriveTrainSubsystem.MotorControlMode;
-import frc.robot.subsystems.DriveTrainSubsystem.MotorType;
+import frc.robot.util.TalonWrapper;
 import frc.robot.util.Vector3;
 
 public final class Constants {
@@ -40,7 +42,7 @@ public final class Constants {
     }
 
     public final static class DriveTrain {
-        public final static MotorType MOTOR_TYPE = MotorType.TALON_SRX;
+        public final static Constants.MotorType MOTOR_TYPE = Constants.MotorType.TALON_SRX;
         public final static DriveMode DRIVE_MODE = DriveTrainSubsystem.DriveMode.DIRECT;
         public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.FEEDFORWARD;
 
@@ -79,6 +81,7 @@ public final class Constants {
         public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.VISION_ONLY;
         public final static AimMode AIM_MODE = AimMode.TURRET;
         public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.BANGBANG;
+        public final static MotorType FLYWHEEL_MOTOR_TYPE = MotorType.TALON_SRX;
 
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
@@ -88,8 +91,8 @@ public final class Constants {
 
         public final static double GRAVITY = 32.2 * 12.0; // inches/second^2
 
-        public final static double FLYWHEEL_RATIO = 1; // TODO change to actual ratio
-        public final static double TURRET_RATIO = 1/3; // TODO change to actual ratio
+        public final static double FLYWHEEL_RATIO = 5 * 64 / 22; // TODO
+        public final static double TURRET_RATIO = 1/3; // TODO
 
         public final static double MAX_REVS_PER_SECOND = 3000;
         public final static double MAX_ACCELERATION = 300;
@@ -167,4 +170,22 @@ public final class Constants {
         public static final Hand SPEED_HAND = Hand.kLeft; // which stick (left or right) to use for each control of arcade drive (speed and rotation)
         public static final Hand ROTATION_HAND = Hand.kRight;
     }
+
+	public enum MotorType {
+	    TALON_SRX(TalonWrapper::getTalonSRX, 4096),
+	    TALON_FX(TalonWrapper::getTalonFX, 2048);
+
+	    private Function<Integer, TalonWrapper> f;
+	    private double u;
+	    private MotorType(Function<Integer, TalonWrapper> f, double u) {
+	        this.f = f;
+	        this.u = u;
+	    }
+		public Function<Integer, TalonWrapper> getMotorCreateFunction() {
+	        return f;
+	    }
+	    public double getEncoderUnits() {
+			return u;
+		}
+	}
 }

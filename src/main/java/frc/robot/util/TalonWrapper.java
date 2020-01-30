@@ -8,7 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SpeedController;
 
-public class TalonWrapper<T> implements SpeedController {
+public class TalonWrapper implements SpeedController {
 
     private SpeedController speedController;
     private BaseTalon talon;
@@ -18,11 +18,11 @@ public class TalonWrapper<T> implements SpeedController {
         this.talon = (BaseTalon)talon;
     }
 
-    public static TalonWrapper<WPI_TalonSRX> getTalonSRX(int id) {
-        return new TalonWrapper<WPI_TalonSRX>(new WPI_TalonSRX(id));
+    public static TalonWrapper getTalonSRX(int id) {
+        return new TalonWrapper(new WPI_TalonSRX(id));
     }
-    public static TalonWrapper<WPI_TalonFX> getTalonFX(int id) {
-        return new TalonWrapper<WPI_TalonFX>(new WPI_TalonFX(id));
+    public static TalonWrapper getTalonFX(int id) {
+        return new TalonWrapper(new WPI_TalonFX(id));
     }
 
     @Override

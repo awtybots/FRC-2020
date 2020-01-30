@@ -8,13 +8,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Robot;
 import frc.robot.Constants.MotorIDs;
+import frc.robot.util.TalonWrapper;
 
 import static frc.robot.Constants.Shooter.*;
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-    private final WPI_TalonSRX flywheel = new WPI_TalonSRX(MotorIDs.SHOOTER_FLYWHEEL);
+    private final TalonWrapper flywheel = FLYWHEEL_MOTOR_TYPE.getMotorCreateFunction().apply(MotorIDs.SHOOTER_FLYWHEEL);
     private final WPI_TalonSRX turret = new WPI_TalonSRX(MotorIDs.SHOOTER_TURRET);
 
     private double PERIOD;
@@ -23,7 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private double currentVelocity;
 
     private double goalAngle = TURRET_START_ANGLE;
-    private double angleFactor = 4096.0/360.0 * TURRET_RATIO; // TODO switch to 2048 for Falcon500 encoders
+    private double angleFactor = 4096.0/360.0 * TURRET_RATIO;
 
     private boolean readyToShoot;
 
@@ -95,7 +96,7 @@ public class ShooterSubsystem extends SubsystemBase {
         this.goalVelocity = goalVelocity;
     }
     private double getFlywheelRevsPerSecond() {
-        return flywheel.getSelectedSensorVelocity() / 409.6 * FLYWHEEL_RATIO;
+        return flywheel.getSelectedSensorVelocity() * 10 / FLYWHEEL_MOTOR_TYPE.getEncoderUnits() * FLYWHEEL_RATIO;
     }
 
     public void setGoalTurretAngle(double angleOffset) {
