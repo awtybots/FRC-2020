@@ -17,6 +17,7 @@ import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 import frc.robot.subsystems.DriveTrainSubsystem.MotorControlMode;
+import frc.robot.subsystems.DriveTrainSubsystem.MotorType;
 import frc.robot.util.Vector3;
 
 public final class Constants {
@@ -39,6 +40,7 @@ public final class Constants {
     }
 
     public final static class DriveTrain {
+        public final static MotorType MOTOR_TYPE = MotorType.TALON_SRX;
         public final static DriveMode DRIVE_MODE = DriveTrainSubsystem.DriveMode.DIRECT;
         public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.FEEDFORWARD;
 
