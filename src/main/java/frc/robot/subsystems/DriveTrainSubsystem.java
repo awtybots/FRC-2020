@@ -45,8 +45,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private static SpeedControllerGroup speedLeft;
     private static SpeedControllerGroup speedRight;
 
-    private final BiFunction<MotorGroup, Double, Double> motorControlFunction;
-
     private double goalVelocityLeft = 0;
     private double goalVelocityRight = 0;
 
@@ -71,8 +69,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     public DriveTrainSubsystem() {
         PERIOD = Robot.getLoopTime();
-        motorControlFunction = MOTOR_CONTROL_MODE == MotorControlMode.FEEDFORWARD ? this::calculateFF : this::calculatePID;
-        Function<Integer, TalonWrapper<?>> motorCreateFunction = MOTOR_TYPE == MotorType.TALON_FX ? TalonWrapper::getTalonFX : TalonWrapper::getTalonSRX;
+        Function<Integer, TalonWrapper<?>> motorCreateFunction = MOTOR_TYPE.getMotorCreateFunction();
         
         motorL1 = motorCreateFunction.apply(MotorIDs.DRIVE_L1);
         motorL2 = motorCreateFunction.apply(MotorIDs.DRIVE_L2);
@@ -103,8 +100,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
     @Override
     public void periodic() { // TODO no default option
         if(DRIVE_MODE == DriveTrainSubsystem.DriveMode.SMOOTH) { // TODO change
-            outputLeft = motorControlFunction.apply(MotorGroup.LEFT, goalVelocityLeft);
-            outputRight = motorControlFunction.apply(MotorGroup.RIGHT, goalVelocityRight);
+            outputLeft = MOTOR_CONTROL_MODE.getMotorControlFunction(this).apply(MotorGroup.LEFT, goalVelocityLeft);
+            outputRight = MOTOR_CONTROL_MODE.getMotorControlFunction(this).apply(MotorGroup.RIGHT, goalVelocityRight);
 
             SmartDashboard.putNumber("Voltage left", outputLeft);
             SmartDashboard.putNumber("Voltage right", outputRight);
@@ -208,7 +205,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
             double pos = motor.getSelectedSensorPosition();
             totalUnits += abs ? Math.abs(pos) : pos;
         }
-        double revolutions = totalUnits / 4096 / motorGroup.getMotors().length; // TODO switch to 2048 for Falcon500 encoders
+        double revolutions = totalUnits / MOTOR_TYPE.getEncoderUnits() / motorGroup.getMotors().length; // TODO switch to 2048 for Falcon500 encoders
         return revolutions * WHEEL_CIRCUMFERENCE;
     }
     public double getWheelVelocity(MotorGroup motorGroup, boolean abs) {
@@ -217,7 +214,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
             double vel = motor.getSelectedSensorVelocity();
             totalUnits += abs ? Math.abs(vel) : vel;
         }
-        double revolutions = totalUnits / 409.6 / motorGroup.getMotors().length; // TODO switch to 2048 for Falcon500 encoders
+        double revolutions = totalUnits / MOTOR_TYPE.getEncoderUnits() / 10 / motorGroup.getMotors().length; // TODO switch to 2048 for Falcon500 encoders
         return revolutions * WHEEL_CIRCUMFERENCE;
     }
     public void resetEncoders() {
@@ -233,6 +230,16 @@ public class DriveTrainSubsystem extends SubsystemBase {
     public enum MotorControlMode {
         FEEDFORWARD,
         PID;
+
+        public BiFunction<MotorGroup, Double, Double> getMotorControlFunction(DriveTrainSubsystem instance) {
+            switch(this) {
+                case PID:
+                    return instance::calculatePID;
+                case FEEDFORWARD:
+                    return instance::calculateFF;
+            }
+            return null;
+        }
     }
 
     public enum DriveMode {
@@ -241,8 +248,21 @@ public class DriveTrainSubsystem extends SubsystemBase {
     }
 
     public enum MotorType {
-        TALON_SRX,
-        TALON_FX;
+        TALON_SRX(TalonWrapper::getTalonSRX, 4096),
+        TALON_FX(TalonWrapper::getTalonFX, 2048);
+
+        private Function<Integer, TalonWrapper<?>> f;
+        private double u;
+        private MotorType(Function<Integer, TalonWrapper<?>> f, double u) {
+            this.f = f;
+            this.u = u;
+        }
+		public Function<Integer, TalonWrapper<?>> getMotorCreateFunction() {
+            return f;
+        }
+        public double getEncoderUnits() {
+			return u;
+		}
     }
 
     public enum MotorGroup {
