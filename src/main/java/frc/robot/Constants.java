@@ -112,7 +112,7 @@ public final class Constants {
         public final static double FLYWHEEL_SLIPPING_FACTOR = 0.9;
 
         // PID
-        public final static double PID_P = 0.02;
+        public final static double PID_P = 0.001;
         public final static double PID_I = 0;
         public final static double PID_D = 0;
         public final static double INTEGRAL_MIN = -0.5;
@@ -120,8 +120,8 @@ public final class Constants {
 
         // FEEDFORWARD FORMULA: FF_S + (FF_V * velocity) + (FF_A * acceleration)
         public final static double FF_S = 3.0; // voltage required to move the flywheel any amount
-        public final static double FF_V = 0.1; // voltage required to sustain the flywheel's speed moving at 1 rev per second
-        public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 rev per second per second
+        public final static double FF_V = 0.001; // voltage required to sustain the flywheel's speed moving at 1 rev per second
+        public final static double FF_A = 0.001; // voltage required to accelerate wheel at 1 rev per second per second
     }
 
     public final static class Limelight {

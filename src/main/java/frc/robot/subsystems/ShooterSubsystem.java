@@ -11,6 +11,7 @@ import frc.robot.Constants.MotorIDs;
 import frc.robot.util.TalonWrapper;
 
 import static frc.robot.Constants.Shooter.*;
+
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -23,6 +24,9 @@ public class ShooterSubsystem extends SubsystemBase {
     private double goalVelocity = 0;
     private double currentVelocity;
     private double currentAngle;
+
+    private double integralError = 0;
+    private double lastVelocityError = 0;
 
     private double goalAngle = TURRET_START_ANGLE;
     private double angleFactor = 4096.0/360.0 * TURRET_RATIO;
@@ -45,23 +49,14 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // get encoder measurements
-        currentVelocity = getFlywheelRevsPerSecond();
-        currentAngle = getTurretAngle();
+        currentVelocity = flywheel.getSelectedSensorVelocity() * 10.0 / FLYWHEEL_MOTOR_TYPE.getEncoderUnits() * FLYWHEEL_RATIO;
+        currentAngle = ((double)turret.getSelectedSensorPosition()) / angleFactor;
         boolean velocityAtGoal = Math.abs(currentVelocity - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;;
         boolean turretAtGoal = Math.abs(currentAngle - goalAngle) <= TURRET_ANGLE_THRESHOLD;
         readyToShoot = velocityAtGoal && turretAtGoal;
 
         // shooter motor
-        switch(MOTOR_CONTROL_MODE) {
-            case BANGBANG:
-                flywheelBangBang();
-                break;
-            case FEEDFORWARD:
-                flywheelFeedForward();
-                break;
-            default:
-                break;
-        }
+        MOTOR_CONTROL_MODE.getFunction(this).run();
 
         // turret motor
         SmartDashboard.putNumber("Turret detected angle", currentAngle); // TODO temp
@@ -97,18 +92,21 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheel.setVoltage(voltage);
     }
 
+    private void flywheelPID() {
+        double velocityError = goalVelocity - currentVelocity;
+        double accelerationError = (velocityError - lastVelocityError) / PERIOD;
+        lastVelocityError = velocityError;
+        integralError += clamp((velocityError * PERIOD), INTEGRAL_MIN / PID_I, INTEGRAL_MAX / PID_I);
+        double percentOutput = (PID_P * velocityError) + (PID_I * integralError) + (PID_D * accelerationError);
+        flywheel.set(percentOutput);
+    }
+
     public void setGoalFlywheelRevsPerSecond(double goalVelocity) {
         this.goalVelocity = goalVelocity;
     }
-    private double getFlywheelRevsPerSecond() {
-        return flywheel.getSelectedSensorVelocity() * 10.0 / FLYWHEEL_MOTOR_TYPE.getEncoderUnits() * FLYWHEEL_RATIO;
-    }
 
     public void setGoalTurretAngle(double angleOffset) {
-        goalAngle = Math.floorMod((int)(getTurretAngle() + angleOffset), 360);
-    }
-    private double getTurretAngle() {
-        return ((double)turret.getSelectedSensorPosition()) / angleFactor;
+        goalAngle = Math.floorMod((int)(currentAngle + angleOffset), 360);
     }
 
     public boolean readyToShoot() {
@@ -118,7 +116,21 @@ public class ShooterSubsystem extends SubsystemBase {
     public enum MotorControlMode {
         BANGBANG,
         FEEDFORWARD,
+        PID,
         OFF;
+
+        public Runnable getFunction(ShooterSubsystem instance) {
+            switch(this) {
+                case BANGBANG:
+                    return instance::flywheelBangBang;
+                case FEEDFORWARD:
+                    return instance::flywheelFeedForward;
+                case PID:
+                    return instance::flywheelPID;
+                default:
+                    return () -> {};
+            }
+        }
     }
 
 }
