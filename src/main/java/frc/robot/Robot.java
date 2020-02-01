@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -44,12 +45,14 @@ public class Robot extends TimedRobot {
     private static double period;
     private static Alliance alliance;
     private static GamePeriod gamePeriod;
+    private static PowerDistributionPanel pdp;
 
     @Override
     public void robotInit() {
         // runtime constants
         period = getPeriod();
         alliance = DriverStation.getInstance().getAlliance();
+        pdp = new PowerDistributionPanel();
 
         // auton chooser
         autonChooser = new SendableChooser<>();
@@ -153,6 +156,9 @@ public class Robot extends TimedRobot {
     }
     public static GamePeriod getGamePeriod() { // TODO unnecessary + not used
         return gamePeriod;
+    }
+    public static PowerDistributionPanel getPDP() {
+        return pdp;
     }
 
     public enum GamePeriod { // TODO unnecessary

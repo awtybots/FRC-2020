@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,11 +40,20 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheel.configFactoryDefault();
         flywheel.setNeutralMode(FLYWHEEL_BRAKE_MODE);
         flywheel.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        flywheel.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_20Ms);
+        flywheel.configVelocityMeasurementWindow(8);
 
         turret.configFactoryDefault();
         turret.setNeutralMode(TURRET_BRAKE_MODE);
         turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         turret.setSelectedSensorPosition((int)(TURRET_START_ANGLE * angleFactor));
+
+        SmartDashboard.setDefaultNumber("PID_P", PID_P);
+        SmartDashboard.setDefaultNumber("PID_I", PID_I);
+        SmartDashboard.setDefaultNumber("PID_D", PID_D);
+
+        SmartDashboard.setDefaultNumber("FF V", FF_V);
+        SmartDashboard.setDefaultNumber("FF A", FF_A);
     }
 
     @Override
@@ -69,8 +79,11 @@ public class ShooterSubsystem extends SubsystemBase {
         }
 
         // SmartDashboard
+        SmartDashboard.putNumber("Shooter Output (%)", flywheel.get());
+        SmartDashboard.putNumber("Shooter RPM", currentVelocity*60.0);
         SmartDashboard.putBoolean("Shooter velocity at goal", velocityAtGoal);
         SmartDashboard.putBoolean("Shooter angle at goal", turretAtGoal);
+        SmartDashboard.putNumber("Shooter Current", Robot.getPDP().getCurrent(10));
     }
 
     private void flywheelBangBang() {
@@ -88,7 +101,14 @@ public class ShooterSubsystem extends SubsystemBase {
         double constrainedGoalAcceleration = clamp(goalVelocity - currentVelocity, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
         constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
 
-        double voltage = (FF_S * Math.signum(constrainedGoalVelocity)) + (FF_V * constrainedGoalVelocity) + (FF_A * constrainedGoalAcceleration);
+        // double voltage =
+        //     (FF_S * Math.signum(constrainedGoalVelocity)) +
+        //     (FF_V * constrainedGoalVelocity) +
+        //     (FF_A * constrainedGoalAcceleration);
+        double voltage =
+            (FF_S * Math.signum(constrainedGoalVelocity)) +
+            (SmartDashboard.getNumber("FF V", FF_V) * constrainedGoalVelocity) +
+            (SmartDashboard.getNumber("FF A", FF_A) * constrainedGoalAcceleration);
         flywheel.setVoltage(voltage);
     }
 
@@ -96,12 +116,15 @@ public class ShooterSubsystem extends SubsystemBase {
         double velocityError = goalVelocity - currentVelocity;
         double accelerationError = (velocityError - lastVelocityError) / PERIOD;
         lastVelocityError = velocityError;
-        integralError += clamp((velocityError * PERIOD), INTEGRAL_MIN / PID_I, INTEGRAL_MAX / PID_I);
-        double percentOutput = (PID_P * velocityError) + (PID_I * integralError) + (PID_D * accelerationError);
+        integralError = clamp(integralError + (velocityError * PERIOD), -INTEGRAL_MAX/PID_I, INTEGRAL_MAX/PID_I);
+        double percentOutput = (SmartDashboard.getNumber("PID_P", PID_P) * velocityError) + (SmartDashboard.getNumber("PID_I", PID_I) * integralError) + (SmartDashboard.getNumber("PID_D", PID_D) * accelerationError);
+        //double percentOutput = (PID_P * velocityError) + (PID_I * integralError) + (PID_D * accelerationError); TODO
+        percentOutput = clamp(percentOutput, PID_MIN, PID_MAX) * Math.signum(goalVelocity);
         flywheel.set(percentOutput);
     }
 
     public void setGoalFlywheelRevsPerSecond(double goalVelocity) {
+        integralError = 0;
         this.goalVelocity = goalVelocity;
     }
 

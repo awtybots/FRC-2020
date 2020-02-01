@@ -44,7 +44,7 @@ public final class Constants {
     public final static class DriveTrain {
         public final static Constants.MotorType MOTOR_TYPE = Constants.MotorType.TALON_SRX;
         public final static DriveMode DRIVE_MODE = DriveTrainSubsystem.DriveMode.DIRECT;
-        public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.FEEDFORWARD;
+        public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID;
 
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
 
@@ -80,7 +80,7 @@ public final class Constants {
     public final static class Shooter {
         public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.VISION_ONLY;
         public final static AimMode AIM_MODE = AimMode.TURRET;
-        public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.BANGBANG;
+        public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
         public final static MotorType FLYWHEEL_MOTOR_TYPE = MotorType.TALON_SRX;
 
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
@@ -91,37 +91,38 @@ public final class Constants {
 
         public final static double GRAVITY = 32.2 * 12.0; // inches/second^2
 
-        public final static double FLYWHEEL_RATIO = 5 * 64 / 22; // TODO
-        public final static double TURRET_RATIO = 1/3; // TODO
+        public final static double FLYWHEEL_RATIO = 84.0 / 22.0; // TODO
+        public final static double TURRET_RATIO = 1.0/3.0; // TODO
 
-        public final static double MAX_REVS_PER_SECOND = 3000;
+        public final static double MAX_REVS_PER_SECOND = 12000.0 / 60.0;
         public final static double MAX_ACCELERATION = 300;
 
-        public final static double FLYWHEEL_TELEOP_SPEED = 100; // TODO way too slow
-        public final static double FLYWHEEL_BANG_BANG_SPEED = 0.3;
-        public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 5;
-        public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10;
+        public final static double FLYWHEEL_TELEOP_SPEED = 5000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
+        public final static double FLYWHEEL_BANG_BANG_SPEED = 0.5; // percentage power for bang bang when on
+        public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 0; // RPS threshold
+        public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
 
-        public final static double TURRET_MIN_SPEED = 0.2;
-        public final static double TURRET_MAX_SPEED = 0.3;
-        public final static double TURRET_ANGLE_THRESHOLD = 3;
-        public final static double TURRET_ANGLE_SLOW_THRESHOLD = 6;
+        public final static double TURRET_MIN_SPEED = 0.2; // %
+        public final static double TURRET_MAX_SPEED = 0.3; // %
+        public final static double TURRET_ANGLE_THRESHOLD = 3; // degrees to be satisfied with result
+        public final static double TURRET_ANGLE_SLOW_THRESHOLD = 6; // degrees to start slowing down
         public final static double TURRET_START_ANGLE = 0; // from 0 to 360
 
         public final static double FLYWHEEL_CIRCUMFERENCE = 4 * Math.PI;
         public final static double FLYWHEEL_SLIPPING_FACTOR = 0.9;
 
         // PID
-        public final static double PID_P = 0.001;
-        public final static double PID_I = 0;
+        public final static double PID_MIN = 0.15;
+        public final static double PID_MAX = 0.8;
+        public final static double PID_P = 0.0003;
+        public final static double PID_I = 0.002;
         public final static double PID_D = 0;
-        public final static double INTEGRAL_MIN = -0.5;
-        public final static double INTEGRAL_MAX = 0.5;
+        public final static double INTEGRAL_MAX = 1.0;
 
         // FEEDFORWARD FORMULA: FF_S + (FF_V * velocity) + (FF_A * acceleration)
-        public final static double FF_S = 3.0; // voltage required to move the flywheel any amount
-        public final static double FF_V = 0.001; // voltage required to sustain the flywheel's speed moving at 1 rev per second
-        public final static double FF_A = 0.001; // voltage required to accelerate wheel at 1 rev per second per second
+        public final static double FF_S = 1.8; // voltage required to move the flywheel any amount
+        public final static double FF_V = 0.005; // voltage required to sustain the flywheel's speed moving at 1 rev per second
+        public final static double FF_A = 0.005; // voltage required to accelerate wheel at 1 rev per second per second
     }
 
     public final static class Limelight {
@@ -175,8 +176,8 @@ public final class Constants {
     }
 
 	public enum MotorType {
-	    TALON_SRX(TalonWrapper::getTalonSRX, 4096),
-	    TALON_FX(TalonWrapper::getTalonFX, 2048);
+	    TALON_SRX(TalonWrapper::getTalonSRX, 4096.0),
+	    TALON_FX(TalonWrapper::getTalonFX, 2048.0);
 
 	    private Function<Integer, TalonWrapper> f;
 	    private double u;

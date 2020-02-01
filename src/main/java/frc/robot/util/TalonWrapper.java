@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -87,6 +88,14 @@ public class TalonWrapper implements SpeedController {
 
 	public void setSelectedSensorPosition(int sensorPos) {
         talon.setSelectedSensorPosition(sensorPos);
+	}
+
+	public void configVelocityMeasurementPeriod(VelocityMeasPeriod period) {
+        talon.configVelocityMeasurementPeriod(period);
+	}
+
+	public void configVelocityMeasurementWindow(int i) {
+        talon.configVelocityMeasurementWindow(i);
 	}
 
 }
