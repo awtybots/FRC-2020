@@ -39,7 +39,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
         flywheel.configFactoryDefault();
         flywheel.setNeutralMode(FLYWHEEL_BRAKE_MODE);
-        flywheel.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        flywheel.setInverted(true);
+        flywheel.configSelectedFeedbackSensor(FLYWHEEL_MOTOR_TYPE.getFeedbackDevice());
         flywheel.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_20Ms);
         flywheel.configVelocityMeasurementWindow(8);
 
@@ -48,7 +49,7 @@ public class ShooterSubsystem extends SubsystemBase {
         turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         turret.setSelectedSensorPosition((int)(TURRET_START_ANGLE * angleFactor));
 
-        SmartDashboard.setDefaultNumber("PID_P", PID_P);
+        SmartDashboard.setDefaultNumber("PID_P", PID_P); // TODO
         SmartDashboard.setDefaultNumber("PID_I", PID_I);
         SmartDashboard.setDefaultNumber("PID_D", PID_D);
 
@@ -83,7 +84,7 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Shooter RPM", currentVelocity*60.0);
         SmartDashboard.putBoolean("Shooter velocity at goal", velocityAtGoal);
         SmartDashboard.putBoolean("Shooter angle at goal", turretAtGoal);
-        SmartDashboard.putNumber("Shooter Current", Robot.getPDP().getCurrent(10));
+        SmartDashboard.putNumber("Shooter Current", Robot.getPDP().getCurrent(4));
     }
 
     private void flywheelBangBang() {

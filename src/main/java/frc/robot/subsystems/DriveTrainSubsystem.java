@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -87,7 +86,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
             motor.configFactoryDefault(); // reset settings
             motor.setNeutralMode(BRAKE_MODE); // sets the brake mode for all motors (called NeutralMode)
-            motor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative); // sets which encoder the motor is using
+            motor.configSelectedFeedbackSensor(MOTOR_TYPE.getFeedbackDevice()); // sets which encoder the motor is using
         }
 
         for (TalonWrapper motor : MotorGroup.RIGHT.getMotors()) {

@@ -1,5 +1,7 @@
 package frc.robot.util;
 
+import java.util.function.Function;
+
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
@@ -11,7 +13,30 @@ import edu.wpi.first.wpilibj.SpeedController;
 
 public class TalonWrapper implements SpeedController {
 
-    private SpeedController speedController;
+    public enum MotorType {
+	    TALON_SRX(TalonWrapper::getTalonSRX, 4096.0, FeedbackDevice.CTRE_MagEncoder_Relative),
+	    TALON_FX(TalonWrapper::getTalonFX, 2048.0, FeedbackDevice.IntegratedSensor);
+
+	    private Function<Integer, TalonWrapper> f;
+        private double u;
+        private FeedbackDevice d;
+	    private MotorType(Function<Integer, TalonWrapper> f, double u, FeedbackDevice d) {
+	        this.f = f;
+            this.u = u;
+            this.d = d;
+	    }
+		public Function<Integer, TalonWrapper> getMotorCreateFunction() {
+	        return f;
+	    }
+	    public double getEncoderUnits() {
+			return u;
+        }
+        public FeedbackDevice getFeedbackDevice() {
+            return d;
+        }
+	}
+
+	private SpeedController speedController;
     private BaseTalon talon;
 
     private TalonWrapper(SpeedController talon) {

@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import java.util.function.Function;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.I2C;
@@ -42,7 +40,7 @@ public final class Constants {
     }
 
     public final static class DriveTrain {
-        public final static Constants.MotorType MOTOR_TYPE = Constants.MotorType.TALON_SRX;
+        public final static TalonWrapper.MotorType MOTOR_TYPE = TalonWrapper.MotorType.TALON_SRX;
         public final static DriveMode DRIVE_MODE = DriveTrainSubsystem.DriveMode.DIRECT;
         public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID;
 
@@ -81,7 +79,7 @@ public final class Constants {
         public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.VISION_ONLY;
         public final static AimMode AIM_MODE = AimMode.TURRET;
         public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
-        public final static MotorType FLYWHEEL_MOTOR_TYPE = MotorType.TALON_SRX;
+        public final static TalonWrapper.MotorType FLYWHEEL_MOTOR_TYPE = TalonWrapper.MotorType.TALON_FX;
 
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
@@ -91,13 +89,13 @@ public final class Constants {
 
         public final static double GRAVITY = 32.2 * 12.0; // inches/second^2
 
-        public final static double FLYWHEEL_RATIO = 84.0 / 22.0; // TODO
+        public final static double FLYWHEEL_RATIO = 12.0 / 34.0 * 84.0 / 22.0; // TODO
         public final static double TURRET_RATIO = 1.0/3.0; // TODO
 
-        public final static double MAX_REVS_PER_SECOND = 12000.0 / 60.0;
+        public final static double MAX_REVS_PER_SECOND = 5000.0 / 60.0; // TODO implement
         public final static double MAX_ACCELERATION = 300;
 
-        public final static double FLYWHEEL_TELEOP_SPEED = 5000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
+        public final static double FLYWHEEL_TELEOP_SPEED = 1200.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
         public final static double FLYWHEEL_BANG_BANG_SPEED = 0.5; // percentage power for bang bang when on
         public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 0; // RPS threshold
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
@@ -112,10 +110,10 @@ public final class Constants {
         public final static double FLYWHEEL_SLIPPING_FACTOR = 0.9;
 
         // PID
-        public final static double PID_MIN = 0.15;
-        public final static double PID_MAX = 0.8;
-        public final static double PID_P = 0.0003;
-        public final static double PID_I = 0.002;
+        public final static double PID_MIN = 0.1;
+        public final static double PID_MAX = 1;
+        public final static double PID_P = 0.02;
+        public final static double PID_I = 0.06;
         public final static double PID_D = 0;
         public final static double INTEGRAL_MAX = 1.0;
 
@@ -174,22 +172,4 @@ public final class Constants {
         public static final Hand SPEED_HAND = Hand.kLeft; // which stick (left or right) to use for each control of arcade drive (speed and rotation)
         public static final Hand ROTATION_HAND = Hand.kRight;
     }
-
-	public enum MotorType {
-	    TALON_SRX(TalonWrapper::getTalonSRX, 4096.0),
-	    TALON_FX(TalonWrapper::getTalonFX, 2048.0);
-
-	    private Function<Integer, TalonWrapper> f;
-	    private double u;
-	    private MotorType(Function<Integer, TalonWrapper> f, double u) {
-	        this.f = f;
-	        this.u = u;
-	    }
-		public Function<Integer, TalonWrapper> getMotorCreateFunction() {
-	        return f;
-	    }
-	    public double getEncoderUnits() {
-			return u;
-		}
-	}
 }
