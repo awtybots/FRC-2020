@@ -98,7 +98,7 @@ public final class Constants {
 
         public final static double FLYWHEEL_TELEOP_SPEED = 1200.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
         public final static double FLYWHEEL_BANG_BANG_SPEED = 0.5; // percentage power for bang bang when on
-        public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 0; // RPS threshold
+        public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 5; // RPS threshold
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
 
         public final static double TURRET_MIN_SPEED = 0.2; // %

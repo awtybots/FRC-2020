@@ -62,7 +62,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // get encoder measurements
         currentVelocity = flywheel.getSelectedSensorVelocity() * 10.0 / FLYWHEEL_MOTOR_TYPE.getEncoderUnits() * FLYWHEEL_RATIO;
         currentAngle = ((double)turret.getSelectedSensorPosition()) / angleFactor;
-        boolean velocityAtGoal = Math.abs(currentVelocity - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;;
+        boolean velocityAtGoal = Math.abs(currentVelocity - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;
         boolean turretAtGoal = Math.abs(currentAngle - goalAngle) <= TURRET_GOAL_ANGLE_THRESHOLD;
         readyToShoot = velocityAtGoal && turretAtGoal;
 

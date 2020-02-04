@@ -110,12 +110,12 @@ public class AutoShoot extends CommandBase {
                 targetDisplacement = visionTargetDisplacement.clone().rotateZ(robotAngle);
                 break;
             case PRESET_TARGET:
-                targetDisplacement = PRESET_TARGET_DISPLACEMENT;
+                targetDisplacement = PRESET_TARGET_DISPLACEMENT.clone().rotateZ(robotAngle);
                 break;
         }
 
         // calculate optimal ball velocity from displacement
-        if(TRAJECTORY_CALCULATION_MODE != TrajectoryCalculationMode.PRESET_TARGET) targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
+        targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
         Vector3 optimalBallVelocity = calculateOptimalBallVelocity(targetDisplacement);
 
         // if shot is impossible from this point, stop motor
@@ -193,12 +193,12 @@ public class AutoShoot extends CommandBase {
     private double calculateOptimalRevsPerSecond(double velocity) {
         double rpsNow = velocity * shooterVelocityToRPSFactor;
         rpsList.add(rpsNow);
-        while(rpsList.size() > FLYWHEEL_GOAL_RPS_AVERAGE_COUNT) rpsList.remove(0);
+        if(rpsList.size() > FLYWHEEL_GOAL_RPS_AVERAGE_COUNT) rpsList.remove(0);
         double total = 0;
         for(double rps : rpsList) {
             total += rps;
         }
-        return total/rpsList.size();
+        return total/(double)rpsList.size();
     }
 
     public enum AimMode {

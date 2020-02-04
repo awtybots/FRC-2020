@@ -10,12 +10,12 @@ public class ToggleShooter extends CommandBase {
 
     public ToggleShooter() {
         addRequirements(shooterSubsystem);
-        SmartDashboard.setDefaultNumber("Shooter Goal RPM", FLYWHEEL_TELEOP_SPEED * 60.0); // TODO
+        SmartDashboard.setDefaultNumber("Shooter goal RPM", FLYWHEEL_TELEOP_SPEED * 60.0); // TODO
     }
 
     @Override
     public void initialize() {
-        shooterSubsystem.setGoalFlywheelRevsPerSecond(SmartDashboard.getNumber("Shooter Goal RPM", FLYWHEEL_TELEOP_SPEED * 60.0) / 60.0);
+        shooterSubsystem.setGoalFlywheelRevsPerSecond(SmartDashboard.getNumber("Shooter goal RPM", FLYWHEEL_TELEOP_SPEED * 60.0) / 60.0);
     }
 
     @Override
