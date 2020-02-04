@@ -77,7 +77,7 @@ public final class Constants {
 
     public final static class Shooter {
         public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.PRESET_TARGET; // TODO temp
-        public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 60, 68);
+        public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 200, 72);
         public final static AimMode AIM_MODE = AimMode.TURRET;
         public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
         public final static TalonWrapper.MotorType FLYWHEEL_MOTOR_TYPE = TalonWrapper.MotorType.TALON_FX;
@@ -85,7 +85,7 @@ public final class Constants {
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
 
-        public final static double SHOOTER_HEIGHT = 24; // TODO change to actual height
+        public final static double SHOOTER_HEIGHT = 43; // TODO change to actual height
         public final static double SHOOTER_ANGLE = 45; // TODO change to actual angle
 
         public final static double GRAVITY = 32.2 * 12.0; // inches/second^2

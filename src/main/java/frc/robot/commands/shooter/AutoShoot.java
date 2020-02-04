@@ -115,7 +115,7 @@ public class AutoShoot extends CommandBase {
         }
 
         // calculate optimal ball velocity from displacement
-        targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
+        if(TRAJECTORY_CALCULATION_MODE != TrajectoryCalculationMode.PRESET_TARGET) targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
         Vector3 optimalBallVelocity = calculateOptimalBallVelocity(targetDisplacement);
 
         // if shot is impossible from this point, stop motor
