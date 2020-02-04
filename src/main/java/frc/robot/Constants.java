@@ -77,7 +77,7 @@ public final class Constants {
 
     public final static class Shooter {
         public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.PRESET_TARGET; // TODO temp
-        public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 200, 72);
+        public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 312, 70);
         public final static AimMode AIM_MODE = AimMode.TURRET;
         public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
         public final static TalonWrapper.MotorType FLYWHEEL_MOTOR_TYPE = TalonWrapper.MotorType.TALON_FX;
@@ -93,7 +93,7 @@ public final class Constants {
         public final static double FLYWHEEL_RATIO = 12.0 / 34.0 * 84.0 / 22.0; // TODO
         public final static double TURRET_RATIO = 1.0/3.0; // TODO
 
-        public final static double MAX_REVS_PER_SECOND = 5000.0 / 60.0; // TODO implement
+        public final static double MAX_REVS_PER_SECOND = 7000.0 / 60.0; // TODO implement
         public final static double MAX_ACCELERATION = 300;
 
         public final static double FLYWHEEL_TELEOP_SPEED = 1200.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
@@ -108,7 +108,7 @@ public final class Constants {
         public final static double TURRET_START_ANGLE = 0; // from 0 to 360 (code doesn't let turret angle go <0 or >360 to prevent rotating too far)
 
         public final static double FLYWHEEL_CIRCUMFERENCE = 4.0 * Math.PI;
-        public final static double FLYWHEEL_SLIPPING_FACTOR = 0.9;
+        public final static double FLYWHEEL_SLIPPING_FACTOR = 0.8;
 
         // PID
         public final static double PID_MIN = 0.1;
