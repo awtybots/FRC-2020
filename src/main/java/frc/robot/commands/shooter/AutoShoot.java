@@ -20,7 +20,7 @@ public class AutoShoot extends CommandBase {
     private double optimalRevsPerSecond = 0;
     private double angleOffset = 0;
     private double shooterAngle = toRadians(SHOOTER_ANGLE);
-    private final double shooterVelocityToRPSFactor = 2 / FLYWHEEL_CIRCUMFERENCE / FLYWHEEL_SLIPPING_FACTOR;
+    private final double shooterVelocityToRPSFactor = 2.0 / FLYWHEEL_CIRCUMFERENCE / FLYWHEEL_SLIPPING_FACTOR;
 
     private ArrayList<Double> rpsList = new ArrayList<>(FLYWHEEL_GOAL_RPS_AVERAGE_COUNT);
 
@@ -44,7 +44,7 @@ public class AutoShoot extends CommandBase {
         switch(AIM_MODE) {
             case DRIVE:
                 double turnSpeed;
-                if(abs(angleOffset) > TURRET_ANGLE_THRESHOLD) {
+                if(abs(angleOffset) > TURRET_GOAL_ANGLE_THRESHOLD) {
                     turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
                     turnSpeed *= TURRET_MAX_SPEED;
                     if(abs(turnSpeed) < TURRET_MIN_SPEED) turnSpeed = TURRET_MIN_SPEED * signum(turnSpeed);
@@ -78,7 +78,7 @@ public class AutoShoot extends CommandBase {
 
 
     @CheckForNull
-    private boolean calculateTrajectory() {
+    private boolean calculateTrajectory() { // calculates necessary RPM and angle from limelight data (or NavX)
         // gather navx and vision info
         double robotAngle = driveTrainSubsystem.getRotation();
         Vector3 visionTargetInfo = limelightSubsystem.getTargetInfo();
@@ -109,6 +109,9 @@ public class AutoShoot extends CommandBase {
                 }
                 targetDisplacement = visionTargetDisplacement.clone().rotateZ(robotAngle);
                 break;
+            case PRESET_TARGET:
+                targetDisplacement = PRESET_TARGET_DISPLACEMENT;
+                break;
         }
 
         // calculate optimal ball velocity from displacement
@@ -128,7 +131,7 @@ public class AutoShoot extends CommandBase {
 
         // get aim angle for new velocity
         double desiredAngleOffset = optimalBallVelocity.getZAngle() - robotAngle;
-        angleOffset = abs(desiredAngleOffset) <= TURRET_ANGLE_THRESHOLD
+        angleOffset = abs(desiredAngleOffset) <= TURRET_GOAL_ANGLE_THRESHOLD
             ? 0.0
             : desiredAngleOffset;
 
@@ -141,7 +144,6 @@ public class AutoShoot extends CommandBase {
 
         // SmartDashboard
         SmartDashboard.putString("Shooter goal velocity", optimalBallVelocity.toString());
-        SmartDashboard.putNumber("Shooter optimal revs per second", optimalRevsPerSecond);
         SmartDashboard.putNumber("Shooter angle offset", angleOffset);
         SmartDashboard.putBoolean("Shooter using NavX", useNavX);
 
@@ -205,7 +207,8 @@ public class AutoShoot extends CommandBase {
     }
     public enum TrajectoryCalculationMode {
         VISION_ONLY,
-        VISION_AND_NAVX;
+        VISION_AND_NAVX,
+        PRESET_TARGET;
     }
 
 }

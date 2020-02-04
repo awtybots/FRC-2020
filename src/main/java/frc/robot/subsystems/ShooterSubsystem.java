@@ -53,7 +53,7 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.setDefaultNumber("PID_I", PID_I);
         SmartDashboard.setDefaultNumber("PID_D", PID_D);
 
-        SmartDashboard.setDefaultNumber("FF V", FF_V);
+        SmartDashboard.setDefaultNumber("FF V", FF_V); // TODO
         SmartDashboard.setDefaultNumber("FF A", FF_A);
     }
 
@@ -63,7 +63,7 @@ public class ShooterSubsystem extends SubsystemBase {
         currentVelocity = flywheel.getSelectedSensorVelocity() * 10.0 / FLYWHEEL_MOTOR_TYPE.getEncoderUnits() * FLYWHEEL_RATIO;
         currentAngle = ((double)turret.getSelectedSensorPosition()) / angleFactor;
         boolean velocityAtGoal = Math.abs(currentVelocity - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;;
-        boolean turretAtGoal = Math.abs(currentAngle - goalAngle) <= TURRET_ANGLE_THRESHOLD;
+        boolean turretAtGoal = Math.abs(currentAngle - goalAngle) <= TURRET_GOAL_ANGLE_THRESHOLD;
         readyToShoot = velocityAtGoal && turretAtGoal;
 
         // shooter motor
@@ -80,11 +80,10 @@ public class ShooterSubsystem extends SubsystemBase {
         }
 
         // SmartDashboard
-        SmartDashboard.putNumber("Shooter Output (%)", flywheel.get());
         SmartDashboard.putNumber("Shooter RPM", currentVelocity*60.0);
+        SmartDashboard.putNumber("Shooter goal RPM", goalVelocity*60.0);
         SmartDashboard.putBoolean("Shooter velocity at goal", velocityAtGoal);
         SmartDashboard.putBoolean("Shooter angle at goal", turretAtGoal);
-        SmartDashboard.putNumber("Shooter Current", Robot.getPDP().getCurrent(4));
     }
 
     private void flywheelBangBang() {
@@ -102,7 +101,7 @@ public class ShooterSubsystem extends SubsystemBase {
         double constrainedGoalAcceleration = clamp(goalVelocity - currentVelocity, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
         constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
 
-        // double voltage =
+        // double voltage = TODO
         //     (FF_S * Math.signum(constrainedGoalVelocity)) +
         //     (FF_V * constrainedGoalVelocity) +
         //     (FF_A * constrainedGoalAcceleration);

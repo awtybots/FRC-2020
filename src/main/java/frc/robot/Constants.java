@@ -76,7 +76,8 @@ public final class Constants {
     }
 
     public final static class Shooter {
-        public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.VISION_ONLY;
+        public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.PRESET_TARGET; // TODO temp
+        public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 60, 68);
         public final static AimMode AIM_MODE = AimMode.TURRET;
         public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
         public final static TalonWrapper.MotorType FLYWHEEL_MOTOR_TYPE = TalonWrapper.MotorType.TALON_FX;
@@ -101,12 +102,12 @@ public final class Constants {
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
 
         public final static double TURRET_MIN_SPEED = 0.2; // %
-        public final static double TURRET_MAX_SPEED = 0.3; // %
-        public final static double TURRET_ANGLE_THRESHOLD = 3; // degrees to be satisfied with result
+        public final static double TURRET_MAX_SPEED = 0.5; // %
+        public final static double TURRET_GOAL_ANGLE_THRESHOLD = 2; // degrees to be satisfied with result
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 6; // degrees to start slowing down
-        public final static double TURRET_START_ANGLE = 0; // from 0 to 360
+        public final static double TURRET_START_ANGLE = 0; // from 0 to 360 (code doesn't let turret angle go <0 or >360 to prevent rotating too far)
 
-        public final static double FLYWHEEL_CIRCUMFERENCE = 4 * Math.PI;
+        public final static double FLYWHEEL_CIRCUMFERENCE = 4.0 * Math.PI;
         public final static double FLYWHEEL_SLIPPING_FACTOR = 0.9;
 
         // PID
