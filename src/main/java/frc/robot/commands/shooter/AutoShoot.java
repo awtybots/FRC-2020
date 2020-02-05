@@ -40,7 +40,7 @@ public class AutoShoot extends CommandBase {
         SmartDashboard.putBoolean("Shooter trajectory possible", accurateTrajectory);
 
         // set motor speeds
-        shooterSubsystem.setGoalFlywheelRevsPerSecond(optimalRevsPerSecond);
+        shooterSubsystem.setFlywheelGoalVelocity(optimalRevsPerSecond);
         switch(AIM_MODE) {
             case DRIVE:
                 double turnSpeed;
@@ -54,7 +54,7 @@ public class AutoShoot extends CommandBase {
                 driveTrainSubsystem.setMotorOutput(turnSpeed, -turnSpeed);
                 break;
             case TURRET:
-                shooterSubsystem.setGoalTurretAngle(angleOffset);
+                shooterSubsystem.setTurretGoalAngle(angleOffset);
                 break;
         }
 
@@ -66,8 +66,8 @@ public class AutoShoot extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        shooterSubsystem.setGoalFlywheelRevsPerSecond(0);
-        shooterSubsystem.setGoalTurretAngle(0);
+        shooterSubsystem.setFlywheelGoalVelocity(0);
+        shooterSubsystem.setTurretGoalAngle(0);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class AutoShoot extends CommandBase {
             : desiredAngleOffset;
 
         // if shooting from this point requires too much RPM, stop motor
-        if(optimalRevsPerSecond > MAX_REVS_PER_SECOND) {
+        if(optimalRevsPerSecond > FLYWHEEL_MAX_VELOCITY) {
             optimalRevsPerSecond = 0;
             rpsList.clear();
             return false;

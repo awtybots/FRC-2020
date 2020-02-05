@@ -87,28 +87,25 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     private void flywheelBangBang() {
-        if(currentVelocity < goalVelocity - FLYWHEEL_GOAL_VELOCITY_THRESHOLD) {
-            flywheel.set(FLYWHEEL_BANG_BANG_SPEED);
-        } else if(currentVelocity > goalVelocity + FLYWHEEL_GOAL_VELOCITY_THRESHOLD){
+        if(currentVelocity < goalVelocity - BANG_BANG_THRESHOLD) {
+            flywheel.set(BANG_BANG_OUTPUT_PERCENT);
+        } else if(currentVelocity > goalVelocity + BANG_BANG_THRESHOLD){
             flywheel.set(0);
         } else if(goalVelocity == 0) {
             flywheel.set(0);
         }
     }
 
-    private void flywheelFeedForward() {
-        double constrainedGoalVelocity = clamp(goalVelocity, -MAX_REVS_PER_SECOND, MAX_REVS_PER_SECOND);
-        double constrainedGoalAcceleration = clamp(goalVelocity - currentVelocity, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
-        constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
-
+    private void flywheelFeedforward() {
+        double goalAcceleration = goalVelocity - currentVelocity;
         // double voltage = TODO
-        //     (FF_S * Math.signum(constrainedGoalVelocity)) +
-        //     (FF_V * constrainedGoalVelocity) +
-        //     (FF_A * constrainedGoalAcceleration);
+        //     (FF_S * Math.signum(goalVelocity)) +
+        //     (FF_V * goalVelocity) +
+        //     (FF_A * goalAcceleration);
         double voltage =
-            (FF_S * Math.signum(constrainedGoalVelocity)) +
-            (SmartDashboard.getNumber("FF V", FF_V) * constrainedGoalVelocity) +
-            (SmartDashboard.getNumber("FF A", FF_A) * constrainedGoalAcceleration);
+            (FF_S * Math.signum(goalVelocity)) +
+            (SmartDashboard.getNumber("FF V", FF_V) * goalVelocity) +
+            (SmartDashboard.getNumber("FF A", FF_A) * goalAcceleration);
         flywheel.setVoltage(voltage);
     }
 
@@ -123,12 +120,12 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheel.set(percentOutput);
     }
 
-    public void setGoalFlywheelRevsPerSecond(double goalVelocity) {
+    public void setFlywheelGoalVelocity(double goalVelocity) {
         integralError = 0;
-        this.goalVelocity = goalVelocity;
+        this.goalVelocity = clamp(goalVelocity, -FLYWHEEL_MAX_VELOCITY, FLYWHEEL_MAX_VELOCITY);
     }
 
-    public void setGoalTurretAngle(double angleOffset) {
+    public void setTurretGoalAngle(double angleOffset) {
         goalAngle = Math.floorMod((int)(currentAngle + angleOffset), 360);
     }
 
@@ -147,7 +144,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 case BANGBANG:
                     return instance::flywheelBangBang;
                 case FEEDFORWARD:
-                    return instance::flywheelFeedForward;
+                    return instance::flywheelFeedforward;
                 case PID:
                     return instance::flywheelPID;
                 default:
