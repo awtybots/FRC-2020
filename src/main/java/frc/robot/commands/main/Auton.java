@@ -1,6 +1,10 @@
 package frc.robot.commands.main;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -14,6 +18,10 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.util.Vector3;
 
 import static frc.robot.Robot.*;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 
 @SuppressWarnings("unused")
 public class Auton extends ParallelCommandGroup {
@@ -56,6 +64,16 @@ public class Auton extends ParallelCommandGroup {
     }
     private RotateDegrees rotateDegrees(double degrees) {
         return new RotateDegrees(degrees);
+    }
+
+    private Trajectory getTrajectory(String name) {
+        try {
+            Path path = Filesystem.getDeployDirectory().toPath().resolve("paths/"+name+".wpilib.json");
+            return TrajectoryUtil.fromPathweaverJson(path);
+        } catch(IOException e) {
+            DriverStation.reportError("Unable to open trajectory '"+name+"'", e.getStackTrace()); // TODO alex log
+            return new Trajectory(new ArrayList<Trajectory.State>(0)); // don't return null, that'll cause errors
+        }
     }
 
     public enum AutonType {
