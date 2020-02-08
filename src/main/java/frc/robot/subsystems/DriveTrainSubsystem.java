@@ -79,7 +79,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
         motorR3 = motorCreateFunction.apply(MotorIDs.DRIVE_R3);
 
         speedLeft = new SpeedControllerGroup(motorL1, motorL2, motorL3);
-        speedRight = new SpeedControllerGroup(motorL1, motorL2, motorL3);
+        speedRight = new SpeedControllerGroup(motorR1, motorR2, motorR3);
 
         for (TalonWrapper motor : MotorGroup.ALL.getMotors()) {
             motor.set(0); // start all motors at 0% speed to stop the blinking
