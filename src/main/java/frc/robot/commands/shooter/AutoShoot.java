@@ -40,7 +40,7 @@ public class AutoShoot extends CommandBase {
         SmartDashboard.putBoolean("Shooter trajectory possible", accurateTrajectory);
 
         // set motor speeds
-        shooterSubsystem.setFlywheelGoalVelocity(optimalRevsPerSecond);
+        shooterSubsystem.setFlywheelGoalVelocity(FLYWHEEL_TELEOP_SPEED); // TODO change back
         switch(AIM_MODE) {
             case DRIVE:
                 double turnSpeed;

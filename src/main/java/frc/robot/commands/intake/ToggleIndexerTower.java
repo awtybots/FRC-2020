@@ -6,22 +6,38 @@ import static frc.robot.Robot.*;
 
 public class ToggleIndexerTower extends CommandBase {
 
+    private boolean button;
+    private boolean on;
+
     public ToggleIndexerTower() {
         addRequirements(indexerTowerSubsystem);
+        button = true;
     }
+    public ToggleIndexerTower(boolean on) {
+        addRequirements(indexerTowerSubsystem);
+        button = false;
+        this.on = on;
+    }
+
 
     @Override
     public void initialize() {
-        indexerTowerSubsystem.toggle(true);
+        if(button) {
+            indexerTowerSubsystem.toggle(true);
+        } else {
+            indexerTowerSubsystem.toggle(on);
+        }
     }
 
     @Override
     public void end(boolean interrupted) {
-        indexerTowerSubsystem.toggle(false);
+        if(button) {
+            indexerTowerSubsystem.toggle(false);
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return !button;
     }
 }

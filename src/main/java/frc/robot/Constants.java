@@ -31,16 +31,16 @@ public final class Constants {
         public static final int DRIVE_R2 = 9;
         public static final int DRIVE_R3 = 12;
 
-        public static final int INTAKE = 3; // TODO
+        public static final int INTAKE = 5;
 
-        public static final int INDEXER_L = 4; // TODO
-        public static final int INDEXER_R = 5; // TODO
-        public static final int TOWER = 6; // TODO
+        public static final int INDEXER_L = 3;
+        public static final int INDEXER_R = 2;
+        public static final int TOWER = 4;
 
-        public static final int SHOOTER_FLYWHEEL = 1;
-        public static final int SHOOTER_TURRET = 2;
+        public static final int SHOOTER_FLYWHEEL = 6;
+        public static final int SHOOTER_TURRET = 13;
 
-        public static final int CONTROL_PANEL_SPINNER = 13; // TODO
+        public static final int CONTROL_PANEL_SPINNER = 14;
     }
 
     public final static class DriveTrain {
@@ -77,12 +77,12 @@ public final class Constants {
     }
 
     public final static class Intake {
-        public final static double MOTOR_SPEED = 0.5;
+        public final static double MOTOR_SPEED = 0.9;
     }
 
     public final static class IndexerTower {
         public final static double INDEXER_MOTOR_SPEED = 0.5;
-        public final static double TOWER_MOTOR_SPEED = 0.5;
+        public final static double TOWER_MOTOR_SPEED = 1;
     }
 
     public final static class Shooter {
@@ -104,10 +104,10 @@ public final class Constants {
         public final static double FLYWHEEL_RATIO = 12.0 / 34.0 * 84.0 / 22.0; // TODO
         public final static double FLYWHEEL_CIRCUMFERENCE = 4.0 * Math.PI;
         public final static double FLYWHEEL_SLIPPING_FACTOR = 0.8;
-        public final static double FLYWHEEL_TELEOP_SPEED = 5000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
+        public final static double FLYWHEEL_TELEOP_SPEED = 7500.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
         public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 10.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
-        public final static double FLYWHEEL_MAX_VELOCITY = 7000.0 / 60.0;
+        public final static double FLYWHEEL_MAX_VELOCITY = 7500.0 / 60.0;
 
         // TURRET
         public final static double TURRET_RATIO = 1.0 / 3.0; // TODO
@@ -115,7 +115,7 @@ public final class Constants {
         public final static double TURRET_MAX_SPEED = 0.5; // %
         public final static double TURRET_GOAL_ANGLE_THRESHOLD = 2; // degrees to be satisfied with result
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 6; // degrees to start slowing down
-        public final static double TURRET_START_ANGLE = 0; // from 0 to 360 (code doesn't let turret angle go <0 or >360 to prevent rotating too far)
+        public final static double TURRET_START_ANGLE = 180; // TODO from 0 to 360 (code doesn't let turret angle go <0 or >360 to prevent rotating too far)
 
         // BANG BANG
         public final static double BANG_BANG_OUTPUT_PERCENT = 0.5; // percentage power for bang bang when on
