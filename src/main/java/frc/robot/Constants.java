@@ -33,10 +33,14 @@ public final class Constants {
 
         public static final int INTAKE = 3; // TODO
 
+        public static final int INDEXER_L = 4; // TODO
+        public static final int INDEXER_R = 5; // TODO
+        public static final int TOWER = 6; // TODO
+
         public static final int SHOOTER_FLYWHEEL = 1;
         public static final int SHOOTER_TURRET = 2;
 
-        public static final int CONTROL_PANEL_SPINNER = 4; // TODO
+        public static final int CONTROL_PANEL_SPINNER = 13; // TODO
     }
 
     public final static class DriveTrain {
@@ -75,9 +79,14 @@ public final class Constants {
         public final static double MOTOR_SPEED = 0.5;
     }
 
+    public final static class IndexerTower {
+        public final static double INDEXER_MOTOR_SPEED = 0.5;
+        public final static double TOWER_MOTOR_SPEED = 0.5;
+    }
+
     public final static class Shooter {
         public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.PRESET_TARGET; // TODO temp
-        public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 312, 70);
+        public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 200, 0);
         public final static AimMode AIM_MODE = AimMode.TURRET;
         public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
         public final static TalonWrapper.MotorType FLYWHEEL_MOTOR_TYPE = TalonWrapper.MotorType.TALON_FX;
@@ -85,7 +94,7 @@ public final class Constants {
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
 
-        public final static double SHOOTER_HEIGHT = 43; // TODO change to actual height
+        public final static double SHOOTER_HEIGHT = 33; // TODO change to actual height
         public final static double SHOOTER_ANGLE = 45; // TODO change to actual angle
 
         public final static double GRAVITY = 32.2 * 12.0; // inches/second^2
@@ -126,9 +135,9 @@ public final class Constants {
 
     public final static class Limelight {
         public final static double CAMERA_MOUNTING_ANGLE = 2;
-        public final static double CAMERA_HEIGHT = 5.1;
+        public final static double CAMERA_HEIGHT = 34;
 
-        public final static double SHOOTER_VISION_HEIGHT = 44;//89.75 TODO;
+        public final static double SHOOTER_VISION_HEIGHT = 89.75;
         public final static double LOADING_STATION_VISION_HEIGHT = 16.5; // TODO no need for vision on loading station
 
         public final static double SHOOTER_VISION_HEIGHT_OFFSET = SHOOTER_VISION_HEIGHT - CAMERA_HEIGHT;
