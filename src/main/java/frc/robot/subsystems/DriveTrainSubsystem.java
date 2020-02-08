@@ -126,7 +126,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
         return (PID_P * velocityError) + (PID_I * integralError.get(motorGroup)) + (PID_D * accelerationError);
     }
 
-    private double calculateFF(MotorGroup motorGroup, double goalVelocity) {
+    private double calculateFeedforward(MotorGroup motorGroup, double goalVelocity) {
         double constrainedGoalVelocity = clamp(goalVelocity, -MAX_VELOCITY, MAX_VELOCITY);
         double currentVelocity = getWheelVelocity(motorGroup, false);
         double goalAcceleration = constrainedGoalVelocity - currentVelocity;
@@ -235,7 +235,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
                 case PID:
                     return instance::calculatePID;
                 case FEEDFORWARD:
-                    return instance::calculateFF;
+                    return instance::calculateFeedforward;
             }
             return null;
         }

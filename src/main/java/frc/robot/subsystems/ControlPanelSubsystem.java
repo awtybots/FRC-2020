@@ -65,7 +65,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
     public void toggle(boolean on) {
         SmartDashboard.putBoolean("Control panel spinner motor", on);
-        //spinner.set(on ? ControlPanelSpinner.MOTOR_SPEED : 0);
+        spinner.set(on ? ControlPanelSpinner.MOTOR_SPEED : 0);
     }
 
     private PanelColor getDetectedColor() {

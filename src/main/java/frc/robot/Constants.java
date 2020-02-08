@@ -44,22 +44,23 @@ public final class Constants {
     }
 
     public final static class DriveTrain {
+        // OPTIONS
         public final static TalonWrapper.MotorType MOTOR_TYPE = TalonWrapper.MotorType.TALON_SRX;
         public final static DriveMode DRIVE_MODE = DriveTrainSubsystem.DriveMode.DIRECT;
         public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID;
-
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
 
+        // LIMITS
         public final static double DEADZONE = 0.1;
         public final static double MIN_MOTOR_OUTPUT = 0.2;
         public final static double MAX_TELEOP_MOTOR_OUTPUT = 0.4;
+        public final static double MAX_VELOCITY = 36; // inches per second
+        public final static double MAX_ACCELERATION = 6; // inches per second^2
 
+        // VALUES
         public final static double GEAR_RATIO = 1/8;
         public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI;
         public final static double ROBOT_CIRMCUMFERENCE = 100; // this the the distance (in inches) each wheel travels when the robot spins one time around its center
-
-        public final static double MAX_VELOCITY = 36; // inches per second
-        public final static double MAX_ACCELERATION = 6; // inches per second^2
         public final static double GOAL_TOLERANCE = 0.5; // how many inches away do we stop
 
         // PID
@@ -69,7 +70,7 @@ public final class Constants {
         public final static double INTEGRAL_MIN = -0.5;
         public final static double INTEGRAL_MAX = 0.5;
 
-        // FEEDFORWARD FORMULA: FF_S + (FF_V * velocity) + (FF_A * acceleration)
+        // FEEDFORWARD
         public final static double FF_S = 1.3; // voltage required to move a wheel any amount
         public final static double FF_V = 0.12; // voltage required to sustain a wheel's speed moving 1 inch per second
         public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 inch per second per second
@@ -85,39 +86,40 @@ public final class Constants {
     }
 
     public final static class Shooter {
+        // OPTIONS
         public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.PRESET_TARGET; // TODO temp
         public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 200, 0);
         public final static AimMode AIM_MODE = AimMode.TURRET;
         public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
         public final static TalonWrapper.MotorType FLYWHEEL_MOTOR_TYPE = TalonWrapper.MotorType.TALON_FX;
-
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
 
+        // PHYSICS
+        public final static double GRAVITY = 32.2 * 12.0; // inches/second^2
         public final static double SHOOTER_HEIGHT = 33; // TODO change to actual height
         public final static double SHOOTER_ANGLE = 45; // TODO change to actual angle
 
-        public final static double GRAVITY = 32.2 * 12.0; // inches/second^2
-
+        // FLYWHEEL
         public final static double FLYWHEEL_RATIO = 12.0 / 34.0 * 84.0 / 22.0; // TODO
-        public final static double TURRET_RATIO = 1.0/3.0; // TODO
-
-        public final static double MAX_REVS_PER_SECOND = 7000.0 / 60.0; // TODO implement
-        public final static double MAX_ACCELERATION = 300;
-
-        public final static double FLYWHEEL_TELEOP_SPEED = 1200.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
-        public final static double FLYWHEEL_BANG_BANG_SPEED = 0.5; // percentage power for bang bang when on
-        public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 0; // RPS threshold
+        public final static double FLYWHEEL_CIRCUMFERENCE = 4.0 * Math.PI;
+        public final static double FLYWHEEL_SLIPPING_FACTOR = 0.8;
+        public final static double FLYWHEEL_TELEOP_SPEED = 5000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
+        public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 10.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
+        public final static double FLYWHEEL_MAX_VELOCITY = 7000.0 / 60.0;
 
+        // TURRET
+        public final static double TURRET_RATIO = 1.0 / 3.0; // TODO
         public final static double TURRET_MIN_SPEED = 0.2; // %
         public final static double TURRET_MAX_SPEED = 0.5; // %
         public final static double TURRET_GOAL_ANGLE_THRESHOLD = 2; // degrees to be satisfied with result
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 6; // degrees to start slowing down
         public final static double TURRET_START_ANGLE = 0; // from 0 to 360 (code doesn't let turret angle go <0 or >360 to prevent rotating too far)
 
-        public final static double FLYWHEEL_CIRCUMFERENCE = 4.0 * Math.PI;
-        public final static double FLYWHEEL_SLIPPING_FACTOR = 0.8;
+        // BANG BANG
+        public final static double BANG_BANG_OUTPUT_PERCENT = 0.5; // percentage power for bang bang when on
+        public final static double BANG_BANG_THRESHOLD = 0.0 / 60.0; // range of RPS from goal where you don't change on/off
 
         // PID
         public final static double PID_MIN = 0.1;
@@ -127,7 +129,7 @@ public final class Constants {
         public final static double PID_D = 0;
         public final static double INTEGRAL_MAX = 1.0;
 
-        // FEEDFORWARD FORMULA: FF_S + (FF_V * velocity) + (FF_A * acceleration)
+        // FEEDFORWARD
         public final static double FF_S = 1.8; // voltage required to move the flywheel any amount
         public final static double FF_V = 0.005; // voltage required to sustain the flywheel's speed moving at 1 rev per second
         public final static double FF_A = 0.005; // voltage required to accelerate wheel at 1 rev per second per second
@@ -138,10 +140,10 @@ public final class Constants {
         public final static double CAMERA_HEIGHT = 34;
 
         public final static double SHOOTER_VISION_HEIGHT = 89.75;
-        public final static double LOADING_STATION_VISION_HEIGHT = 16.5; // TODO no need for vision on loading station
+        public final static double LOADING_STATION_VISION_HEIGHT = 16.5;
 
         public final static double SHOOTER_VISION_HEIGHT_OFFSET = SHOOTER_VISION_HEIGHT - CAMERA_HEIGHT;
-        public final static double LOADING_STATION_VISION_HEIGHT_OFFSET = LOADING_STATION_VISION_HEIGHT - CAMERA_HEIGHT; // TODO no need for vision on loading station
+        public final static double LOADING_STATION_VISION_HEIGHT_OFFSET = LOADING_STATION_VISION_HEIGHT - CAMERA_HEIGHT;
     }
 
     public final static class NavX {
@@ -168,12 +170,9 @@ public final class Constants {
     }
 
     public final static class ControlPanelSpinner {
-        public final static double COLOR_PASSES = 7;
-
-        public final static double MOTOR_SPEED = 0.3;
-        public final static double ENCODER_UNITS = 4096; // TODO switch to 2048 for Falcon500 encoders
-
         public final static NeutralMode BRAKE_MODE = NeutralMode.Brake;
+        public final static double COLOR_PASSES = 7;
+        public final static double MOTOR_SPEED = 0.3;
     }
 
     public final static class Controller {
