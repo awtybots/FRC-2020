@@ -7,13 +7,20 @@ import com.ctre.phoenix.music.Orchestra;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.util.TalonWrapper;
 
-public class PlaySong extends CommandBase {
+public class PlayMusic extends CommandBase {
 
     private Song song;
     private Orchestra orchestra;
+    private boolean waitForCompletion = false;
 
-    public PlaySong(Song song) {
-        this.song = song;
+    public PlayMusic(Song song) {
+        if(song == null) { // if no song was given, shuffle play songs forever
+            this.song = Song.random();
+            this.waitForCompletion = true;
+            this.andThen(new PlayMusic(null));
+        } else {
+            this.song = song;
+        }
         this.orchestra = TalonWrapper.getOrchestra();
     }
 
@@ -25,7 +32,7 @@ public class PlaySong extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return !orchestra.isPlaying();
+        return (!waitForCompletion) || (!orchestra.isPlaying());
     }
 
     public enum Song { // TODO give songs meaningful names

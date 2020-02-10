@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 import edu.wpi.first.wpilibj.SPI;
@@ -140,6 +141,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
         LEFT.getGroup().set(left);
         RIGHT.getGroup().set(right);
     }
+    public void setMotorVoltage(double left, double right) {
+        if(Math.abs(left) < MIN_MOTOR_OUTPUT * 12.0) left = 0;
+        if(Math.abs(right) < MIN_MOTOR_OUTPUT * 12.0) right = 0;
+        LEFT.getGroup().setVoltage(left);
+        RIGHT.getGroup().setVoltage(right);
+    }
     public void setGoalVelocity(double left, double right) {
         goalVelocity.put(LEFT, left);
         goalVelocity.put(RIGHT, right);
@@ -163,6 +170,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
             new Pose2d(displacement.toTranslation2d(), Rotation2d.fromDegrees(initialAngle))
         );
         this.initialAngle = initialAngle;
+    }
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
     }
     public Vector3 getDisplacement() {
         return position.clone();
@@ -198,6 +208,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
         }
         double revolutions = totalUnits / MOTOR_TYPE.getEncoderUnits() / 10 / motorGroup.getMotors().length;
         return revolutions * WHEEL_CIRCUMFERENCE;
+    }
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(getWheelVelocity(LEFT, false), getWheelVelocity(RIGHT, false));
     }
     public void resetEncoders() {
         for(TalonWrapper motor : ALL.getMotors()) {

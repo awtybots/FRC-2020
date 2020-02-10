@@ -97,9 +97,15 @@ public class ShooterSubsystem extends SubsystemBase {
         double accelerationError = (velocityError - lastVelocityError) / PERIOD;
         lastVelocityError = velocityError;
         integralError = clamp(integralError + (velocityError * PERIOD), -INTEGRAL_MAX/PID_I, INTEGRAL_MAX/PID_I);
-        double percentOutput = (SmartDashboard.getNumber("PID_P", PID_P) * velocityError) + (SmartDashboard.getNumber("PID_I", PID_I) * integralError) + (SmartDashboard.getNumber("PID_D", PID_D) * accelerationError);
-        //double percentOutput = (PID_P * velocityError) + (PID_I * integralError) + (PID_D * accelerationError); TODO change back to this
-        percentOutput = clamp(percentOutput, PID_MIN, PID_MAX) * Math.signum(goalVelocity);
+        double percentOutput
+            = (SmartDashboard.getNumber("PID_P", PID_P) * velocityError)
+            + (SmartDashboard.getNumber("PID_I", PID_I) * integralError)
+            + (SmartDashboard.getNumber("PID_D", PID_D) * accelerationError);
+        // double percentOutput
+        //     = (PID_P * velocityError)
+        //     + (PID_I * integralError)
+        //     + (PID_D * accelerationError); // TODO change back to this
+        percentOutput = clamp(percentOutput, FLYWHEEL_MIN_OUTPUT, FLYWHEEL_MAX_OUTPUT) * Math.signum(goalVelocity);
         SmartDashboard.putNumber("Shooter percent output", percentOutput);
         flywheel.set(percentOutput);
     }

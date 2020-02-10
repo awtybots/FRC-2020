@@ -61,7 +61,8 @@ public final class Constants {
         public final static double GEAR_RATIO = 1/8;
         public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI;
         public final static double ROBOT_CIRMCUMFERENCE = 100; // this the the distance (in inches) each wheel travels when the robot spins one time around its center
-        public final static double GOAL_TOLERANCE = 0.5; // how many inches away do we stop
+        public final static double GOAL_TOLERANCE = 0.5; // how many inches away do we stop TODO remove this and non-trajectory drive commands
+        public final static double TRACK_WIDTH = 24; // inches between left wheels and right wheels TODO
 
         // PID
         public final static double PID_P = 0.02;
@@ -74,6 +75,10 @@ public final class Constants {
         public final static double FF_S = 1.3; // voltage required to move a wheel any amount
         public final static double FF_V = 0.12; // voltage required to sustain a wheel's speed moving 1 inch per second
         public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 inch per second per second
+
+        // RAMSETE
+        public final static double RAM_B = 1;
+        public final static double RAM_Z = 1;
     }
 
     public final static class Intake {
@@ -108,6 +113,8 @@ public final class Constants {
         public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 10.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
         public final static double FLYWHEEL_MAX_VELOCITY = 7500.0 / 60.0;
+        public final static double FLYWHEEL_MIN_OUTPUT = 0.1;
+        public final static double FLYWHEEL_MAX_OUTPUT = 0.8;
 
         // TURRET
         public final static double TURRET_RATIO = 1.0 / 3.0; // TODO
@@ -117,13 +124,7 @@ public final class Constants {
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 6; // degrees to start slowing down
         public final static double TURRET_START_ANGLE = 180; // TODO from 0 to 360 (code doesn't let turret angle go <0 or >360 to prevent rotating too far)
 
-        // BANG BANG
-        public final static double BANG_BANG_OUTPUT_PERCENT = 0.5; // percentage power for bang bang when on
-        public final static double BANG_BANG_THRESHOLD = 0.0 / 60.0; // range of RPS from goal where you don't change on/off
-
         // PID
-        public final static double PID_MIN = 0.1;
-        public final static double PID_MAX = 1;
         public final static double PID_P = 0.02;
         public final static double PID_I = 0.06;
         public final static double PID_D = 0;
