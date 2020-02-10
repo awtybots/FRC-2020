@@ -11,13 +11,12 @@ public class PlayMusic extends CommandBase {
 
     private Song song;
     private Orchestra orchestra;
-    private boolean waitForCompletion = false;
+    private boolean shufflePlay = false;
 
     public PlayMusic(Song song) {
         if(song == null) { // if no song was given, shuffle play songs forever
             this.song = Song.random();
-            this.waitForCompletion = true;
-            this.andThen(new PlayMusic(null));
+            this.shufflePlay = true;
         } else {
             this.song = song;
         }
@@ -31,8 +30,15 @@ public class PlayMusic extends CommandBase {
     }
 
     @Override
+    public void end(boolean interrupted) {
+        if(shufflePlay) {
+            new PlayMusic(null).schedule();
+        }
+    }
+
+    @Override
     public boolean isFinished() {
-        return (!waitForCompletion) || (!orchestra.isPlaying());
+        return (!shufflePlay) || (!orchestra.isPlaying());
     }
 
     public enum Song { // TODO give songs meaningful names
