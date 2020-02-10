@@ -30,6 +30,15 @@ import java.util.ArrayList;
 
 public class Auton extends ParallelCommandGroup {
 
+    public enum AutonType {
+        DO_NOTHING,
+        SHOOT_TEST,
+        SHUFFLE_PLAY,
+
+        SQUARE,
+        PATH_1;
+    }
+
     public Auton(AutonType autonType) {
         addCommands(
             getAutonSequence(autonType)
@@ -38,6 +47,17 @@ public class Auton extends ParallelCommandGroup {
 
     private Command getAutonSequence(AutonType autonType) {
         switch(autonType) {
+
+            case SHOOT_TEST: return
+                parallel(
+                    start(0, 0, 0),
+                    toggleIntake(true),
+                    toggleIndexerTower(true),
+                    autoShoot()
+                );
+
+            case SHUFFLE_PLAY: return
+                playMusic(null);
 
             case SQUARE: return
                 sequence(
@@ -51,17 +71,6 @@ public class Auton extends ParallelCommandGroup {
                     driveInches(24),
                     rotateDegrees(90)
                 );
-
-            case SHOOT: return
-                parallel(
-                    start(0, 0, 0),
-                    toggleIntake(true),
-                    toggleIndexerTower(true),
-                    autoShoot()
-                );
-
-            case MUSIC: return
-                playMusic(null);
 
             case PATH_1: return
                 sequence(
@@ -78,32 +87,6 @@ public class Auton extends ParallelCommandGroup {
 
         }
     }
-
-    private ResetNavX start(double x, double y, double rotation) {
-        return new ResetNavX(new Vector3(x, y, 0), rotation);
-    }
-    private AutoShoot autoShoot() {
-        return new AutoShoot();
-    }
-    private ToggleIntake toggleIntake(boolean on) {
-        return new ToggleIntake(on);
-    }
-    private ToggleIndexerTower toggleIndexerTower(boolean on) {
-        return new ToggleIndexerTower(on);
-    }
-    private WaitCommand waitSeconds(double t) {
-        return new WaitCommand(t);
-    }
-    private DriveInches driveInches(double in) {
-        return new DriveInches(in);
-    }
-    private RotateDegrees rotateDegrees(double deg) {
-        return new RotateDegrees(deg);
-    }
-    private PlayMusic playMusic(Song song) {
-        return new PlayMusic(song);
-    }
-
 
     private Trajectory loadTrajectory(String name) {
         try {
@@ -143,13 +126,29 @@ public class Auton extends ParallelCommandGroup {
         );
     }
 
-    public enum AutonType {
-        NOTHING,
 
-        SHOOT,
-        MUSIC,
-        SQUARE,
-
-        PATH_1;
+    private ResetNavX start(double x, double y, double rotation) {
+        return new ResetNavX(new Vector3(x, y, 0), rotation);
+    }
+    private AutoShoot autoShoot() {
+        return new AutoShoot();
+    }
+    private ToggleIntake toggleIntake(boolean on) {
+        return new ToggleIntake(on);
+    }
+    private ToggleIndexerTower toggleIndexerTower(boolean on) {
+        return new ToggleIndexerTower(on);
+    }
+    private WaitCommand waitSeconds(double t) {
+        return new WaitCommand(t);
+    }
+    private DriveInches driveInches(double in) {
+        return new DriveInches(in);
+    }
+    private RotateDegrees rotateDegrees(double deg) {
+        return new RotateDegrees(deg);
+    }
+    private PlayMusic playMusic(Song song) {
+        return new PlayMusic(song);
     }
 }

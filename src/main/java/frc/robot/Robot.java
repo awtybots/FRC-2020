@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
         autonChooser = new SendableChooser<>();
         AutonType[] autonTypes = AutonType.values();
         for(AutonType autonType : autonTypes) {
-            if(autonType == AutonType.NOTHING) {
+            if(autonType == AutonType.DO_NOTHING) {
                 autonChooser.setDefaultOption(autonType.toString(), autonType);
             } else {
                 autonChooser.addOption(autonType.toString(), autonType);
