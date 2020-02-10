@@ -153,7 +153,7 @@ public final class Constants {
         // yaw 0 is facing the red alliance stations
         // increasing yaw turns counter clockwise
 
-        public final static Vector3 POWER_PORT_POSITION = new Vector3(648, -67.34, 50);//98.25 TODO);
+        public final static Vector3 POWER_PORT_POSITION = new Vector3(648, -67.34, 98.25);
         public final static Vector3 LOADING_BAY_POSITION = new Vector3(0, -61.34, 29);
     }
 

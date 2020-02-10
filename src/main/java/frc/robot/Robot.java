@@ -7,11 +7,9 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -44,15 +42,12 @@ public class Robot extends TimedRobot {
     private SendableChooser<AutonType> autonChooser;
 
     private static double period;
-    private static Alliance alliance;
-    private static GamePeriod gamePeriod;
     private static PowerDistributionPanel pdp;
 
     @Override
     public void robotInit() {
         // runtime constants
         period = getPeriod();
-        alliance = DriverStation.getInstance().getAlliance();
         pdp = new PowerDistributionPanel();
 
         // auton chooser
@@ -110,8 +105,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        gamePeriod = GamePeriod.AUTON;
-
         autonCommand = new Auton(autonChooser.getSelected()); // get chosen AutonType
         autonCommand.schedule(); // start auton
     }
@@ -123,8 +116,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        gamePeriod = GamePeriod.TELEOP;
-
         if(autonCommand != null) autonCommand.cancel(); // finish auton
 
         teleopCommand = new Teleop(); // overlaying teleop command for the teleop period
@@ -153,19 +144,8 @@ public class Robot extends TimedRobot {
     public static double getLoopTime() {
         return period;
     }
-    public static Alliance getAlliance() { // TODO deprecate + remove
-        return alliance;
-    }
-    public static GamePeriod getGamePeriod() { // TODO unnecessary + not used
-        return gamePeriod;
-    }
     public static PowerDistributionPanel getPDP() {
         return pdp;
-    }
-
-    public enum GamePeriod { // TODO unnecessary
-        AUTON,
-        TELEOP;
     }
 
 }

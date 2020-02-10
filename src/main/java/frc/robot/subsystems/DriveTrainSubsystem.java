@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 import edu.wpi.first.wpilibj.SPI;
@@ -24,9 +23,10 @@ import frc.robot.util.Vector3;
 
 import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.Constants.NavX.*;
+import static frc.robot.subsystems.DriveTrainSubsystem.MotorGroup.*;
 
 import java.util.HashMap;
-import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class DriveTrainSubsystem extends SubsystemBase {
@@ -41,15 +41,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private static TalonWrapper motorR2;
     private static TalonWrapper motorR3;
 
-    private static SpeedControllerGroup speedLeft;
-    private static SpeedControllerGroup speedRight;
-
-    private double goalVelocityLeft = 0;
-    private double goalVelocityRight = 0;
-
-    private double outputLeft = 0;
-    private double outputRight = 0;
-
+    private HashMap<MotorGroup, Double> goalVelocity;
     private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
     private HashMap<MotorGroup, Double> integralError = new HashMap<>();
 
@@ -78,10 +70,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
         motorR2 = motorCreateFunction.apply(MotorIDs.DRIVE_R2);
         motorR3 = motorCreateFunction.apply(MotorIDs.DRIVE_R3);
 
-        speedLeft = new SpeedControllerGroup(motorL1, motorL2, motorL3);
-        speedRight = new SpeedControllerGroup(motorR1, motorR2, motorR3);
-
-        for (TalonWrapper motor : MotorGroup.ALL.getMotors()) {
+        for (TalonWrapper motor : ALL.getMotors()) {
             motor.set(0); // start all motors at 0% speed to stop the blinking
 
             motor.configFactoryDefault(); // reset settings
@@ -89,45 +78,46 @@ public class DriveTrainSubsystem extends SubsystemBase {
             motor.configSelectedFeedbackSensor(MOTOR_TYPE.getFeedbackDevice()); // sets which encoder the motor is using
         }
 
-        for (TalonWrapper motor : MotorGroup.RIGHT.getMotors()) {
+        for (TalonWrapper motor : RIGHT.getMotors()) {
             motor.setSensorPhase(true);
         }
 
-        speedRight.setInverted(true);
+        RIGHT.getGroup().setInverted(true);
     }
 
     @Override
-    public void periodic() { // TODO no default option
-        if(DRIVE_MODE == DriveTrainSubsystem.DriveMode.SMOOTH) { // TODO change
-            outputLeft = MOTOR_CONTROL_MODE.getMotorControlFunction(this).apply(MotorGroup.LEFT, goalVelocityLeft);
-            outputRight = MOTOR_CONTROL_MODE.getMotorControlFunction(this).apply(MotorGroup.RIGHT, goalVelocityRight);
-
-            SmartDashboard.putNumber("Voltage left", outputLeft);
-            SmartDashboard.putNumber("Voltage right", outputRight);
-
-            speedLeft.setVoltage(outputLeft);
-            speedRight.setVoltage(outputRight);
+    public void periodic() {
+        if(DRIVE_MODE == DriveTrainSubsystem.DriveMode.SMOOTH) {
+            MOTOR_CONTROL_MODE.getMotorControlFunction(this).accept(LEFT);
+            MOTOR_CONTROL_MODE.getMotorControlFunction(this).accept(RIGHT);
         }
 
         if(odometry != null) {
-            odometry.update(getRawRotation(), getWheelDistance(MotorGroup.LEFT, false), getWheelDistance(MotorGroup.RIGHT, false));
+            odometry.update(getRawRotation(), getWheelDistance(LEFT, false), getWheelDistance(RIGHT, false));
             lastPosition = position.clone();
             position = new Vector3(odometry.getPoseMeters()).print("Position");
             getVelocity().print("Velocity");
         }
     }
 
-    private double calculatePID(MotorGroup motorGroup, double goalVelocity) {
+    private void drivePID(MotorGroup motorGroup) {
         double currentVelocity = getWheelVelocity(motorGroup, false);
-        double velocityError = goalVelocity - currentVelocity;
+        double velocityError = goalVelocity.getOrDefault(motorGroup, 0.0) - currentVelocity;
         double accelerationError = (velocityError - lastVelocityError.getOrDefault(motorGroup, 0.0)) / PERIOD;
         lastVelocityError.put(motorGroup, velocityError);
         integralError.put(motorGroup, clamp(integralError.getOrDefault(motorGroup, 0.0) + (velocityError * PERIOD), INTEGRAL_MIN / PID_I, INTEGRAL_MAX / PID_I));
-        return (PID_P * velocityError) + (PID_I * integralError.get(motorGroup)) + (PID_D * accelerationError);
+
+        double P = PID_P * velocityError;
+        double I = PID_I * integralError.get(motorGroup);
+        double D = PID_D * accelerationError;
+
+        double output = P + I + D;
+
+        motorGroup.getGroup().set(output);
     }
 
-    private double calculateFeedforward(MotorGroup motorGroup, double goalVelocity) {
-        double constrainedGoalVelocity = clamp(goalVelocity, -MAX_VELOCITY, MAX_VELOCITY);
+    private void driveFeedforward(MotorGroup motorGroup) {
+        double constrainedGoalVelocity = clamp(goalVelocity.getOrDefault(motorGroup, 0.0), -MAX_VELOCITY, MAX_VELOCITY);
         double currentVelocity = getWheelVelocity(motorGroup, false);
         double goalAcceleration = constrainedGoalVelocity - currentVelocity;
         double constrainedGoalAcceleration = clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD);
@@ -138,14 +128,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
         double A = FF_A * constrainedGoalAcceleration;
         double voltage = S + V + A;
 
-        SmartDashboard.putNumber("Current Velocity", currentVelocity);
-        SmartDashboard.putNumber("Goal Velocity", constrainedGoalVelocity);
-        SmartDashboard.putNumber("Goal Acceleration", constrainedGoalAcceleration);
-        SmartDashboard.putNumber("FF_S", S);
-        SmartDashboard.putNumber("FF_V", V);
-        SmartDashboard.putNumber("FF_A", A);
-
-        return voltage;
+        motorGroup.getGroup().setVoltage(voltage);
     }
 
 
@@ -154,12 +137,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
     public void setMotorOutput(double left, double right) {
         if(Math.abs(left) < MIN_MOTOR_OUTPUT) left = 0;
         if(Math.abs(right) < MIN_MOTOR_OUTPUT) right = 0;
-        speedLeft.set(left);
-        speedRight.set(right);
+        LEFT.getGroup().set(left);
+        RIGHT.getGroup().set(right);
     }
     public void setGoalVelocity(double left, double right) {
-        goalVelocityLeft = left;
-        goalVelocityRight = right;
+        goalVelocity.put(LEFT, left);
+        goalVelocity.put(RIGHT, right);
     }
     public void smoothStop() {
         setGoalVelocity(0, 0);
@@ -217,7 +200,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
         return revolutions * WHEEL_CIRCUMFERENCE;
     }
     public void resetEncoders() {
-        for(TalonWrapper motor : MotorGroup.ALL.getMotors()) {
+        for(TalonWrapper motor : ALL.getMotors()) {
             motor.setSelectedSensorPosition(0);
         }
     }
@@ -230,12 +213,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
         FEEDFORWARD,
         PID;
 
-        public BiFunction<MotorGroup, Double, Double> getMotorControlFunction(DriveTrainSubsystem instance) {
+        public Consumer<MotorGroup> getMotorControlFunction(DriveTrainSubsystem instance) {
             switch(this) {
                 case PID:
-                    return instance::calculatePID;
+                    return instance::drivePID;
                 case FEEDFORWARD:
-                    return instance::calculateFeedforward;
+                    return instance::driveFeedforward;
             }
             return null;
         }
@@ -252,13 +235,18 @@ public class DriveTrainSubsystem extends SubsystemBase {
         ALL(new TalonWrapper[]{ motorL1, motorL2, motorL3, motorR1, motorR2, motorR3 });
 
         private TalonWrapper[] motorList;
+        private SpeedControllerGroup group;
 
         private MotorGroup(TalonWrapper[] motorList) {
             this.motorList = motorList;
+            this.group = new SpeedControllerGroup(motorList[0], motorList);
         }
 
         public TalonWrapper[] getMotors() {
             return motorList;
+        }
+        public SpeedControllerGroup getGroup() {
+            return group;
         }
     }
 

@@ -10,9 +10,10 @@ import frc.robot.commands.drive.DriveInches;
 import frc.robot.commands.drive.RotateDegrees;
 import frc.robot.commands.intake.ToggleIndexerTower;
 import frc.robot.commands.intake.ToggleIntake;
+import frc.robot.commands.music.PlaySong;
+import frc.robot.commands.music.PlaySong.Song;
 import frc.robot.commands.shooter.AutoShoot;
 import frc.robot.commands.shooter.ResetNavX;
-import frc.robot.commands.shooter.ToggleShooter;
 import frc.robot.util.Vector3;
 
 import java.io.IOException;
@@ -21,12 +22,8 @@ import java.util.ArrayList;
 
 public class Auton extends ParallelCommandGroup {
 
-    // this is the overlaying command group for everything that happens in auton
-    // see https://docs.wpilib.org/en/latest/docs/software/commandbased/command-groups.html
-
     public Auton(AutonType autonType) {
         addCommands(
-            //new ToggleIntake(),
             getAutonSequence(autonType)
         );
     }
@@ -36,22 +33,24 @@ public class Auton extends ParallelCommandGroup {
             case SQUARE:
                 return sequence(
                     start(0, 0, 0),
-                    driveInches(24),
-                    rotateDegrees(90),
-                    driveInches(24),
-                    rotateDegrees(90),
-                    driveInches(24),
-                    rotateDegrees(90),
-                    driveInches(24),
-                    rotateDegrees(90)
+                    new DriveInches(24),
+                    new RotateDegrees(90),
+                    new DriveInches(24),
+                    new RotateDegrees(90),
+                    new DriveInches(24),
+                    new RotateDegrees(90),
+                    new DriveInches(24),
+                    new RotateDegrees(90)
                 );
-            case AUTOSHOOT:
+            case SHOOT:
                 return parallel(
+                    start(0, 0, 0),
                     new ToggleIntake(true),
                     new ToggleIndexerTower(true),
-                    new AutoShoot(),
-                    start(0, 0, 0)
+                    new AutoShoot()
                 );
+            case PLAY_MUSIC:
+                return new PlaySong(Song.random());
             default:
                 return start(0, 0, 0);
         }
@@ -60,13 +59,8 @@ public class Auton extends ParallelCommandGroup {
     private ResetNavX start(double x, double y, double rotation) {
         return new ResetNavX(new Vector3(x, y, 0), rotation);
     }
-    private DriveInches driveInches(double inches) {
-        return new DriveInches(inches);
-    }
-    private RotateDegrees rotateDegrees(double degrees) {
-        return new RotateDegrees(degrees);
-    }
 
+    @SuppressWarnings("unused")
     private Trajectory getTrajectory(String name) {
         try {
             Path path = Filesystem.getDeployDirectory().toPath().resolve("paths/"+name+".wpilib.json");
@@ -79,7 +73,8 @@ public class Auton extends ParallelCommandGroup {
 
     public enum AutonType {
         DO_NOTHING,
-        AUTOSHOOT,
+        SHOOT,
+        PLAY_MUSIC,
         SQUARE;
     }
 }

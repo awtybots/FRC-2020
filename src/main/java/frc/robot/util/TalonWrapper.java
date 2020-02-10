@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import java.util.function.Function;
 
+import com.ctre.phoenix.music.Orchestra;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
@@ -34,7 +35,9 @@ public class TalonWrapper implements SpeedController {
         public FeedbackDevice getFeedbackDevice() {
             return d;
         }
-	}
+    }
+
+    private static Orchestra orchestra = new Orchestra();
 
 	private SpeedController speedController;
     private BaseTalon talon;
@@ -48,7 +51,12 @@ public class TalonWrapper implements SpeedController {
         return new TalonWrapper(new WPI_TalonSRX(id));
     }
     public static TalonWrapper getTalonFX(int id) {
-        return new TalonWrapper(new WPI_TalonFX(id));
+        WPI_TalonFX talonFX = new WPI_TalonFX(id);
+        orchestra.addInstrument(talonFX);
+        return new TalonWrapper(talonFX);
+    }
+    public static Orchestra getOrchestra() {
+        return orchestra;
     }
 
     @Override
