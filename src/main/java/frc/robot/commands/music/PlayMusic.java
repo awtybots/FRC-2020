@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.ctre.phoenix.music.Orchestra;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.util.TalonWrapper;
 
@@ -27,10 +28,12 @@ public class PlayMusic extends CommandBase {
     public void initialize() {
         orchestra.loadMusic(song.getPath());
         orchestra.play();
+        SmartDashboard.putString("Currently playing", song.getName());
     }
 
     @Override
     public void end(boolean interrupted) {
+        SmartDashboard.putString("Currently playing", "");
         if(shufflePlay) {
             new PlayMusic(null).schedule();
         }
@@ -38,7 +41,7 @@ public class PlayMusic extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (!shufflePlay) || (!orchestra.isPlaying());
+        return false;
     }
 
     public enum Song { // TODO give songs meaningful names
@@ -54,12 +57,15 @@ public class PlayMusic extends CommandBase {
         SONG_10("song10"),
         SONG_11("song11");
 
-        private String path;
+        private String name;
         private Song(String name) {
-            this.path = "songs/"+name+".chrp";
+            this.name = name;
         }
         public String getPath() {
-            return path;
+            return "songs/"+name+".chrp";
+        }
+        public String getName() {
+            return name;
         }
 		public static Song random() {
 			return values()[new Random().nextInt(values().length)];
