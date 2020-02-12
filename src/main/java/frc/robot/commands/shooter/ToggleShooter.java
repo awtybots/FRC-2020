@@ -2,7 +2,6 @@ package frc.robot.commands.shooter;
 
 import static frc.robot.Constants.Shooter.*;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import static frc.robot.Robot.*;
 
@@ -10,12 +9,11 @@ public class ToggleShooter extends CommandBase {
 
     public ToggleShooter() {
         addRequirements(shooterSubsystem);
-        SmartDashboard.setDefaultNumber("Shooter goal RPM", FLYWHEEL_TELEOP_SPEED * 60.0); // TODO temp
     }
 
     @Override
     public void initialize() {
-        shooterSubsystem.setFlywheelGoalVelocity(SmartDashboard.getNumber("Shooter goal RPM", FLYWHEEL_TELEOP_SPEED * 60.0) / 60.0);
+        shooterSubsystem.setFlywheelGoalVelocity(FLYWHEEL_TELEOP_SPEED);
     }
 
     @Override

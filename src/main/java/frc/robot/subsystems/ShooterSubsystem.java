@@ -144,7 +144,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
 	public void disableMotorControl() {
-        System.out.println("SHOOTER SUBSYTEM MOTOR CONTROL DISABLED");
+        System.out.println("SHOOTER SUBSYTEM MOTOR CONTROL DISABLED FOR MUSIC");
         MODE = MotorControlMode.OFF;
 	}
 

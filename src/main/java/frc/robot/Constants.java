@@ -87,7 +87,7 @@ public final class Constants {
 
     public final static class IndexerTower {
         public final static double INDEXER_MOTOR_SPEED = 0.5;
-        public final static double TOWER_MOTOR_SPEED = 0.5;
+        public final static double TOWER_MOTOR_SPEED = 0.7;
     }
 
     public final static class Shooter {
@@ -109,10 +109,10 @@ public final class Constants {
         public final static double FLYWHEEL_RATIO = 12.0 / 34.0 * 84.0 / 22.0; // TODO
         public final static double FLYWHEEL_CIRCUMFERENCE = 4.0 * Math.PI;
         public final static double FLYWHEEL_SLIPPING_FACTOR = 0.8;
-        public final static double FLYWHEEL_TELEOP_SPEED = 7500.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
+        public final static double FLYWHEEL_TELEOP_SPEED = 5000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
         public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 10.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
-        public final static double FLYWHEEL_MAX_VELOCITY = 7500.0 / 60.0;
+        public final static double FLYWHEEL_MAX_VELOCITY = 5000.0 / 60.0;
         public final static double FLYWHEEL_MIN_OUTPUT = 0.1;
         public final static double FLYWHEEL_MAX_OUTPUT = 0.8;
 
@@ -126,7 +126,7 @@ public final class Constants {
 
         // PID
         public final static double PID_P = 0.02;
-        public final static double PID_I = 0.06;
+        public final static double PID_I = 0.04;
         public final static double PID_D = 0;
         public final static double INTEGRAL_MAX = 1.0;
 

@@ -42,7 +42,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private static TalonWrapper motorR2;
     private static TalonWrapper motorR3;
 
-    private HashMap<MotorGroup, Double> goalVelocity;
+    private HashMap<MotorGroup, Double> goalVelocity = new HashMap<>();
     private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
     private HashMap<MotorGroup, Double> integralError = new HashMap<>();
 

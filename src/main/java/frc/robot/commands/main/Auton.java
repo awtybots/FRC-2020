@@ -52,7 +52,6 @@ public class Auton extends ParallelCommandGroup {
                 parallel(
                     start(0, 0, 0),
                     toggleIntake(true),
-                    toggleIndexerTower(true),
                     autoShoot()
                 );
 

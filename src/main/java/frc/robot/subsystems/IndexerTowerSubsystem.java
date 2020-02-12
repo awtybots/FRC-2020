@@ -19,8 +19,8 @@ public class IndexerTowerSubsystem extends SubsystemBase {
     }
 
     public void toggle(boolean on) {
-        indexerL.set(on ? INDEXER_MOTOR_SPEED : 0);
-        indexerR.set(on ? INDEXER_MOTOR_SPEED : 0);
-        tower.set(on ? TOWER_MOTOR_SPEED : 0);
+        indexerL.set(on ? INDEXER_MOTOR_SPEED : 0.0);
+        indexerR.set(on ? INDEXER_MOTOR_SPEED : 0.0);
+        tower.set(on ? TOWER_MOTOR_SPEED : 0.0);
     }
 }
