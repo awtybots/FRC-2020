@@ -34,8 +34,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private boolean readyToShoot;
 
+    private MotorControlMode MODE;
+
     public ShooterSubsystem() {
         PERIOD = Robot.getLoopTime();
+        MODE = MOTOR_CONTROL_MODE;
 
         flywheel.configFactoryDefault();
         flywheel.setNeutralMode(FLYWHEEL_BRAKE_MODE);
@@ -64,7 +67,7 @@ public class ShooterSubsystem extends SubsystemBase {
         readyToShoot = velocityAtGoal && turretAtGoal;
 
         // shooter motor
-        MOTOR_CONTROL_MODE.getFunction(this).run();
+        MODE.getFunction(this).run();
 
         // turret motor
         SmartDashboard.putNumber("Turret detected angle", currentAngle); // TODO temp
@@ -139,5 +142,10 @@ public class ShooterSubsystem extends SubsystemBase {
             }
         }
     }
+
+	public void disableMotorControl() {
+        System.out.println("SHOOTER SUBSYTEM MOTOR CONTROL DISABLED");
+        MODE = MotorControlMode.OFF;
+	}
 
 }

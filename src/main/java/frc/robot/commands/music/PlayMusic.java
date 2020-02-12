@@ -7,6 +7,7 @@ import com.ctre.phoenix.music.Orchestra;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.util.TalonWrapper;
+import static frc.robot.Robot.*;
 
 public class PlayMusic extends CommandBase {
 
@@ -15,6 +16,8 @@ public class PlayMusic extends CommandBase {
     private boolean shufflePlay = false;
 
     public PlayMusic(Song song) {
+        addRequirements(shooterSubsystem); // disable shooter
+        shooterSubsystem.disableMotorControl();
         if(song == null) { // if no song was given, shuffle play songs forever
             this.song = Song.random();
             this.shufflePlay = true;

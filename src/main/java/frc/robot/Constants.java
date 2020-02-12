@@ -82,20 +82,20 @@ public final class Constants {
     }
 
     public final static class Intake {
-        public final static double MOTOR_SPEED = 0.9;
+        public final static double MOTOR_SPEED = 0.5;
     }
 
     public final static class IndexerTower {
         public final static double INDEXER_MOTOR_SPEED = 0.5;
-        public final static double TOWER_MOTOR_SPEED = 1;
+        public final static double TOWER_MOTOR_SPEED = 0.5;
     }
 
     public final static class Shooter {
         // OPTIONS
         public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.PRESET_TARGET; // TODO temp
-        public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 200, 0);
+        public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 100, 0);
         public final static AimMode AIM_MODE = AimMode.TURRET;
-        public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.OFF; // TODO turn on
+        public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
         public final static TalonWrapper.MotorType FLYWHEEL_MOTOR_TYPE = TalonWrapper.MotorType.TALON_FX;
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;

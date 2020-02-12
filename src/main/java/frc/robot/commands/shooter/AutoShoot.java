@@ -25,7 +25,7 @@ public class AutoShoot extends CommandBase {
     private ArrayList<Double> rpsList = new ArrayList<>(FLYWHEEL_GOAL_RPS_AVERAGE_COUNT);
 
     public AutoShoot() {
-        addRequirements(shooterSubsystem, limelightSubsystem);
+        addRequirements(shooterSubsystem, limelightSubsystem, indexerTowerSubsystem);
     }
 
     @Override
@@ -59,9 +59,8 @@ public class AutoShoot extends CommandBase {
         }
 
         // if ready to shoot then shoot balls
-        if(accurateTrajectory && shooterSubsystem.readyToShoot()) {
-            // TODO actually shoot a ball
-        }
+        boolean enableIndexerTower = (accurateTrajectory && shooterSubsystem.readyToShoot());
+        indexerTowerSubsystem.toggle(enableIndexerTower);
     }
 
     @Override
