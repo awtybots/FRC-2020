@@ -61,8 +61,8 @@ public final class Constants {
         public final static double GEAR_RATIO = 1/8;
         public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI;
         public final static double ROBOT_CIRMCUMFERENCE = 100; // this the the distance (in inches) each wheel travels when the robot spins one time around its center
-        public final static double GOAL_TOLERANCE = 0.5; // how many inches away do we stop TODO remove this and non-trajectory drive commands
-        public final static double TRACK_WIDTH = 24; // inches between left wheels and right wheels TODO
+        public final static double GOAL_TOLERANCE = 0.5;
+        public final static double TRACK_WIDTH = 24; // inches between left wheels and right wheels TODO use actual values
 
         // PID
         public final static double PID_P = 0.02;
@@ -77,8 +77,8 @@ public final class Constants {
         public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 inch per second per second
 
         // RAMSETE
-        public final static double RAM_B = 1;
-        public final static double RAM_Z = 1;
+        public final static double RAM_B = 2.0; // these are values from WPILib for meters
+        public final static double RAM_Z = 0.7;
     }
 
     public final static class Intake {
@@ -122,7 +122,7 @@ public final class Constants {
         public final static double TURRET_MAX_SPEED = 0.5; // %
         public final static double TURRET_GOAL_ANGLE_THRESHOLD = 2; // degrees to be satisfied with result
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 6; // degrees to start slowing down
-        public final static double TURRET_START_ANGLE = 180; // TODO from 0 to 360 (code doesn't let turret angle go <0 or >360 to prevent rotating too far)
+        public final static double TURRET_START_ANGLE = 180; // from 0 to 360 (code doesn't let turret angle go <0 or >360 to prevent rotating too far)
 
         // PID
         public final static double PID_P = 0.02;
