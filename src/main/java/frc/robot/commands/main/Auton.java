@@ -20,6 +20,7 @@ import frc.robot.commands.music.PlayMusic;
 import frc.robot.commands.music.PlayMusic.Song;
 import frc.robot.commands.shooter.AutoShoot;
 import frc.robot.commands.shooter.ResetNavX;
+import frc.robot.commands.shooter.SetShooterSpeed;
 import frc.robot.util.Vector3;
 import static frc.robot.Robot.*;
 import static frc.robot.Constants.DriveTrain.*;
@@ -131,6 +132,10 @@ public class Auton extends ParallelCommandGroup {
     }
     private AutoShoot autoShoot() {
         return new AutoShoot();
+    }
+    @SuppressWarnings("unused")
+    private SetShooterSpeed setShooterSpeed(double rps) {
+        return new SetShooterSpeed(rps);
     }
     private ToggleIntake toggleIntake(boolean on) {
         return new ToggleIntake(on);
