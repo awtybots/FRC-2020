@@ -43,6 +43,20 @@ public final class Constants {
         public static final int CONTROL_PANEL_SPINNER = 14;
     }
 
+    public final static class SolenoidChannels {
+        public static final int INTAKE_L_FWD = 0; // TODO real values
+        public static final int INTAKE_L_REV = 0;
+
+        public static final int INTAKE_R_FWD = 0;
+        public static final int INTAKE_R_REV = 0;
+
+        public static final int CLIMB_L_FWD = 0;
+        public static final int CLIMB_L_REV = 0;
+
+        public static final int CLIMB_R_FWD = 0;
+        public static final int CLIMB_R_REV = 0;
+    }
+
     public final static class DriveTrain {
         // OPTIONS
         public final static TalonWrapper.MotorType MOTOR_TYPE = TalonWrapper.MotorType.TALON_SRX;

@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.*;
 import frc.robot.commands.controlpanel.AutoSpinControlPanel;
+import frc.robot.commands.intake.MoveIntake;
 import frc.robot.commands.intake.ToggleIndexerTower;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.main.*;
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
     public static ControlPanelSubsystem controlPanelSubsystem;
     public static LimelightSubsystem limelightSubsystem;
     public static IndexerTowerSubsystem indexerTowerSubsystem;
+    public static ClimbSubsystem climbSubsystem;
 
     private Teleop teleopCommand;
     private Auton autonCommand;
@@ -69,12 +71,13 @@ public class Robot extends TimedRobot {
         controlPanelSubsystem = new ControlPanelSubsystem();
         limelightSubsystem = new LimelightSubsystem();
         indexerTowerSubsystem = new IndexerTowerSubsystem();
+        climbSubsystem = new ClimbSubsystem();
 
         // button mappings
         getButton("A").whenHeld(new ToggleShooter());
         getButton("B").whenHeld(new AutoShoot());
         getButton("X").whenPressed(new AutoSpinControlPanel());
-        //getButton("Y")
+        getButton("Y").whenPressed(new MoveIntake());
         getButton("BumperLeft").whenHeld(new ToggleIndexerTower());
         getButton("BumperRight").whenHeld(new ToggleIntake());
     }
