@@ -44,7 +44,7 @@ public class TeleopDrive extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        driveTrainSubsystem.hardStop();
+        driveTrainSubsystem.stop();
     }
 
     @Override

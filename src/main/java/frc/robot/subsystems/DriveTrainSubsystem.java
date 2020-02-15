@@ -151,10 +151,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
         goalVelocity.put(LEFT, left);
         goalVelocity.put(RIGHT, right);
     }
-    public void smoothStop() {
-        setGoalVelocity(0, 0);
-    }
-    public void hardStop() {
+    public void stop() {
         setGoalVelocity(0, 0);
         setMotorOutput(0, 0);
     }
