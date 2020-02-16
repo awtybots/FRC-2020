@@ -13,6 +13,9 @@ public class ResetNavX extends InstantCommand {
     public ResetNavX() {
         this(new Vector3(), 0);
     }
+    public ResetNavX(double x, double y, double startAngle) {
+        this(new Vector3(x, y, 0), startAngle);
+    }
     public ResetNavX(Vector3 displacement, double startAngle) {
         this.displacement = displacement;
         this.startAngle = startAngle;

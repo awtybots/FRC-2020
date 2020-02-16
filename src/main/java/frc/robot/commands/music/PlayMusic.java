@@ -15,6 +15,9 @@ public class PlayMusic extends CommandBase {
     private Orchestra orchestra;
     private boolean shufflePlay = false;
 
+    public PlayMusic() {
+        this(null);
+    }
     public PlayMusic(Song song) {
         addRequirements(shooterSubsystem); // disable shooter
         shooterSubsystem.disableMotorControl();

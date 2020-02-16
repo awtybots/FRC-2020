@@ -10,24 +10,26 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import static edu.wpi.first.wpilibj.XboxController.Button.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import frc.robot.Constants.*;
-import frc.robot.commands.controlpanel.AutoSpinControlPanel;
-import frc.robot.commands.intake.MoveIntake;
-import frc.robot.commands.intake.ToggleIndexerTower;
-import frc.robot.commands.intake.ToggleIntake;
+import frc.robot.commands.climb.*;
+import frc.robot.commands.controlpanel.*;
+import frc.robot.commands.intake.*;
 import frc.robot.commands.main.*;
 import frc.robot.commands.main.Auton.AutonType;
-import frc.robot.commands.shooter.AutoShoot;
-import frc.robot.commands.shooter.ToggleShooter;
+import frc.robot.commands.music.PlayMusic;
+import frc.robot.commands.shooter.*;
 import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
 
     public static XboxController xboxController1;
+    public static XboxController xboxController2;
 
     public static DriveTrainSubsystem driveTrainSubsystem;
     public static IntakeSubsystem intakeSubsystem;
@@ -64,7 +66,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData(autonChooser);
 
         // subsystems
-        xboxController1 = new XboxController(Controller.PORT);
+        xboxController1 = new XboxController(Controller.PORT_1);
+        xboxController2 = new XboxController(Controller.PORT_2);
         driveTrainSubsystem = new DriveTrainSubsystem();
         intakeSubsystem = new IntakeSubsystem();
         shooterSubsystem = new ShooterSubsystem();
@@ -74,12 +77,19 @@ public class Robot extends TimedRobot {
         climbSubsystem = new ClimbSubsystem();
 
         // button mappings
-        getButton("A").whenHeld(new ToggleShooter());
-        getButton("B").whenHeld(new AutoShoot());
-        getButton("X").whenPressed(new AutoSpinControlPanel());
-        getButton("Y").whenPressed(new MoveIntake());
-        getButton("BumperLeft").whenHeld(new ToggleIndexerTower());
-        getButton("BumperRight").whenHeld(new ToggleIntake());
+        getButton(xboxController1, kA).whenHeld(new ToggleIntake());
+        getButton(xboxController1, kB).whenHeld(new AutoShoot());
+        getButton(xboxController1, kX).whenPressed(new Climb());
+        getButton(xboxController1, kY);
+        getButton(xboxController2, kBumperRight);
+        getButton(xboxController2, kBumperLeft);
+
+        getButton(xboxController2, kA).whenPressed(new AutoSpinControlPanel());
+        getButton(xboxController2, kB).whenHeld(new ToggleIndexerTower());
+        getButton(xboxController2, kX).whenHeld(new ToggleShooter());
+        getButton(xboxController2, kY).whenHeld(new PlayMusic());
+        getButton(xboxController2, kBumperRight).whenPressed(new MoveIntake());;
+        getButton(xboxController2, kBumperLeft).whenPressed(new AngleClimber());;
     }
 
     /**
@@ -139,8 +149,8 @@ public class Robot extends TimedRobot {
 
     }
 
-    private JoystickButton getButton(String name) {
-        return new JoystickButton(xboxController1, XboxController.Button.valueOf("k"+name).value);
+    private JoystickButton getButton(XboxController controller, XboxController.Button btn) {
+        return new JoystickButton(controller, btn.value);
     }
 
     public static double getLoopTime() {

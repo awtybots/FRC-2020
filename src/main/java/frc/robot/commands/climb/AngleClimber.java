@@ -1,43 +1,43 @@
-package frc.robot.commands.intake;
+package frc.robot.commands.climb;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import static frc.robot.Robot.*;
 
-public class MoveIntake extends InstantCommand {
+public class AngleClimber extends InstantCommand {
 
-    private static IntakePosition currentPosition;
+    private static ClimberAngle currentPosition;
 
-    private IntakePosition pos;
+    private ClimberAngle pos;
 
-    public MoveIntake() {
+    public AngleClimber() {
         this.pos = null;
     }
-    public MoveIntake(IntakePosition pos) {
-        this.pos = pos;
+    public AngleClimber(ClimberAngle dir) {
+        this.pos = dir;
     }
 
     @Override
     public void initialize() {
         if(pos == null) pos = currentPosition.getOpposite();
         currentPosition = pos;
-        intakeSubsystem.setPistons(pos.getDirection());
+        climbSubsystem.setPistons(pos.getDirection());
     }
 
-    public enum IntakePosition {
-        UP  (DoubleSolenoid.Value.kReverse),
-        DOWN(DoubleSolenoid.Value.kForward);
+    public enum ClimberAngle {
+        UP  (DoubleSolenoid.Value.kForward),
+        DOWN(DoubleSolenoid.Value.kReverse);
 
         private DoubleSolenoid.Value direction;
-        private IntakePosition(DoubleSolenoid.Value direction) {
+        private ClimberAngle(DoubleSolenoid.Value direction) {
             this.direction = direction;
         }
 
         public DoubleSolenoid.Value getDirection() {
             return direction;
         }
-        public IntakePosition getOpposite() {
+        public ClimberAngle getOpposite() {
             switch(this) {
                 case UP: return DOWN;
                 case DOWN: return UP;

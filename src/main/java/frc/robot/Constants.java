@@ -46,15 +46,18 @@ public final class Constants {
     public final static class SolenoidChannels {
         public static final int INTAKE_L_FWD = 0; // TODO real values
         public static final int INTAKE_L_REV = 0;
-
         public static final int INTAKE_R_FWD = 0;
         public static final int INTAKE_R_REV = 0;
 
         public static final int CLIMB_L_FWD = 0;
         public static final int CLIMB_L_REV = 0;
-
         public static final int CLIMB_R_FWD = 0;
         public static final int CLIMB_R_REV = 0;
+
+		public static final int CLIMB_MINI_L_FWD = 0;
+		public static final int CLIMB_MINI_L_REV = 0;
+		public static final int CLIMB_MINI_R_FWD = 0;
+        public static final int CLIMB_MINI_R_REV = 0;
     }
 
     public final static class DriveTrain {
@@ -63,6 +66,8 @@ public final class Constants {
         public final static DriveMode DRIVE_MODE = DriveTrainSubsystem.DriveMode.DIRECT;
         public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
+        public static final Hand SPEED_HAND = Hand.kLeft; // which controller stick (left or right) to use for each control of arcade drive (speed and rotation)
+        public static final Hand ROTATION_HAND = Hand.kRight;
 
         // LIMITS
         public final static double DEADZONE = 0.1;
@@ -191,9 +196,7 @@ public final class Constants {
     }
 
     public final static class Controller {
-        public static final int PORT = 0;
-
-        public static final Hand SPEED_HAND = Hand.kLeft; // which stick (left or right) to use for each control of arcade drive (speed and rotation)
-        public static final Hand ROTATION_HAND = Hand.kRight;
+        public static final int PORT_1 = 0;
+        public static final int PORT_2 = 1;
     }
 }
