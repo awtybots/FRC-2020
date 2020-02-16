@@ -10,7 +10,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
 import static edu.wpi.first.wpilibj.XboxController.Button.*;
+
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -47,11 +52,16 @@ public class Robot extends TimedRobot {
     private static double period;
     private static PowerDistributionPanel pdp;
 
+    private DigitalOutput LEDOutput = new DigitalOutput(0);
+
     @Override
     public void robotInit() {
         // runtime constants
         period = getPeriod();
         pdp = new PowerDistributionPanel();
+
+        // set LED color
+        LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
 
         // auton chooser
         autonChooser = new SendableChooser<>();
