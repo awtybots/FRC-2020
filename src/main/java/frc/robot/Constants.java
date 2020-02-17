@@ -107,7 +107,7 @@ public final class Constants {
     public final static class Shooter {
         // OPTIONS
         public final static AutoShootMode AUTO_SHOOT_MODE = AutoShootMode.JUST_AIM_TURRET;
-        public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.VISION_AND_NAVX;
+        public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.VISION_ONLY;
         public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 100, 0);
         public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;

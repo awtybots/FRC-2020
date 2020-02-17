@@ -114,6 +114,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void setFlywheelGoalVelocity(double goalVelocity) {
         integralError = 0;
+        System.out.println("flywheel goal velocity: "+goalVelocity); // TODO remove print
         this.goalVelocity = clamp(goalVelocity, -FLYWHEEL_MAX_VELOCITY, FLYWHEEL_MAX_VELOCITY);
     }
 
