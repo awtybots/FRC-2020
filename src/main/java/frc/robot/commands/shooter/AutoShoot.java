@@ -2,7 +2,6 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.subsystems.LimelightSubsystem.Pipeline;
 import frc.robot.subsystems.DriveTrainSubsystem.FieldObject;
 import frc.robot.util.Vector3;
@@ -22,10 +21,14 @@ public class AutoShoot extends CommandBase {
     private double shooterAngle = toRadians(SHOOTER_ANGLE);
     private final double shooterVelocityToRPSFactor = 2.0 / FLYWHEEL_CIRCUMFERENCE / FLYWHEEL_SLIPPING_FACTOR;
 
+    private boolean sawTarget = false;
+    private boolean hitRight = false;
+
     private ArrayList<Double> rpsList = new ArrayList<>(FLYWHEEL_GOAL_RPS_AVERAGE_COUNT);
 
     public AutoShoot() {
-        addRequirements(shooterSubsystem, limelightSubsystem, indexerTowerSubsystem);
+        addRequirements(shooterSubsystem, limelightSubsystem);
+        if(AUTO_SHOOT_MODE == AutoShootMode.MOVING_SHOTS) addRequirements(indexerTowerSubsystem);
     }
 
     @Override
@@ -35,32 +38,24 @@ public class AutoShoot extends CommandBase {
 
     @Override
     public void execute() {
-        // calculate trajectory (required turret angle, initial velocity, and flywheel revs per second)
-        boolean accurateTrajectory = calculateTrajectory();
-        SmartDashboard.putBoolean("Shooter trajectory possible", accurateTrajectory);
-
-        // set motor speeds
-        shooterSubsystem.setFlywheelGoalVelocity(optimalRevsPerSecond);
-        switch(AIM_MODE) {
-            case DRIVE:
-                double turnSpeed;
-                if(abs(angleOffset) > TURRET_GOAL_ANGLE_THRESHOLD) {
-                    turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
-                    turnSpeed *= TURRET_MAX_SPEED;
-                    if(abs(turnSpeed) < TURRET_MIN_SPEED) turnSpeed = TURRET_MIN_SPEED * signum(turnSpeed);
-                } else {
-                    turnSpeed = 0;
-                }
-                driveTrainSubsystem.setMotorOutput(turnSpeed, -turnSpeed);
+        switch(AUTO_SHOOT_MODE) {
+            case JUST_AIM_TURRET:
+                shooterSubsystem.setTurretGoalAngle(calculateAngleOffset());
                 break;
-            case TURRET:
+            case MOVING_SHOTS:
+                // calculate trajectory (required turret angle, initial velocity, and flywheel revs per second)
+                boolean accurateTrajectory = calculateTrajectory();
+                SmartDashboard.putBoolean("Shooter trajectory possible", accurateTrajectory);
+
+                // set motor speeds
+                shooterSubsystem.setFlywheelGoalVelocity(optimalRevsPerSecond);
                 shooterSubsystem.setTurretGoalAngle(angleOffset);
+
+                // if ready to shoot then shoot balls
+                boolean enableIndexerTower = (accurateTrajectory && shooterSubsystem.readyToShoot());
+                indexerTowerSubsystem.toggle(enableIndexerTower);
                 break;
         }
-
-        // if ready to shoot then shoot balls
-        boolean enableIndexerTower = (accurateTrajectory && shooterSubsystem.readyToShoot());
-        indexerTowerSubsystem.toggle(enableIndexerTower);
     }
 
     @Override
@@ -87,21 +82,18 @@ public class AutoShoot extends CommandBase {
         // choose displacement of goal from navx or limelight
         Vector3 targetDisplacement = null;
         boolean useNavX = false;
+        angleOffset = calculateAngleOffset(robotAngle, visionTargetInfo, navXTargetDisplacement);
+
         switch(TRAJECTORY_CALCULATION_MODE) {
             case VISION_AND_NAVX:
                 // use the NavX displacement instead (less reliable) if we A) can't see the target or B) the target we're seeing belongs to the other alliance
                 useNavX = visionTargetDisplacement == null || visionTargetDisplacement.clone().setZ(0).dot(navXTargetDisplacement.clone().setZ(0)) < 0;
-                // calculate the NavX offset angle, it will be changed if we see a target
-                angleOffset = navXTargetDisplacement.getZAngle() - robotAngle;
                 targetDisplacement = useNavX
                     ? navXTargetDisplacement
                     : visionTargetDisplacement.clone().rotateZ(robotAngle);
                 break;
             case VISION_ONLY:
-                angleOffset = 0;
                 if(visionTargetDisplacement == null) {
-                    // if we don't see a target then just rotate the turret
-                    angleOffset = 90;
                     optimalRevsPerSecond = 0;
                     rpsList.clear();
                     return false;
@@ -117,7 +109,7 @@ public class AutoShoot extends CommandBase {
         targetDisplacement.setZ(FieldObject.POWER_PORT.getPosition().z - SHOOTER_HEIGHT);
         Vector3 optimalBallVelocity = calculateOptimalBallVelocity(targetDisplacement);
 
-        // if shot is impossible from this point, stop motor
+        // check if shot is impossible from this point
         if(optimalBallVelocity == null) {
             optimalRevsPerSecond = 0;
             rpsList.clear();
@@ -128,13 +120,10 @@ public class AutoShoot extends CommandBase {
         optimalBallVelocity.subtract(driveTrainSubsystem.getVelocity().setZ(0));
         optimalRevsPerSecond = calculateOptimalRevsPerSecond(optimalBallVelocity.getMagnitude());
 
-        // get aim angle for new velocity
-        double desiredAngleOffset = optimalBallVelocity.getZAngle() - robotAngle;
-        angleOffset = abs(desiredAngleOffset) <= TURRET_GOAL_ANGLE_THRESHOLD
-            ? 0.0
-            : desiredAngleOffset;
+        // get better aim angle for new velocity
+        angleOffset = optimalBallVelocity.getZAngle() - robotAngle;
 
-        // if shooting from this point requires too much RPM, stop motor
+        // check if shooting from this point requires too much RPM
         if(optimalRevsPerSecond > FLYWHEEL_MAX_VELOCITY) {
             optimalRevsPerSecond = 0;
             rpsList.clear();
@@ -200,14 +189,56 @@ public class AutoShoot extends CommandBase {
         return total/(double)rpsList.size();
     }
 
-    public enum AimMode {
-        TURRET,
-        DRIVE;
+    private double calculateAngleOffset() {
+        double robotAngle = driveTrainSubsystem.getRotation();
+        Vector3 visionTargetInfo = limelightSubsystem.getTargetInfo();
+        Vector3 navXTargetDisplacement = driveTrainSubsystem.getDisplacement(FieldObject.POWER_PORT);
+
+        return calculateAngleOffset(robotAngle, visionTargetInfo, navXTargetDisplacement);
     }
+
+    private double calculateAngleOffset(double robotAngle, Vector3 visionTargetInfo, Vector3 navXTargetDisplacement) {
+        switch(TRAJECTORY_CALCULATION_MODE) {
+            case VISION_ONLY:
+                if(visionTargetInfo == null) {
+                    if(sawTarget) {
+                        hitRight = false;
+                        sawTarget = false;
+                    }
+                    if(shooterSubsystem.getTurretAngle() + TURRET_WRAP_AROUND_THRESHOLD > 360) {
+                        hitRight = true;
+                    }
+                    if(hitRight) {
+                        return -TURRET_ANGLE_SLOW_THRESHOLD;
+                    } else {
+                        return TURRET_ANGLE_SLOW_THRESHOLD;
+                    }
+                } else {
+                    sawTarget = true;
+                    return visionTargetInfo.x;
+                }
+            case VISION_AND_NAVX:
+                if(visionTargetInfo == null) {
+                    return navXTargetDisplacement.getZAngle() - robotAngle;
+                } else {
+                    return visionTargetInfo.x;
+                }
+            case PRESET_TARGET:
+                return PRESET_TARGET_DISPLACEMENT.getZAngle();
+            default:
+                return 0;
+        }
+    }
+
     public enum TrajectoryCalculationMode {
         VISION_ONLY,
         VISION_AND_NAVX,
         PRESET_TARGET;
+    }
+
+    public enum AutoShootMode {
+        JUST_AIM_TURRET,
+        MOVING_SHOTS;
     }
 
 }

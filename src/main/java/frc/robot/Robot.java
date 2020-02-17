@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
     public static LimelightSubsystem limelightSubsystem;
     public static IndexerTowerSubsystem indexerTowerSubsystem;
     public static ClimbSubsystem climbSubsystem;
+    public static MusicSubsystem musicSubsystem;
 
     private Teleop teleopCommand;
     private Auton autonCommand;
@@ -85,6 +86,7 @@ public class Robot extends TimedRobot {
         limelightSubsystem = new LimelightSubsystem();
         indexerTowerSubsystem = new IndexerTowerSubsystem();
         climbSubsystem = new ClimbSubsystem();
+        musicSubsystem = new MusicSubsystem();
 
         // button mappings
         getButton(xboxController1, kA).whenHeld(new ToggleIntake());
@@ -98,8 +100,8 @@ public class Robot extends TimedRobot {
         getButton(xboxController2, kB).whenHeld(new ToggleIndexerTower());
         getButton(xboxController2, kX).whenHeld(new ToggleShooter());
         getButton(xboxController2, kY).whenHeld(new PlayMusic());
-        getButton(xboxController2, kBumperRight).whenPressed(new MoveIntake());;
-        getButton(xboxController2, kBumperLeft).whenPressed(new AngleClimber());;
+        getButton(xboxController2, kBumperRight).whenPressed(new MoveIntake());
+        getButton(xboxController2, kBumperLeft).whenPressed(new AngleClimber());
     }
 
     /**

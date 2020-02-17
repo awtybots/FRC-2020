@@ -11,13 +11,11 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import frc.robot.commands.shooter.AutoShoot.AimMode;
+import frc.robot.commands.shooter.AutoShoot.AutoShootMode;
 import frc.robot.commands.shooter.AutoShoot.TrajectoryCalculationMode;
-import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 import frc.robot.subsystems.DriveTrainSubsystem.MotorControlMode;
-import frc.robot.util.TalonWrapper;
 import frc.robot.util.Vector3;
 
 public final class Constants {
@@ -25,11 +23,9 @@ public final class Constants {
     public final static class MotorIDs {
         public static final int DRIVE_L1 = 8;
         public static final int DRIVE_L2 = 10;
-        public static final int DRIVE_L3 = 11;
 
         public static final int DRIVE_R1 = 7;
         public static final int DRIVE_R2 = 9;
-        public static final int DRIVE_R3 = 12;
 
         public static final int INTAKE = 5;
 
@@ -62,8 +58,7 @@ public final class Constants {
 
     public final static class DriveTrain {
         // OPTIONS
-        public final static TalonWrapper.MotorType MOTOR_TYPE = TalonWrapper.MotorType.TALON_SRX;
-        public final static DriveMode DRIVE_MODE = DriveTrainSubsystem.DriveMode.DIRECT;
+        public final static DriveMode DRIVE_MODE = DriveMode.VELOCITY;
         public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public static final Hand SPEED_HAND = Hand.kLeft; // which controller stick (left or right) to use for each control of arcade drive (speed and rotation)
@@ -72,7 +67,7 @@ public final class Constants {
         // LIMITS
         public final static double DEADZONE = 0.1;
         public final static double MIN_MOTOR_OUTPUT = 0.2;
-        public final static double MAX_TELEOP_MOTOR_OUTPUT = 0.4;
+        public final static double MAX_TELEOP_MOTOR_OUTPUT = 0.6;
         public final static double MAX_VELOCITY = 36; // inches per second
         public final static double MAX_ACCELERATION = 6; // inches per second^2
 
@@ -111,11 +106,10 @@ public final class Constants {
 
     public final static class Shooter {
         // OPTIONS
-        public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.PRESET_TARGET; // TODO temp
+        public final static AutoShootMode AUTO_SHOOT_MODE = AutoShootMode.JUST_AIM_TURRET;
+        public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.VISION_AND_NAVX;
         public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 100, 0);
-        public final static AimMode AIM_MODE = AimMode.TURRET;
         public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
-        public final static TalonWrapper.MotorType FLYWHEEL_MOTOR_TYPE = TalonWrapper.MotorType.TALON_FX;
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
 
@@ -139,8 +133,9 @@ public final class Constants {
         public final static double TURRET_RATIO = 1.0 / 3.0; // TODO
         public final static double TURRET_MIN_SPEED = 0.2; // %
         public final static double TURRET_MAX_SPEED = 0.5; // %
-        public final static double TURRET_GOAL_ANGLE_THRESHOLD = 2; // degrees to be satisfied with result
-        public final static double TURRET_ANGLE_SLOW_THRESHOLD = 6; // degrees to start slowing down
+        public final static double TURRET_GOAL_ANGLE_THRESHOLD = 1; // degrees to be satisfied with result
+        public final static double TURRET_ANGLE_SLOW_THRESHOLD = 5; // degrees to start slowing down
+        public final static double TURRET_WRAP_AROUND_THRESHOLD = 6; // if we don't see a target, how far away from 360 should we start moving the other direction
         public final static double TURRET_START_ANGLE = 180; // from 0 to 360 (code doesn't let turret angle go <0 or >360 to prevent rotating too far)
 
         // PID

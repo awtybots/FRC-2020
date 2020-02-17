@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import static frc.robot.Constants.DriveTrain.*;
+
+import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 import frc.robot.subsystems.DriveTrainSubsystem.MotorGroup;
 import static frc.robot.Robot.*;
 
@@ -33,10 +35,13 @@ public class RotateDegrees extends CommandBase {
         currentDistance = driveTrainSubsystem.getWheelDistance(MotorGroup.ALL, true);
 
         // stopping distance
-        double remainingDistance = goalDistance - currentDistance;
-        double stoppingDistance = currentVelocity * currentVelocity / MAX_ACCELERATION / 2;
-        if(stoppingDistance >= remainingDistance) {
-            goalVelocity = 0; // start slowing down before we hit the target
+        if(DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY) {
+            double remainingDistance = goalDistance - currentDistance;
+            double stoppingDistance = currentVelocity * currentVelocity / MAX_ACCELERATION / 2;
+            SmartDashboard.putNumber("RD - Stopping Distance", stoppingDistance);
+            if(stoppingDistance >= remainingDistance) {
+                goalVelocity = 0; // start slowing down before we hit the target
+            }
         }
 
         // motors
@@ -47,7 +52,6 @@ public class RotateDegrees extends CommandBase {
         SmartDashboard.putNumber("RD - Goal Distance", goalDistance);
         SmartDashboard.putNumber("RD - Current Velocity", currentVelocity);
         SmartDashboard.putNumber("RD - Goal Velocity", goalVelocity);
-        SmartDashboard.putNumber("RD - Stopping Distance", stoppingDistance);
     }
 
     @Override

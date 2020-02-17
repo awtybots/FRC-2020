@@ -8,6 +8,7 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 
 import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.Robot.*;
@@ -31,13 +32,10 @@ public class TeleopDrive extends CommandBase {
         double rotation = smooth(xboxController1.getX(ROTATION_HAND));
         double left = speed + rotation;
         double right = speed - rotation;
-        switch(DRIVE_MODE) {
-            case DIRECT:
-                driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
-                break;
-            case SMOOTH:
-                driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
-                break;
+        if(DRIVE_MODE == DriveMode.DIRECT) {
+            driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
+        } else {
+            driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
         }
     }
 

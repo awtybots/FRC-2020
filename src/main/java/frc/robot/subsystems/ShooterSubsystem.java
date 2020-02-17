@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -9,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Robot;
 import frc.robot.Constants.MotorIDs;
-import frc.robot.util.TalonWrapper;
 
 import static frc.robot.Constants.Shooter.*;
 
@@ -17,14 +17,14 @@ import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-    private final TalonWrapper flywheel = FLYWHEEL_MOTOR_TYPE.getMotorCreateFunction().apply(MotorIDs.SHOOTER_FLYWHEEL);
+    private final WPI_TalonFX flywheel = new WPI_TalonFX(MotorIDs.SHOOTER_FLYWHEEL);
     private final WPI_TalonSRX turret = new WPI_TalonSRX(MotorIDs.SHOOTER_TURRET);
 
     private double PERIOD;
 
     private double goalVelocity = 0;
-    private double currentVelocity;
-    private double currentAngle;
+    private double currentVelocity = 0;
+    private double currentAngle = 0;
 
     private double integralError = 0;
     private double lastVelocityError = 0;
@@ -32,7 +32,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private double goalAngle = TURRET_START_ANGLE;
     private double angleFactor = 4096.0/360.0 * TURRET_RATIO;
 
-    private boolean readyToShoot;
+    private boolean readyToShoot = false;
 
     private MotorControlMode MODE;
 
@@ -43,7 +43,7 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheel.configFactoryDefault();
         flywheel.setNeutralMode(FLYWHEEL_BRAKE_MODE);
         flywheel.setInverted(true);
-        flywheel.configSelectedFeedbackSensor(FLYWHEEL_MOTOR_TYPE.getFeedbackDevice());
+        flywheel.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
         flywheel.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_20Ms);
         flywheel.configVelocityMeasurementWindow(8);
 
@@ -60,7 +60,7 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // get encoder measurements
-        currentVelocity = flywheel.getSelectedSensorVelocity() * 10.0 / FLYWHEEL_MOTOR_TYPE.getEncoderUnits() * FLYWHEEL_RATIO;
+        currentVelocity = flywheel.getSelectedSensorVelocity() * 10.0 / 2048.0 * FLYWHEEL_RATIO; // TODO testing
         currentAngle = ((double)turret.getSelectedSensorPosition()) / angleFactor;
         boolean velocityAtGoal = Math.abs(currentVelocity - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;
         boolean turretAtGoal = Math.abs(currentAngle - goalAngle) <= TURRET_GOAL_ANGLE_THRESHOLD;
@@ -74,8 +74,7 @@ public class ShooterSubsystem extends SubsystemBase {
         if(!turretAtGoal) {
             double angleOffset = goalAngle - currentAngle;
             SmartDashboard.putNumber("Turret angle offset", angleOffset);
-            double turnSpeed = MathUtil.clamp(angleOffset, -TURRET_ANGLE_SLOW_THRESHOLD, TURRET_ANGLE_SLOW_THRESHOLD)/TURRET_ANGLE_SLOW_THRESHOLD;
-            turnSpeed *= TURRET_MAX_SPEED;
+            double turnSpeed = MathUtil.clamp(angleOffset/TURRET_ANGLE_SLOW_THRESHOLD, -1.0, 1.0) * TURRET_MAX_SPEED;
             if(Math.abs(turnSpeed) < TURRET_MIN_SPEED) turnSpeed = TURRET_MIN_SPEED * Math.signum(turnSpeed);
         }
 
@@ -118,6 +117,9 @@ public class ShooterSubsystem extends SubsystemBase {
         this.goalVelocity = clamp(goalVelocity, -FLYWHEEL_MAX_VELOCITY, FLYWHEEL_MAX_VELOCITY);
     }
 
+    public double getTurretAngle() {
+        return currentAngle;
+    }
     public void setTurretGoalAngle(double angleOffset) {
         goalAngle = Math.floorMod((int)(currentAngle + angleOffset), 360);
     }
@@ -142,10 +144,5 @@ public class ShooterSubsystem extends SubsystemBase {
             }
         }
     }
-
-	public void disableMotorControl() {
-        System.out.println("SHOOTER SUBSYTEM MOTOR CONTROL DISABLED FOR MUSIC");
-        MODE = MotorControlMode.OFF;
-	}
 
 }

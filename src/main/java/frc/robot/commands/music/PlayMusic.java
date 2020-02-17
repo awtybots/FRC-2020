@@ -2,38 +2,31 @@ package frc.robot.commands.music;
 
 import java.util.Random;
 
-import com.ctre.phoenix.music.Orchestra;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.util.TalonWrapper;
 import static frc.robot.Robot.*;
 
 public class PlayMusic extends CommandBase {
 
     private Song song;
-    private Orchestra orchestra;
     private boolean shufflePlay = false;
 
     public PlayMusic() {
         this(null);
     }
     public PlayMusic(Song song) {
-        addRequirements(shooterSubsystem); // disable shooter
-        shooterSubsystem.disableMotorControl();
+        addRequirements(musicSubsystem);
         if(song == null) { // if no song was given, shuffle play songs forever
             this.song = Song.random();
             this.shufflePlay = true;
         } else {
             this.song = song;
         }
-        this.orchestra = TalonWrapper.getOrchestra();
     }
 
     @Override
     public void initialize() {
-        orchestra.loadMusic(song.getPath());
-        orchestra.play();
+        musicSubsystem.playSong(song.getPath());
         SmartDashboard.putString("Currently playing", song.getName());
     }
 

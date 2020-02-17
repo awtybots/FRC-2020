@@ -9,7 +9,6 @@ public class SetShooterSpeed extends InstantCommand {
     private double rps;
 
     public SetShooterSpeed(double rps) {
-        addRequirements(shooterSubsystem);
         this.rps = rps;
     }
 

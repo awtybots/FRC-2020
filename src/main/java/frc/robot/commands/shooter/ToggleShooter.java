@@ -8,7 +8,7 @@ import static frc.robot.Robot.*;
 public class ToggleShooter extends CommandBase {
 
     public ToggleShooter() {
-        addRequirements(shooterSubsystem);
+
     }
 
     @Override
