@@ -22,6 +22,9 @@ public class Auton extends ParallelCommandGroup {
 
     public Auton(AutonType autonType) {
         addCommands(
+            new AngleClimber(ClimberAngle.DOWN),
+            new Climb(ClimbDirection.DOWN),
+            new MoveIntake(IntakePosition.DOWN),
             getAutonSequence(autonType)
         );
     }
@@ -59,7 +62,7 @@ public class Auton extends ParallelCommandGroup {
 
             case SQUARE: return
                 sequence(
-                    new ResetNavX(0, 0, 0),
+                    new ResetNavX(),
                     new DriveInches(24),
                     new RotateDegrees(90),
                     new DriveInches(24),
@@ -73,7 +76,6 @@ public class Auton extends ParallelCommandGroup {
             case PATH_1: return
                 sequence(
                     new AutoShoot(),
-                    new MoveIntake(IntakePosition.DOWN),
                     new ToggleIntake(true),
                     new ToggleIndexerTower(true),
                     new DriveTrajectory("GoToCenter", true),

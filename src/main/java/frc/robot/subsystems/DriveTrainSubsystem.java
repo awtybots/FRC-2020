@@ -44,7 +44,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
     private HashMap<MotorGroup, Double> integralError = new HashMap<>();
 
-    private final AHRS board = new AHRS(SPI.Port.kMXP);
+    private final AHRS navX = new AHRS(SPI.Port.kMXP);
 
     private DifferentialDriveOdometry odometry;
     private Vector3 lastPosition = new Vector3();
@@ -159,7 +159,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     public void setDisplacement(Vector3 displacement, double initialAngle) {
         resetEncoders();
-        board.reset();
+        navX.reset();
         odometry = new DifferentialDriveOdometry(
             getRawRotation(),
             new Pose2d(displacement.toTranslation2d(), Rotation2d.fromDegrees(initialAngle))
@@ -179,12 +179,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
         return position.clone().subtract(lastPosition).multiply(PERIOD);
     }
     public double getRotation() {
-        return Math.floorMod((int)(initialAngle - board.getAngle()), 360);
+        return Math.floorMod((int)(initialAngle + navX.getAngle()), 360);
     }
 
 
     private Rotation2d getRawRotation() {
-        return Rotation2d.fromDegrees(-board.getAngle());
+        return Rotation2d.fromDegrees(navX.getAngle());
     }
     public double getWheelDistance(MotorGroup motorGroup, boolean abs) {
         double totalUnits = 0;
