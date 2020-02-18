@@ -137,6 +137,8 @@ public final class Constants {
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 5; // degrees to start slowing down
         public final static double TURRET_WRAP_AROUND_THRESHOLD = 6; // if we don't see a target, how far away from 360 should we start moving the other direction
         public final static double TURRET_START_ANGLE = 180; // from 0 to 360 (code doesn't let turret angle go <0 or >360 to prevent rotating too far)
+        public final static double TURRET_CLIMB_ANGLE = 180;
+        public final static double TURRET_CLIMB_ANGLE_TOLERANCE = 3;
 
         // PID
         public final static double PID_P = 0.02;

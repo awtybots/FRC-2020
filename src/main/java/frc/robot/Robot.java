@@ -27,7 +27,6 @@ import frc.robot.commands.controlpanel.*;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.main.*;
 import frc.robot.commands.main.Auton.AutonType;
-import frc.robot.commands.music.PlayMusic;
 import frc.robot.commands.shooter.*;
 import frc.robot.subsystems.*;
 
@@ -90,18 +89,18 @@ public class Robot extends TimedRobot {
 
         // button mappings
         getButton(xboxController1, kA).whenHeld(new ToggleIntake());
-        getButton(xboxController1, kB).whenHeld(new AutoShoot());
-        getButton(xboxController1, kX).whenPressed(new Climb());
+        getButton(xboxController1, kB).whenPressed(new MoveIntake());
+        getButton(xboxController1, kX);
         getButton(xboxController1, kY);
-        getButton(xboxController2, kBumperRight);
-        getButton(xboxController2, kBumperLeft);
-
-        getButton(xboxController2, kA).whenPressed(new AutoSpinControlPanel());
-        getButton(xboxController2, kB).whenHeld(new ToggleIndexerTower());
-        getButton(xboxController2, kX).whenHeld(new ToggleShooter());
-        getButton(xboxController2, kY).whenHeld(new PlayMusic());
-        getButton(xboxController2, kBumperRight).whenPressed(new MoveIntake());
         getButton(xboxController2, kBumperLeft).whenPressed(new AngleClimber());
+        getButton(xboxController2, kBumperRight).whenPressed(new Climb());
+
+        getButton(xboxController2, kA).whenHeld(new ToggleIndexerTower());
+        getButton(xboxController2, kB).whenPressed(new AutoSpinControlPanel());
+        getButton(xboxController2, kX).whenHeld(new ToggleShooter());
+        getButton(xboxController2, kY).whenPressed(new AutoShoot());
+        getButton(xboxController2, kBumperLeft);
+        getButton(xboxController2, kBumperRight);
     }
 
     /**
