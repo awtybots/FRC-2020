@@ -13,8 +13,7 @@ import frc.robot.Constants.SolenoidChannels;
 public class IntakeSubsystem extends SubsystemBase {
 
     private final WPI_TalonSRX motor = new WPI_TalonSRX(MotorIDs.INTAKE);
-    private final DoubleSolenoid pistonL = new DoubleSolenoid(SolenoidChannels.INTAKE_L_FWD, SolenoidChannels.INTAKE_L_REV);
-    private final DoubleSolenoid pistonR = new DoubleSolenoid(SolenoidChannels.INTAKE_R_FWD, SolenoidChannels.INTAKE_R_REV);
+    private final DoubleSolenoid pistons = new DoubleSolenoid(SolenoidChannels.INTAKE_FWD, SolenoidChannels.INTAKE_REV);
 
     public IntakeSubsystem() {
         toggle(false);
@@ -25,7 +24,6 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
 	public void setPistons(Value direction) {
-        pistonL.set(direction);
-        pistonR.set(direction);
+        pistons.set(direction);
 	}
 }
