@@ -29,13 +29,13 @@ public class DriveInches extends CommandBase {
     @Override
     public void execute() {
         // encoders
-        double currentVelocity = driveTrainSubsystem.getWheelVelocity(MotorGroup.ALL, false);
-        currentDistance = driveTrainSubsystem.getWheelDistance(MotorGroup.ALL, false);
+        double currentVelocity = driveTrainSubsystem.getWheelVelocity(MotorGroup.ALL);
+        currentDistance = driveTrainSubsystem.getWheelDistance(MotorGroup.ALL);
 
         // stopping distance
         if(DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY) {
             double remainingDistance = Math.abs(goalDistance - currentDistance);
-            double stoppingDistance = currentVelocity * currentVelocity / MAX_ACCELERATION / 2;
+            double stoppingDistance = currentVelocity * currentVelocity / MAX_ACCELERATION / 2.0;
             SmartDashboard.putNumber("DI - Stopping Distance", stoppingDistance);
             if(stoppingDistance >= remainingDistance) {
                 goalVelocity = 0; // start slowing down before we hit the target
@@ -49,7 +49,6 @@ public class DriveInches extends CommandBase {
         SmartDashboard.putNumber("DI - Current Distance", currentDistance);
         SmartDashboard.putNumber("DI - Goal Distance", goalDistance);
         SmartDashboard.putNumber("DI - Current Velocity", currentVelocity);
-        SmartDashboard.putNumber("DI - Goal Velocity", goalVelocity);
     }
 
     @Override
@@ -59,7 +58,7 @@ public class DriveInches extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(currentDistance) >= Math.abs(goalDistance) - GOAL_TOLERANCE;
+        return Math.abs(currentDistance) >= Math.abs(goalDistance);
     }
 
 }

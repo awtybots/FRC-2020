@@ -58,7 +58,7 @@ public final class Constants {
 
     public final static class DriveTrain {
         // OPTIONS
-        public final static DriveMode DRIVE_MODE = DriveMode.VELOCITY;
+        public final static DriveMode DRIVE_MODE = DriveMode.VELOCITY; // TODO change to DIRECT or tune the values below if it doesn't work
         public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public static final Hand SPEED_HAND = Hand.kLeft; // which controller stick (left or right) to use for each control of arcade drive (speed and rotation)
@@ -67,28 +67,29 @@ public final class Constants {
         // LIMITS
         public final static double DEADZONE = 0.1;
         public final static double MIN_MOTOR_OUTPUT = 0.2;
-        public final static double MAX_TELEOP_MOTOR_OUTPUT = 0.6;
-        public final static double MAX_VELOCITY = 36; // inches per second
-        public final static double MAX_ACCELERATION = 6; // inches per second^2
+        public final static double MAX_TELEOP_MOTOR_OUTPUT = 0.6; // TODO increase
+        public final static double MAX_VELOCITY = 36; // inches per second TODO way too slow (for testing)
+        public final static double MAX_ACCELERATION = 6; // inches per second^2 TODO way too slow (for testing)
 
         // VALUES
-        public final static double GEAR_RATIO = 1/8;
-        public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI;
-        public final static double ROBOT_CIRMCUMFERENCE = 100; // this the the distance (in inches) each wheel travels when the robot spins one time around its center
-        public final static double GOAL_TOLERANCE = 0.5;
-        public final static double TRACK_WIDTH = 24; // inches between left wheels and right wheels TODO use actual values
+        public final static double GEAR_RATIO = 1.0 / 8.0; // TODO change to actual value
+        public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI; // TODO change to actual value
+        public final static double TRACK_WIDTH = 26; // inches between left wheels and right wheels TODO measure actual value
 
         // PID
-        public final static double PID_P = 0.02;
+        public final static double PID_P = 0.02; // TODO tune
         public final static double PID_I = 0;
         public final static double PID_D = 0;
-        public final static double INTEGRAL_MIN = -0.5;
-        public final static double INTEGRAL_MAX = 0.5;
+        public final static double INTEGRAL_MAX = 1.0;
 
         // FEEDFORWARD
-        public final static double FF_S = 1.3; // voltage required to move a wheel any amount
+        public final static double FF_S = 1.3; // voltage required to move a wheel any amount TODO tune
         public final static double FF_V = 0.12; // voltage required to sustain a wheel's speed moving 1 inch per second
         public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 inch per second per second
+
+        // AUTON COMMANDS
+        public final static double ROTATE_DEGREES_SLOW_THRESHOLD = 5; // degrees to start slowing down (only if DRIVE_MODE is TRAPEZOIDAL_VELOCITY)
+        public final static double ROTATE_DEGREES_GOAL_TOLERANCE = 2;
 
         // RAMSETE
         public final static double RAM_B = 2.0; // these are values from WPILib for meters
@@ -137,7 +138,7 @@ public final class Constants {
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 5; // degrees to start slowing down
         public final static double TURRET_WRAP_AROUND_THRESHOLD = 6; // if we don't see a target, how far away from 360 should we start moving the other direction
         public final static double TURRET_START_ANGLE = 180; // from 0 to 360 (code doesn't let turret angle go <0 or >360 to prevent rotating too far)
-        public final static double TURRET_CLIMB_ANGLE = 180;
+        public final static double TURRET_CLIMB_ANGLE = 180; // angle the turret goes to for the climber to fit
         public final static double TURRET_CLIMB_ANGLE_TOLERANCE = 3;
 
         // PID

@@ -6,52 +6,44 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import static frc.robot.Constants.DriveTrain.*;
 
 import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
-import frc.robot.subsystems.DriveTrainSubsystem.MotorGroup;
 import static frc.robot.Robot.*;
 
 public class RotateDegrees extends CommandBase {
 
-    private final double goalDistance;
+    private double goalRotation;
     private double goalVelocity;
-    private double currentDistance = 0;
-    private double multiplier;
+    private double currentRotation = 0;
 
     public RotateDegrees(double degrees) {
         addRequirements(driveTrainSubsystem);
-        this.goalDistance = Math.abs(degrees)/360 * ROBOT_CIRMCUMFERENCE;
-        this.multiplier = Math.signum(degrees);
-        this.goalVelocity = multiplier * MAX_VELOCITY;
+        goalRotation = -degrees;
+        goalVelocity = Math.signum(-degrees) * MAX_VELOCITY;
     }
 
     @Override
     public void initialize() {
-        driveTrainSubsystem.resetEncoders();
+        goalRotation = Math.floorMod((int)(driveTrainSubsystem.getRotation() + goalRotation), 360);
     }
 
     @Override
     public void execute() {
-        // encoders
-        double currentVelocity = driveTrainSubsystem.getWheelVelocity(MotorGroup.ALL, true);
-        currentDistance = driveTrainSubsystem.getWheelDistance(MotorGroup.ALL, true);
+        // rotation values
+        currentRotation = driveTrainSubsystem.getRotation();
 
         // stopping distance
         if(DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY) {
-            double remainingDistance = goalDistance - currentDistance;
-            double stoppingDistance = currentVelocity * currentVelocity / MAX_ACCELERATION / 2;
-            SmartDashboard.putNumber("RD - Stopping Distance", stoppingDistance);
-            if(stoppingDistance >= remainingDistance) {
+            double remainingDistance = goalRotation - currentRotation;
+            if(ROTATE_DEGREES_SLOW_THRESHOLD >= remainingDistance) {
                 goalVelocity = 0; // start slowing down before we hit the target
             }
         }
 
         // motors
-        driveTrainSubsystem.setGoalVelocity(goalVelocity * multiplier, goalVelocity * -multiplier);
+        driveTrainSubsystem.setGoalVelocity(goalVelocity, -goalVelocity);
 
         // SmartDashbaord
-        SmartDashboard.putNumber("RD - Current Distance", currentDistance);
-        SmartDashboard.putNumber("RD - Goal Distance", goalDistance);
-        SmartDashboard.putNumber("RD - Current Velocity", currentVelocity);
-        SmartDashboard.putNumber("RD - Goal Velocity", goalVelocity);
+        SmartDashboard.putNumber("RD - Current Distance", currentRotation);
+        SmartDashboard.putNumber("RD - Goal Distance", goalRotation);
     }
 
     @Override
@@ -61,7 +53,7 @@ public class RotateDegrees extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return currentDistance >= goalDistance - GOAL_TOLERANCE;
+        return Math.abs(currentRotation - goalRotation) <= ROTATE_DEGREES_GOAL_TOLERANCE;
     }
 
 }
