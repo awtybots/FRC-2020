@@ -30,6 +30,7 @@ import frc.robot.commands.main.Auton.AutonType;
 import frc.robot.commands.shooter.*;
 import frc.robot.subsystems.*;
 import static frc.robot.Constants.Shooter.*;
+import static frc.robot.Constants.DriveTrain.*;
 
 public class Robot extends TimedRobot {
 
@@ -129,6 +130,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        driveTrainSubsystem.setDriveMode(AUTON_DRIVE_MODE);
         autonCommand = new Auton(autonChooser.getSelected()); // get chosen AutonType
         autonCommand.schedule(); // start auton
     }
@@ -142,6 +144,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         if(autonCommand != null) autonCommand.cancel(); // finish auton
 
+        driveTrainSubsystem.setDriveMode(TELEOP_DRIVE_MODE);
         teleopCommand = new Teleop(); // overlaying teleop command for the teleop period
         teleopCommand.schedule(); // start teleop
     }

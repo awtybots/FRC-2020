@@ -53,6 +53,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     private double initialAngle;
 
+    private DriveMode CURRENT_DRIVE_MODE = DriveMode.DIRECT;
     private static double PERIOD;
 
 
@@ -94,7 +95,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(DRIVE_MODE != DriveTrainSubsystem.DriveMode.DIRECT) {
+        if(CURRENT_DRIVE_MODE != DriveTrainSubsystem.DriveMode.DIRECT) {
             MOTOR_CONTROL_MODE.getMotorControlFunction(this).accept(LEFT);
             MOTOR_CONTROL_MODE.getMotorControlFunction(this).accept(RIGHT);
         }
@@ -111,7 +112,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private void drivePID(MotorGroup motorGroup) {
         double currentVelocity = getWheelVelocity(motorGroup);
         double goalAcceleration = goalVelocity.getOrDefault(motorGroup, 0.0) - currentVelocity;
-        double velocityError = DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY
+        double velocityError = CURRENT_DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY
             ? clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD)
             : goalAcceleration;
         double accelerationError = (velocityError - lastVelocityError.getOrDefault(motorGroup, 0.0)) / PERIOD;
@@ -129,7 +130,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private void driveFeedforward(MotorGroup motorGroup) {
         double currentVelocity = getWheelVelocity(motorGroup);
         double goalAcceleration = goalVelocity.getOrDefault(motorGroup, 0.0) - currentVelocity;
-        double constrainedGoalAcceleration = DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY
+        double constrainedGoalAcceleration = CURRENT_DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY
             ? clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD)
             : goalAcceleration;
         double constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
@@ -162,6 +163,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
         setMotorVoltage(RIGHT, right);
     }
 
+    public void setDriveMode(DriveMode mode) {
+        CURRENT_DRIVE_MODE = mode;
+    }
     public void setGoalVelocity(double left, double right) {
         goalVelocity.put(LEFT, clamp(left, -MAX_VELOCITY, MAX_VELOCITY));
         goalVelocity.put(RIGHT, clamp(left, -MAX_VELOCITY, MAX_VELOCITY));

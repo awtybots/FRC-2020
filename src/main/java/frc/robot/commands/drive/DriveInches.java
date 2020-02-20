@@ -33,7 +33,7 @@ public class DriveInches extends CommandBase {
         currentDistance = driveTrainSubsystem.getWheelDistance(MotorGroup.ALL);
 
         // stopping distance
-        if(DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY) {
+        if(AUTON_DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY) {
             double remainingDistance = Math.abs(goalDistance - currentDistance);
             double stoppingDistance = currentVelocity * currentVelocity / MAX_ACCELERATION / 2.0;
             SmartDashboard.putNumber("DI - Stopping Distance", stoppingDistance);

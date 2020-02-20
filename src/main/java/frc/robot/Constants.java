@@ -52,7 +52,8 @@ public final class Constants {
 
     public final static class DriveTrain {
         // OPTIONS
-        public final static DriveMode DRIVE_MODE = DriveMode.DIRECT; // TODO test VELOCITY and TRAPEZOIDAL_VELOCITY
+        public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.DIRECT; // TODO test VELOCITY and TRAPEZOIDAL_VELOCITY
+        public final static DriveMode AUTON_DRIVE_MODE = DriveMode.DIRECT; // TODO test VELOCITY and TRAPEZOIDAL_VELOCITY
         public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public static final Hand SPEED_HAND = Hand.kLeft;
@@ -72,13 +73,13 @@ public final class Constants {
         public final static double TRACK_WIDTH = 26.5; // inches between left wheels and right wheels
 
         // PID
-        public final static double PID_P = 0.02; // TODO tune
+        public final static double PID_P = 0.02;
         public final static double PID_I = 0;
         public final static double PID_D = 0;
         public final static double INTEGRAL_MAX = 1.0;
 
         // FEEDFORWARD
-        public final static double FF_S = 1.3; // voltage required to move a wheel any amount TODO tune
+        public final static double FF_S = 1.3; // voltage required to move a wheel any amount
         public final static double FF_V = 0.12; // voltage required to sustain a wheel's speed moving 1 inch per second
         public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 inch per second per second
 

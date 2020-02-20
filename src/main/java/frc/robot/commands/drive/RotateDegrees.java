@@ -31,7 +31,7 @@ public class RotateDegrees extends CommandBase {
         currentRotation = driveTrainSubsystem.getRotation();
 
         // stopping distance
-        if(DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY) {
+        if(AUTON_DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY) {
             double remainingDistance = goalRotation - currentRotation;
             if(ROTATE_DEGREES_SLOW_THRESHOLD >= remainingDistance) {
                 goalVelocity = 0; // start slowing down before we hit the target
