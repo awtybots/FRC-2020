@@ -21,7 +21,7 @@ import frc.robot.util.Vector3;
 public final class Constants {
 
     public final static class MotorIDs {
-        public static final int DRIVE_L1 = 8;
+        public static final int DRIVE_L1 = 8; // TODO real values
         public static final int DRIVE_L2 = 10;
 
         public static final int DRIVE_R1 = 7;
@@ -52,21 +52,22 @@ public final class Constants {
 
     public final static class DriveTrain {
         // OPTIONS
-        public final static DriveMode DRIVE_MODE = DriveMode.VELOCITY; // TODO change to DIRECT or tune the values below if it doesn't work
+        public final static DriveMode DRIVE_MODE = DriveMode.DIRECT; // TODO test VELOCITY and TRAPEZOIDAL_VELOCITY
         public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
-        public static final Hand SPEED_HAND = Hand.kLeft; // which controller stick (left or right) to use for each control of arcade drive (speed and rotation)
+        public static final Hand SPEED_HAND = Hand.kLeft;
         public static final Hand ROTATION_HAND = Hand.kRight;
+        public final static boolean TUNING_MODE = false; // change to true if you want to tune PID / FF in SmartDashboard
 
         // LIMITS
         public final static double DEADZONE = 0.1;
         public final static double MIN_MOTOR_OUTPUT = 0.2;
-        public final static double MAX_TELEOP_MOTOR_OUTPUT = 0.6; // TODO increase
-        public final static double MAX_VELOCITY = 36; // inches per second TODO way too slow (for testing)
-        public final static double MAX_ACCELERATION = 6; // inches per second^2 TODO way too slow (for testing)
+        public final static double MAX_MOTOR_OUTPUT = 0.6; // TODO increase
+        public final static double MAX_VELOCITY = 36; // inches per second TODO too slow (for testing)
+        public final static double MAX_ACCELERATION = 6; // inches per second^2 TODO too slow (for testing)
 
         // VALUES
-        public final static double GEAR_RATIO = 1.0 / 8.0; // TODO change to actual value
+        public final static double GEAR_RATIO = 12.0 / 40.0 * 24.0 / 34.0;
         public final static double WHEEL_CIRCUMFERENCE = 6.375 * Math.PI;
         public final static double TRACK_WIDTH = 26.5; // inches between left wheels and right wheels
 
@@ -107,6 +108,7 @@ public final class Constants {
         public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
+        public final static boolean TUNING_MODE = false; // change to true if you want to tune PID / FF in SmartDashboard
 
         // SPEEDS
         public final static double FLYWHEEL_TELEOP_SPEED_1 = 4000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)

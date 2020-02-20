@@ -33,7 +33,7 @@ public class TeleopDrive extends CommandBase {
         double left = speed + rotation;
         double right = speed - rotation;
         if(DRIVE_MODE == DriveMode.DIRECT) {
-            driveTrainSubsystem.setMotorOutput(left * MAX_TELEOP_MOTOR_OUTPUT, right * MAX_TELEOP_MOTOR_OUTPUT);
+            driveTrainSubsystem.setMotorOutput(left * MAX_MOTOR_OUTPUT, right * MAX_MOTOR_OUTPUT);
         } else {
             driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
         }

@@ -52,9 +52,15 @@ public class ShooterSubsystem extends SubsystemBase {
         turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         turret.setSelectedSensorPosition((int)(TURRET_START_ANGLE * angleFactor));
 
-        SmartDashboard.setDefaultNumber("PID_P", PID_P); // TODO temp
-        SmartDashboard.setDefaultNumber("PID_I", PID_I);
-        SmartDashboard.setDefaultNumber("PID_D", PID_D);
+        if(TUNING_MODE) {
+            SmartDashboard.setDefaultNumber("Shooter PID_P", PID_P);
+            SmartDashboard.setDefaultNumber("Shooter PID_I", PID_I);
+            SmartDashboard.setDefaultNumber("Shooter PID_D", PID_D);
+
+            SmartDashboard.setDefaultNumber("Shooter FF_S", FF_S);
+            SmartDashboard.setDefaultNumber("Shooter FF_V", FF_V);
+            SmartDashboard.setDefaultNumber("Shooter FF_A", FF_A);
+        }
     }
 
     @Override
@@ -87,8 +93,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private void flywheelFeedforward() {
         double goalAcceleration = goalVelocity - currentVelocity;
-        double voltage
-            = (FF_S * Math.signum(goalVelocity))
+        double voltage = TUNING_MODE
+            ? (SmartDashboard.getNumber("Shooter FF_S", FF_S) * Math.signum(goalVelocity))
+            + (SmartDashboard.getNumber("Shooter FF_V", FF_V) * goalVelocity)
+            + (SmartDashboard.getNumber("Shooter FF_A", FF_A) * goalAcceleration)
+
+            : (FF_S * Math.signum(goalVelocity))
             + (FF_V * goalVelocity)
             + (FF_A * goalAcceleration);
         flywheel.setVoltage(voltage);
@@ -99,14 +109,14 @@ public class ShooterSubsystem extends SubsystemBase {
         double accelerationError = (velocityError - lastVelocityError) / PERIOD;
         lastVelocityError = velocityError;
         integralError = clamp(integralError + (velocityError * PERIOD), -INTEGRAL_MAX/PID_I, INTEGRAL_MAX/PID_I);
-        double percentOutput
-            = (SmartDashboard.getNumber("PID_P", PID_P) * velocityError)
-            + (SmartDashboard.getNumber("PID_I", PID_I) * integralError)
-            + (SmartDashboard.getNumber("PID_D", PID_D) * accelerationError);
-        // double percentOutput
-        //     = (PID_P * velocityError)
-        //     + (PID_I * integralError)
-        //     + (PID_D * accelerationError); // TODO change back to this
+        double percentOutput = TUNING_MODE
+            ? (SmartDashboard.getNumber("Shooter PID_P", PID_P) * velocityError)
+            + (SmartDashboard.getNumber("Shooter PID_I", PID_I) * integralError)
+            + (SmartDashboard.getNumber("Shooter PID_D", PID_D) * accelerationError)
+            
+            : (PID_P * velocityError)
+            + (PID_I * integralError)
+            + (PID_D * accelerationError);
         percentOutput = clamp(percentOutput, FLYWHEEL_MIN_OUTPUT, FLYWHEEL_MAX_OUTPUT) * Math.signum(goalVelocity);
         SmartDashboard.putNumber("Shooter percent output", percentOutput);
         flywheel.set(percentOutput);

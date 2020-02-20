@@ -67,7 +67,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
         motorR1 = new WPI_TalonFX(MotorIDs.DRIVE_R1);
         motorR2 = new WPI_TalonFX(MotorIDs.DRIVE_R2);
 
-        for (WPI_TalonFX motor : ALL.getMotors()) {
+        for(WPI_TalonFX motor : ALL.getMotors()) {
             motor.set(0); // start all motors at 0% speed to stop the blinking
 
             motor.configFactoryDefault(); // reset settings
@@ -75,11 +75,21 @@ public class DriveTrainSubsystem extends SubsystemBase {
             motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); // sets which encoder the motor is using
         }
 
-        for (WPI_TalonFX motor : RIGHT.getMotors()) {
+        for(WPI_TalonFX motor : RIGHT.getMotors()) {
             motor.setSensorPhase(true);
         }
 
         RIGHT.getGroup().setInverted(true);
+
+        if(TUNING_MODE) {
+            SmartDashboard.setDefaultNumber("DriveTrain PID_P", PID_P);
+            SmartDashboard.setDefaultNumber("DriveTrain PID_I", PID_I);
+            SmartDashboard.setDefaultNumber("DriveTrain PID_D", PID_D);
+
+            SmartDashboard.setDefaultNumber("DriveTrain FF_S", FF_S);
+            SmartDashboard.setDefaultNumber("DriveTrain FF_V", FF_V);
+            SmartDashboard.setDefaultNumber("DriveTrain FF_A", FF_A);
+        }
     }
 
     @Override
@@ -108,12 +118,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
         lastVelocityError.put(motorGroup, velocityError);
         integralError.put(motorGroup, clamp(integralError.getOrDefault(motorGroup, 0.0) + (velocityError * PERIOD), -INTEGRAL_MAX / PID_I, INTEGRAL_MAX / PID_I));
 
-        double P = PID_P * velocityError;
-        double I = PID_I * integralError.get(motorGroup);
-        double D = PID_D * accelerationError;
+        double P = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain PID_P", PID_P) : PID_P) * velocityError;
+        double I = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain PID_I", PID_I) : PID_I) * integralError.get(motorGroup);
+        double D = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain PID_D", PID_D) : PID_D) * accelerationError;
 
         double output = P + I + D;
-        motorGroup.getGroup().set(output);
+        setMotorOutput(motorGroup, output);
     }
 
     private void driveFeedforward(MotorGroup motorGroup) {
@@ -124,29 +134,34 @@ public class DriveTrainSubsystem extends SubsystemBase {
             : goalAcceleration;
         double constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
 
-        double S = FF_S * Math.signum(constrainedGoalVelocity);
-        double V = FF_V * constrainedGoalVelocity;
-        double A = FF_A * constrainedGoalAcceleration;
+        double S = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain FF_S", FF_S) : FF_S) * Math.signum(constrainedGoalVelocity);
+        double V = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain FF_V", FF_V) : FF_V) * constrainedGoalVelocity;
+        double A = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain FF_A", FF_A) : FF_A) * constrainedGoalAcceleration;
 
         double voltage = S + V + A;
-        motorGroup.getGroup().setVoltage(voltage);
+        setMotorVoltage(motorGroup, voltage);
     }
 
 
     // DRIVE COMMAND FUNCTIONS
 
+    private void setMotorOutput(MotorGroup group, double pct) {
+        if(Math.abs(pct) < MIN_MOTOR_OUTPUT) pct = 0;
+        pct = clamp(pct, -MAX_MOTOR_OUTPUT, MAX_MOTOR_OUTPUT);
+        group.getGroup().set(pct);
+    }
+    public void setMotorVoltage(MotorGroup group, double voltage) {
+        setMotorOutput(group, voltage/12.0);
+    }
     public void setMotorOutput(double left, double right) {
-        if(Math.abs(left) < MIN_MOTOR_OUTPUT) left = 0;
-        if(Math.abs(right) < MIN_MOTOR_OUTPUT) right = 0;
-        LEFT.getGroup().set(left);
-        RIGHT.getGroup().set(right);
+        setMotorOutput(LEFT, left);
+        setMotorOutput(RIGHT, right);
     }
     public void setMotorVoltage(double left, double right) {
-        if(Math.abs(left) < MIN_MOTOR_OUTPUT * 12.0) left = 0;
-        if(Math.abs(right) < MIN_MOTOR_OUTPUT * 12.0) right = 0;
-        LEFT.getGroup().setVoltage(left);
-        RIGHT.getGroup().setVoltage(right);
+        setMotorVoltage(LEFT, left);
+        setMotorVoltage(RIGHT, right);
     }
+
     public void setGoalVelocity(double left, double right) {
         goalVelocity.put(LEFT, clamp(left, -MAX_VELOCITY, MAX_VELOCITY));
         goalVelocity.put(RIGHT, clamp(left, -MAX_VELOCITY, MAX_VELOCITY));
