@@ -67,8 +67,8 @@ public final class Constants {
 
         // VALUES
         public final static double GEAR_RATIO = 1.0 / 8.0; // TODO change to actual value
-        public final static double WHEEL_CIRCUMFERENCE = 5 * Math.PI; // TODO change to actual value
-        public final static double TRACK_WIDTH = 26; // inches between left wheels and right wheels TODO measure actual value
+        public final static double WHEEL_CIRCUMFERENCE = 6.375 * Math.PI;
+        public final static double TRACK_WIDTH = 26.5; // inches between left wheels and right wheels
 
         // PID
         public final static double PID_P = 0.02; // TODO tune
@@ -108,16 +108,20 @@ public final class Constants {
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
 
+        // SPEEDS
+        public final static double FLYWHEEL_TELEOP_SPEED_1 = 4000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
+        public final static double FLYWHEEL_TELEOP_SPEED_2 = 5000.0 / 60.0; // 3 presets (buttons A, B, X)
+        public final static double FLYWHEEL_TELEOP_SPEED_3 = 6000.0 / 60.0;
+
         // PHYSICS
         public final static double GRAVITY = 32.2 * 12.0; // inches/second^2
-        public final static double SHOOTER_HEIGHT = 33; // TODO change to actual height
-        public final static double SHOOTER_ANGLE = 45; // TODO change to actual angle
+        public final static double SHOOTER_HEIGHT = 44; // height of ball when it leaves the shooter
+        public final static double SHOOTER_ANGLE = 34.8; // angle of ball when it leaves the shooter
 
         // FLYWHEEL
-        public final static double FLYWHEEL_RATIO = 12.0 / 34.0 * 84.0 / 22.0; // TODO
+        public final static double FLYWHEEL_RATIO = 12.0 / 36.0 * 72.0 / 22.0;
         public final static double FLYWHEEL_CIRCUMFERENCE = 4.0 * Math.PI;
-        public final static double FLYWHEEL_SLIPPING_FACTOR = 0.8;
-        public final static double FLYWHEEL_TELEOP_SPEED = 5000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
+        public final static double FLYWHEEL_SLIPPING_FACTOR = 1; // percent of energy not lost to friction 
         public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 10.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
         public final static double FLYWHEEL_MAX_VELOCITY = 5000.0 / 60.0;

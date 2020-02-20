@@ -31,7 +31,7 @@ public class Auton extends ParallelCommandGroup {
 
     public enum AutonType {
         DO_NOTHING,
-        SHOOT_TEST,
+        AUTOSHOOT_TEST,
         CLIMB_TEST,
         SHUFFLE_PLAY,
 
@@ -42,7 +42,7 @@ public class Auton extends ParallelCommandGroup {
     private Command getAutonSequence(AutonType autonType) {
         switch(autonType) {
 
-            case SHOOT_TEST: return
+            case AUTOSHOOT_TEST: return
                 parallel(
                     new ResetNavX(),
                     new ToggleIntake(true),
@@ -53,7 +53,7 @@ public class Auton extends ParallelCommandGroup {
                 sequence(
                     new AngleClimber(ClimberAngle.UP),
                     new Climb(ClimbDirection.UP),
-                    new DriveInches(6),
+                    new DriveInches(12),
                     new Climb(ClimbDirection.DOWN)
                 );
 
@@ -74,13 +74,16 @@ public class Auton extends ParallelCommandGroup {
                 );
 
             case PATH_1: return
-                sequence(
+                parallel(
                     new AutoShoot(),
                     new ToggleIntake(true),
                     new ToggleIndexerTower(true),
-                    new DriveTrajectory("GoToCenter", true),
-                    new WaitCommand(3),
-                    new DriveTrajectory("GoToControlPanel")
+
+                    sequence(
+                        new DriveTrajectory("GoToCenter", true),
+                        new WaitCommand(3),
+                        new DriveTrajectory("GoToControlPanel")
+                    )
                 );
 
             default: return
