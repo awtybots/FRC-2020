@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.commands.shooter.AutoShoot.AutoShootMode;
 import frc.robot.commands.shooter.AutoShoot.TrajectoryCalculationMode;
+import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
-import frc.robot.subsystems.DriveTrainSubsystem.MotorControlMode;
 import frc.robot.util.Vector3;
 
 public final class Constants {
@@ -54,7 +54,7 @@ public final class Constants {
         // OPTIONS
         public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.DIRECT; // TODO test VELOCITY and TRAPEZOIDAL_VELOCITY
         public final static DriveMode AUTON_DRIVE_MODE = DriveMode.DIRECT; // TODO test VELOCITY and TRAPEZOIDAL_VELOCITY
-        public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID;
+        public final static DriveTrainSubsystem.MotorControlMode MOTOR_CONTROL_MODE = DriveTrainSubsystem.MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public static final Hand SPEED_HAND = Hand.kLeft;
         public static final Hand ROTATION_HAND = Hand.kRight;
@@ -132,7 +132,7 @@ public final class Constants {
         public final static double FLYWHEEL_MAX_OUTPUT = 0.8;
 
         // TURRET
-        public final static double TURRET_RATIO = 1.0 / 3.0; // TODO
+        public final static double TURRET_RATIO = 1.0 / 3.0; // TODO real value
         public final static double TURRET_MIN_SPEED = 0.2; // %
         public final static double TURRET_MAX_SPEED = 0.5; // %
         public final static double TURRET_GOAL_ANGLE_THRESHOLD = 1; // degrees to be satisfied with result
@@ -155,8 +155,8 @@ public final class Constants {
     }
 
     public final static class Limelight {
-        public final static double CAMERA_MOUNTING_ANGLE = 2;
-        public final static double CAMERA_HEIGHT = 34;
+        public final static double CAMERA_MOUNTING_ANGLE = 2; // TODO
+        public final static double CAMERA_HEIGHT = 34; // TODO
 
         public final static double SHOOTER_VISION_HEIGHT = 89.75;
         public final static double LOADING_STATION_VISION_HEIGHT = 16.5;
