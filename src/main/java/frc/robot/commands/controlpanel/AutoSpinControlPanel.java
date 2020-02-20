@@ -33,7 +33,7 @@ public class AutoSpinControlPanel extends CommandBase {
             startColor = controlPanelSubsystem.getCurrentColor();
             if(startColor == PanelColor.NONE) {
                 cancel();
-                System.err.println("Cannot start rotation control without seeing a color!"); // TODO alex log
+                System.err.println("Cannot start rotation control without seeing a color!"); // log error
             }
             lastColor = startColor;
         }

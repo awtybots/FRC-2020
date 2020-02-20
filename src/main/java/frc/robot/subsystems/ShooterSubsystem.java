@@ -32,13 +32,11 @@ public class ShooterSubsystem extends SubsystemBase {
     private double goalAngle = TURRET_START_ANGLE;
     private double angleFactor = 4096.0/360.0 * TURRET_RATIO;
 
-    private boolean readyToShoot = false;
-
-    private MotorControlMode MODE;
+    private boolean velocityAtGoal = false;
+    private boolean turretAtGoal = false;
 
     public ShooterSubsystem() {
         PERIOD = Robot.getLoopTime();
-        MODE = MOTOR_CONTROL_MODE;
 
         flywheel.configFactoryDefault();
         flywheel.setNeutralMode(FLYWHEEL_BRAKE_MODE);
@@ -49,7 +47,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         turret.configFactoryDefault();
         turret.setNeutralMode(TURRET_BRAKE_MODE);
-        turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
         turret.setSelectedSensorPosition((int)(TURRET_START_ANGLE * angleFactor));
 
         if(TUNING_MODE) {
@@ -66,17 +64,16 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // get encoder measurements
-        currentVelocity = flywheel.getSelectedSensorVelocity() * 10.0 / 2048.0 * FLYWHEEL_RATIO; // TODO testing
+        currentVelocity = flywheel.getSelectedSensorVelocity() * 10.0 / 2048.0 * FLYWHEEL_RATIO;
         currentAngle = ((double)turret.getSelectedSensorPosition()) / angleFactor;
-        boolean velocityAtGoal = Math.abs(currentVelocity - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;
-        boolean turretAtGoal = Math.abs(currentAngle - goalAngle) <= TURRET_GOAL_ANGLE_THRESHOLD;
-        readyToShoot = velocityAtGoal && turretAtGoal;
+        velocityAtGoal = Math.abs(currentVelocity - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;
+        turretAtGoal = Math.abs(currentAngle - goalAngle) <= TURRET_GOAL_ANGLE_THRESHOLD;
 
         // shooter motor
-        MODE.getFunction(this).run();
+        MOTOR_CONTROL_MODE.getFunction(this).run();
 
         // turret motor
-        SmartDashboard.putNumber("Turret detected angle", currentAngle); // TODO temp
+        SmartDashboard.putNumber("Turret detected angle", currentAngle);
         if(!turretAtGoal) {
             double angleOffset = goalAngle - currentAngle;
             SmartDashboard.putNumber("Turret angle offset", angleOffset);
@@ -136,7 +133,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public boolean readyToShoot() {
-        return readyToShoot;
+        return velocityAtGoal && turretAtGoal;
     }
 
     public enum MotorControlMode {

@@ -68,7 +68,7 @@ public class DriveTrajectory extends RamseteCommand {
             Path path = Filesystem.getDeployDirectory().toPath().resolve("paths/"+name+".wpilib.json");
             return TrajectoryUtil.fromPathweaverJson(path);
         } catch(IOException e) {
-            DriverStation.reportError("Unable to open trajectory '"+name+"'", e.getStackTrace()); // TODO alex log
+            DriverStation.reportError("Unable to open trajectory '"+name+"'", e.getStackTrace()); // log error
             return new Trajectory(new ArrayList<Trajectory.State>(0)); // don't return null, that'll cause errors
         }
     }

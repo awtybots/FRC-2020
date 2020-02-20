@@ -52,8 +52,8 @@ public final class Constants {
 
     public final static class DriveTrain {
         // OPTIONS
-        public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.DIRECT; // TODO test VELOCITY and TRAPEZOIDAL_VELOCITY
-        public final static DriveMode AUTON_DRIVE_MODE = DriveMode.DIRECT; // TODO test VELOCITY and TRAPEZOIDAL_VELOCITY
+        public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.DIRECT;
+        public final static DriveMode AUTON_DRIVE_MODE = DriveMode.DIRECT;
         public final static DriveTrainSubsystem.MotorControlMode MOTOR_CONTROL_MODE = DriveTrainSubsystem.MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public static final Hand SPEED_HAND = Hand.kLeft;
@@ -63,9 +63,9 @@ public final class Constants {
         // LIMITS
         public final static double DEADZONE = 0.1;
         public final static double MIN_MOTOR_OUTPUT = 0.2;
-        public final static double MAX_MOTOR_OUTPUT = 0.6; // TODO increase
-        public final static double MAX_VELOCITY = 36; // inches per second TODO too slow (for testing)
-        public final static double MAX_ACCELERATION = 6; // inches per second^2 TODO too slow (for testing)
+        public final static double MAX_MOTOR_OUTPUT = 0.6;
+        public final static double MAX_VELOCITY = 36; // inches per second
+        public final static double MAX_ACCELERATION = 6; // inches per second^2
 
         // VALUES
         public final static double GEAR_RATIO = 12.0 / 40.0 * 24.0 / 34.0;
@@ -132,9 +132,9 @@ public final class Constants {
         public final static double FLYWHEEL_MAX_OUTPUT = 0.8;
 
         // TURRET
-        public final static double TURRET_RATIO = 1.0 / 3.0; // TODO real value
-        public final static double TURRET_MIN_SPEED = 0.2; // %
-        public final static double TURRET_MAX_SPEED = 0.5; // %
+        public final static double TURRET_RATIO = 1.0;
+        public final static double TURRET_MIN_SPEED = 0.2;
+        public final static double TURRET_MAX_SPEED = 0.5;
         public final static double TURRET_GOAL_ANGLE_THRESHOLD = 1; // degrees to be satisfied with result
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 5; // degrees to start slowing down
         public final static double TURRET_WRAP_AROUND_THRESHOLD = 6; // if we don't see a target, how far away from 360 should we start moving the other direction
@@ -155,8 +155,8 @@ public final class Constants {
     }
 
     public final static class Limelight {
-        public final static double CAMERA_MOUNTING_ANGLE = 2; // TODO
-        public final static double CAMERA_HEIGHT = 34; // TODO
+        public final static double CAMERA_MOUNTING_ANGLE = 2;
+        public final static double CAMERA_HEIGHT = 34;
 
         public final static double SHOOTER_VISION_HEIGHT = 89.75;
         public final static double LOADING_STATION_VISION_HEIGHT = 16.5;

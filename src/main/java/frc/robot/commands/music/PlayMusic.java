@@ -43,7 +43,7 @@ public class PlayMusic extends CommandBase {
         return false;
     }
 
-    public enum Song { // TODO give songs meaningful names
+    public enum Song {
         SONG_1("song1"),
         SONG_2("song2"),
         SONG_3("song3"),
