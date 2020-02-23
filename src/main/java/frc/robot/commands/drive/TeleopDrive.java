@@ -24,7 +24,11 @@ public class TeleopDrive extends CommandBase {
 
     private double smooth(double x) {
         if(Math.abs(x) < DEADZONE) return 0;
-        return Math.pow(x, 2) * Math.signum(x);
+        if(JOYSTICK_SMOOTHING == JoystickSmoothing.NONE) {
+            return x;
+        } else {
+            return Math.pow(x, 2) * Math.signum(x);
+        }
     }
 
     @Override
@@ -48,5 +52,9 @@ public class TeleopDrive extends CommandBase {
     @Override
     public boolean isFinished() {
         return false;
+    }
+
+    public enum JoystickSmoothing {
+        NONE, SQUARE;
     }
 }

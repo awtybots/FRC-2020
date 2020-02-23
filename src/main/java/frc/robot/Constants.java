@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import frc.robot.commands.drive.TeleopDrive.JoystickSmoothing;
 import frc.robot.commands.shooter.AutoShoot.AutoShootMode;
 import frc.robot.commands.shooter.AutoShoot.TrajectoryCalculationMode;
 import frc.robot.subsystems.DriveTrainSubsystem;
@@ -21,26 +22,26 @@ import frc.robot.util.Vector3;
 public final class Constants {
 
     public final static class MotorIDs {
-        public static final int DRIVE_L1 = 1; // TODO real values
+        public static final int DRIVE_L1 = 1;
         public static final int DRIVE_L2 = 9;
 
         public static final int DRIVE_R1 = 10;
         public static final int DRIVE_R2 = 4;
 
-        public static final int INTAKE = 5;
+        public static final int INTAKE = 3;
 
         public static final int INDEXER_L = 8;
-        public static final int INDEXER_R = 3;
+        public static final int INDEXER_R = 2;
         public static final int TOWER = 7;
 
-        public static final int SHOOTER_FLYWHEEL = 11; // TODO connect to CAN Bus
+        public static final int SHOOTER_FLYWHEEL = 11;
         public static final int SHOOTER_TURRET = 6;
 
-        public static final int CONTROL_PANEL_SPINNER = 2;
+        public static final int CONTROL_PANEL_SPINNER = 5;
     }
 
     public final static class SolenoidChannels {
-        public static final int INTAKE_FWD = 4; // TODO real values
+        public static final int INTAKE_FWD = 4;
         public static final int INTAKE_REV = 5;
 
         public static final int CLIMB_FWD = 6;
@@ -49,8 +50,9 @@ public final class Constants {
 
     public final static class DriveTrain {
         // OPTIONS
-        public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.DIRECT;
+        public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.VELOCITY;
         public final static DriveMode AUTON_DRIVE_MODE = DriveMode.DIRECT;
+        public final static JoystickSmoothing JOYSTICK_SMOOTHING = JoystickSmoothing.NONE; // TODO change to square
         public final static DriveTrainSubsystem.MotorControlMode MOTOR_CONTROL_MODE = DriveTrainSubsystem.MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public static final Hand SPEED_HAND = Hand.kLeft;
@@ -58,8 +60,8 @@ public final class Constants {
         public final static boolean TUNING_MODE = false; // change to true if you want to tune PID / FF in SmartDashboard
 
         // LIMITS
-        public final static double MIN_MOTOR_OUTPUT = 0.2;
-        public final static double MAX_MOTOR_OUTPUT = 0.6;
+        public final static double MIN_MOTOR_OUTPUT = 0.1;
+        public final static double MAX_MOTOR_OUTPUT = 0.9;
         public final static double MAX_VELOCITY = 36; // inches per second
         public final static double MAX_ACCELERATION = 6; // inches per second^2
 
@@ -89,12 +91,13 @@ public final class Constants {
     }
 
     public final static class Intake {
-        public final static double MOTOR_SPEED = 0.5;
+        public final static double MOTOR_SPEED = 0.6;
     }
 
     public final static class IndexerTower {
-        public final static double INDEXER_MOTOR_SPEED = 0.5;
-        public final static double TOWER_MOTOR_SPEED = 0.7;
+        public final static double INDEXER_L_MOTOR_SPEED = 0.4;
+        public final static double INDEXER_R_MOTOR_SPEED = 0.6;
+        public final static double TOWER_MOTOR_SPEED = 0.5;
     }
 
     public final static class Shooter {
@@ -152,7 +155,7 @@ public final class Constants {
     }
 
     public final static class Limelight {
-        public final static double CAMERA_MOUNTING_ANGLE = 2;
+        public final static double CAMERA_MOUNTING_ANGLE = 41;
         public final static double CAMERA_HEIGHT = 34;
 
         public final static double SHOOTER_VISION_HEIGHT = 89.75;

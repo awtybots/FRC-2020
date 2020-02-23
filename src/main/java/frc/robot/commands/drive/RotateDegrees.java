@@ -23,6 +23,7 @@ public class RotateDegrees extends CommandBase {
     @Override
     public void initialize() {
         goalRotation = Math.floorMod((int)(driveTrainSubsystem.getRotation() + goalRotation), 360);
+        driveTrainSubsystem.resetEncoders();
     }
 
     @Override

@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -77,10 +78,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
         }
 
         for(WPI_TalonFX motor : RIGHT.getMotors()) {
-            motor.setSensorPhase(true);
+            motor.setInverted(TalonFXInvertType.CounterClockwise);
         }
-
-        RIGHT.getGroup().setInverted(true);
 
         if(TUNING_MODE) {
             SmartDashboard.setDefaultNumber("DriveTrain PID_P", PID_P);
@@ -107,6 +106,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
             getVelocity().print("Velocity");
             SmartDashboard.putNumber("Rotation", getRotation());
         }
+
+        System.out.println("total velocity: "+getWheelVelocity(ALL)); // TODO remove prints
+        System.out.println("total distance: "+getWheelDistance(ALL));
     }
 
     private void drivePID(MotorGroup motorGroup) {
@@ -210,6 +212,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     public double getWheelDistance(MotorGroup motorGroup) {
         double totalUnits = 0;
         for(WPI_TalonFX motor : motorGroup.getMotors()) {
+            System.out.println("distance: "+motor.getSelectedSensorPosition());
             totalUnits += motor.getSelectedSensorPosition();
         }
         double revolutions = totalUnits / 2048.0 / motorGroup.getMotors().length;
@@ -218,6 +221,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     public double getWheelVelocity(MotorGroup motorGroup) {
         double totalUnits = 0;
         for(WPI_TalonFX motor : motorGroup.getMotors()) {
+            System.out.println("velocity: "+motor.getSelectedSensorVelocity());
             totalUnits += motor.getSelectedSensorVelocity();
         }
         double revolutions = totalUnits / 2048.0 * 10.0 / motorGroup.getMotors().length;

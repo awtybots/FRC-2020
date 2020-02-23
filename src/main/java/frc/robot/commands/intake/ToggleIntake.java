@@ -10,11 +10,9 @@ public class ToggleIntake extends CommandBase {
     private boolean on;
 
     public ToggleIntake() {
-        addRequirements(intakeSubsystem);
         button = true;
     }
     public ToggleIntake(boolean on) {
-        addRequirements(intakeSubsystem);
         button = false;
         this.on = on;
     }

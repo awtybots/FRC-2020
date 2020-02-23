@@ -13,14 +13,15 @@ public class IndexerTowerSubsystem extends SubsystemBase {
     private final WPI_TalonSRX tower = new WPI_TalonSRX(MotorIDs.TOWER);
 
     public IndexerTowerSubsystem() {
-        indexerR.setInverted(true);
+        indexerL.setInverted(true);
+        tower.setInverted(true);
 
         toggle(false);
     }
 
     public void toggle(boolean on) {
-        indexerL.set(on ? INDEXER_MOTOR_SPEED : 0.0);
-        indexerR.set(on ? INDEXER_MOTOR_SPEED : 0.0);
+        indexerL.set(on ? INDEXER_L_MOTOR_SPEED : 0.0);
+        indexerR.set(on ? INDEXER_R_MOTOR_SPEED : 0.0);
         tower.set(on ? TOWER_MOTOR_SPEED : 0.0);
     }
 }
