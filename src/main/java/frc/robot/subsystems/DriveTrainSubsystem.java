@@ -54,7 +54,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private double initialAngle;
 
     private DriveMode CURRENT_DRIVE_MODE = DriveMode.DIRECT;
-    private static double PERIOD;
+    private static double PERIOD = 0.02;
 
 
     // DRIVING

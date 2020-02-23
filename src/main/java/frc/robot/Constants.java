@@ -103,7 +103,7 @@ public final class Constants {
         public final static AutoShootMode AUTO_SHOOT_MODE = AutoShootMode.JUST_AIM_TURRET;
         public final static TrajectoryCalculationMode TRAJECTORY_CALCULATION_MODE = TrajectoryCalculationMode.VISION_ONLY;
         public final static Vector3 PRESET_TARGET_DISPLACEMENT = new Vector3(0, 100, 0);
-        public final static ShooterSubsystem.MotorControlMode MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
+        public final static ShooterSubsystem.MotorControlMode FLYWHEEL_MOTOR_CONTROL_MODE = ShooterSubsystem.MotorControlMode.PID;
         public final static NeutralMode TURRET_BRAKE_MODE = NeutralMode.Brake;
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
         public final static boolean TUNING_MODE = false; // change to true if you want to tune PID / FF in SmartDashboard
@@ -132,6 +132,7 @@ public final class Constants {
         public final static double TURRET_RATIO = 1.0;
         public final static double TURRET_MIN_SPEED = 0.2;
         public final static double TURRET_MAX_SPEED = 0.5;
+        public final static double TURRET_MAX_ACCEL = 0.2; // max % to increase by every second
         public final static double TURRET_GOAL_ANGLE_THRESHOLD = 1; // degrees to be satisfied with result
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 5; // degrees to start slowing down
         public final static double TURRET_WRAP_AROUND_THRESHOLD = 6; // if we don't see a target, how far away from 360 should we start moving the other direction
