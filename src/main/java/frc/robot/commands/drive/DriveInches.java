@@ -43,7 +43,11 @@ public class DriveInches extends CommandBase {
         }
 
         // motors
-        driveTrainSubsystem.setGoalVelocity(goalVelocity, goalVelocity);
+        if(AUTON_DRIVE_MODE == DriveMode.DIRECT) {
+            driveTrainSubsystem.setMotorOutput(goalVelocity/MAX_VELOCITY, goalVelocity/MAX_VELOCITY);
+        } else {
+            driveTrainSubsystem.setGoalVelocity(goalVelocity, goalVelocity);
+        }
 
         // SmartDashbaord
         SmartDashboard.putNumber("DI - Current Distance", currentDistance);
