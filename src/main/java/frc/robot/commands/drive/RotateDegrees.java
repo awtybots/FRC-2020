@@ -39,7 +39,11 @@ public class RotateDegrees extends CommandBase {
         }
 
         // motors
-        driveTrainSubsystem.setGoalVelocity(goalVelocity, -goalVelocity);
+        if(AUTON_DRIVE_MODE == DriveMode.DIRECT) {
+            driveTrainSubsystem.setMotorOutput(goalVelocity/MAX_VELOCITY, -goalVelocity/MAX_VELOCITY);
+        } else {
+            driveTrainSubsystem.setGoalVelocity(goalVelocity, -goalVelocity);
+        }
 
         // SmartDashbaord
         SmartDashboard.putNumber("RD - Current Distance", currentRotation);

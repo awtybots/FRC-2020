@@ -20,11 +20,12 @@ public class ShooterSubsystem extends SubsystemBase {
     private final WPI_TalonFX flywheel = new WPI_TalonFX(MotorIDs.SHOOTER_FLYWHEEL);
     private final WPI_TalonSRX turret = new WPI_TalonSRX(MotorIDs.SHOOTER_TURRET);
 
-    private double PERIOD;
+    private double PERIOD = 0.02;
 
     private double goalVelocity = 0;
     private double currentVelocity = 0;
     private double currentAngle = 0;
+    private double lastTurnSpeed = 0;
 
     private double integralError = 0;
     private double lastVelocityError = 0;
@@ -70,16 +71,10 @@ public class ShooterSubsystem extends SubsystemBase {
         turretAtGoal = Math.abs(currentAngle - goalAngle) <= TURRET_GOAL_ANGLE_THRESHOLD;
 
         // shooter motor
-        MOTOR_CONTROL_MODE.getFunction(this).run();
+        FLYWHEEL_MOTOR_CONTROL_MODE.getFunction(this).run();
 
         // turret motor
-        SmartDashboard.putNumber("Turret detected angle", currentAngle);
-        if(!turretAtGoal) {
-            double angleOffset = goalAngle - currentAngle;
-            SmartDashboard.putNumber("Turret angle offset", angleOffset);
-            double turnSpeed = MathUtil.clamp(angleOffset/TURRET_ANGLE_SLOW_THRESHOLD, -1.0, 1.0) * TURRET_MAX_SPEED;
-            if(Math.abs(turnSpeed) < TURRET_MIN_SPEED) turnSpeed = TURRET_MIN_SPEED * Math.signum(turnSpeed);
-        }
+        spinTurret();
 
         // SmartDashboard
         SmartDashboard.putNumber("Shooter RPM", currentVelocity*60.0);
@@ -100,7 +95,6 @@ public class ShooterSubsystem extends SubsystemBase {
             + (FF_A * goalAcceleration);
         flywheel.setVoltage(voltage);
     }
-
     private void flywheelPID() {
         double velocityError = goalVelocity - currentVelocity;
         double accelerationError = (velocityError - lastVelocityError) / PERIOD;
@@ -110,7 +104,7 @@ public class ShooterSubsystem extends SubsystemBase {
             ? (SmartDashboard.getNumber("Shooter PID_P", PID_P) * velocityError)
             + (SmartDashboard.getNumber("Shooter PID_I", PID_I) * integralError)
             + (SmartDashboard.getNumber("Shooter PID_D", PID_D) * accelerationError)
-            
+
             : (PID_P * velocityError)
             + (PID_I * integralError)
             + (PID_D * accelerationError);
@@ -125,6 +119,27 @@ public class ShooterSubsystem extends SubsystemBase {
         this.goalVelocity = clamp(goalVelocity, -FLYWHEEL_MAX_VELOCITY, FLYWHEEL_MAX_VELOCITY);
     }
 
+
+
+    private void spinTurret() {
+        SmartDashboard.putNumber("Turret detected angle", currentAngle);
+        if(turretAtGoal) {
+            setTurretSpeed(0);
+        } else {
+            double angleOffset = goalAngle - currentAngle;
+            SmartDashboard.putNumber("Turret angle offset", angleOffset);
+            double turnSpeed = MathUtil.clamp(angleOffset/TURRET_ANGLE_SLOW_THRESHOLD, -1.0, 1.0) * TURRET_MAX_SPEED;
+            setTurretSpeed(turnSpeed);
+        }
+    }
+	public void setTurretSpeed(double turnSpeed) {
+        double rampedTurnAccel = clamp(turnSpeed - lastTurnSpeed, -TURRET_MAX_ACCEL, TURRET_MAX_ACCEL);
+        double rampedTurnSpeed = lastTurnSpeed + rampedTurnAccel;
+        lastTurnSpeed = rampedTurnSpeed;
+
+        if(Math.abs(rampedTurnSpeed) < TURRET_MIN_SPEED) rampedTurnSpeed = TURRET_MIN_SPEED * Math.signum(rampedTurnSpeed);
+        turret.set(rampedTurnSpeed);
+	}
     public double getTurretAngle() {
         return currentAngle;
     }
