@@ -41,10 +41,10 @@ public final class Constants {
 
     public final static class SolenoidChannels {
         public static final int INTAKE_FWD = 0; // TODO real values
-        public static final int INTAKE_REV = 0;
+        public static final int INTAKE_REV = 1;
 
-        public static final int CLIMB_FWD = 0;
-        public static final int CLIMB_REV = 0;
+        public static final int CLIMB_FWD = 2;
+        public static final int CLIMB_REV = 3;
     }
 
     public final static class DriveTrain {
