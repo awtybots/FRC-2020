@@ -25,6 +25,7 @@ import frc.robot.Constants.*;
 import frc.robot.commands.climb.*;
 import frc.robot.commands.controlpanel.*;
 import frc.robot.commands.intake.*;
+import frc.robot.commands.intake.MoveIntake.IntakePosition;
 import frc.robot.commands.main.*;
 import frc.robot.commands.main.Auton.AutonType;
 import frc.robot.commands.shooter.*;
@@ -90,11 +91,11 @@ public class Robot extends TimedRobot {
         musicSubsystem = new MusicSubsystem();
 
         // button mappings
-        getButton(xboxController1, kA).whenHeld(new ToggleIntake());
-        getButton(xboxController1, kB).whenPressed(new MoveIntake());
+        getButton(xboxController1, kA).whenHeld(new ToggleIntake()).whenPressed(new MoveIntake(IntakePosition.DOWN)).whenReleased(new MoveIntake(IntakePosition.UP));
+        getButton(xboxController1, kB);
         getButton(xboxController1, kX).whenPressed(new AutoSpinControlPanel());
         getButton(xboxController1, kY);
-        getButton(xboxController2, kBumperLeft).whenPressed(new AngleClimber());
+        getButton(xboxController2, kBumperLeft);
         getButton(xboxController2, kBumperRight).whenPressed(new Climb());
 
         getButton(xboxController2, kA).whenPressed(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_1)).whenReleased(new SetShooterSpeed(0));

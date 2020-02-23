@@ -45,9 +45,6 @@ public final class Constants {
 
         public static final int CLIMB_FWD = 0;
         public static final int CLIMB_REV = 0;
-
-		public static final int CLIMB_MINI_FWD = 0;
-		public static final int CLIMB_MINI_REV = 0;
     }
 
     public final static class DriveTrain {
@@ -124,7 +121,7 @@ public final class Constants {
         // FLYWHEEL
         public final static double FLYWHEEL_RATIO = 12.0 / 36.0 * 72.0 / 22.0;
         public final static double FLYWHEEL_CIRCUMFERENCE = 4.0 * Math.PI;
-        public final static double FLYWHEEL_SLIPPING_FACTOR = 1; // percent of energy not lost to friction 
+        public final static double FLYWHEEL_SLIPPING_FACTOR = 1; // percent of energy not lost to friction
         public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 10.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
         public final static double FLYWHEEL_MAX_VELOCITY = 5000.0 / 60.0;
