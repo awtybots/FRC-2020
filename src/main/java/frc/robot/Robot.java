@@ -29,6 +29,7 @@ import frc.robot.commands.intake.MoveIntake.IntakePosition;
 import frc.robot.commands.main.*;
 import frc.robot.commands.main.Auton.AutonType;
 import frc.robot.commands.shooter.*;
+import frc.robot.commands.shooter.SpinTurret.TurretDirection;
 import frc.robot.subsystems.*;
 import static frc.robot.Constants.Shooter.*;
 import static frc.robot.Constants.DriveTrain.*;
@@ -92,18 +93,18 @@ public class Robot extends TimedRobot {
 
         // button mappings
         getButton(xboxController1, kA).whenHeld(new ToggleIntake()).whenPressed(new MoveIntake(IntakePosition.DOWN)).whenReleased(new MoveIntake(IntakePosition.UP));
-        getButton(xboxController1, kB);
-        getButton(xboxController1, kX).whenPressed(new AutoSpinControlPanel());
-        getButton(xboxController1, kY);
+        getButton(xboxController1, kB).whenPressed(new AutoSpinControlPanel());
+        getButton(xboxController1, kX);
+        getButton(xboxController1, kY).whenPressed(new Climb());
         getButton(xboxController2, kBumperLeft);
-        getButton(xboxController2, kBumperRight).whenPressed(new Climb());
+        getButton(xboxController2, kBumperRight);
 
         getButton(xboxController2, kA).whenPressed(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_1)).whenReleased(new SetShooterSpeed(0));
         getButton(xboxController2, kB).whenPressed(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_2)).whenReleased(new SetShooterSpeed(0));
         getButton(xboxController2, kX).whenPressed(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_3)).whenReleased(new SetShooterSpeed(0));
-        getButton(xboxController2, kY).whenPressed(new AutoShoot());
-        getButton(xboxController2, kBumperLeft);
-        getButton(xboxController2, kBumperRight).whenHeld(new ToggleIndexerTower());
+        getButton(xboxController2, kY).whenHeld(new ToggleIndexerTower());
+        getButton(xboxController2, kBumperLeft).whenHeld(new SpinTurret(TurretDirection.LEFT));
+        getButton(xboxController2, kBumperRight).whenHeld(new SpinTurret(TurretDirection.RIGHT));
     }
 
     /**

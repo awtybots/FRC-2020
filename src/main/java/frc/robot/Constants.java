@@ -58,7 +58,6 @@ public final class Constants {
         public final static boolean TUNING_MODE = false; // change to true if you want to tune PID / FF in SmartDashboard
 
         // LIMITS
-        public final static double DEADZONE = 0.1;
         public final static double MIN_MOTOR_OUTPUT = 0.2;
         public final static double MAX_MOTOR_OUTPUT = 0.6;
         public final static double MAX_VELOCITY = 36; // inches per second
@@ -195,5 +194,7 @@ public final class Constants {
     public final static class Controller {
         public static final int PORT_1 = 0;
         public static final int PORT_2 = 1;
+
+        public final static double DEADZONE = 0.1;
     }
 }

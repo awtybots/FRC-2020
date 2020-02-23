@@ -113,31 +113,33 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheel.set(percentOutput);
     }
 
-    private void spinTurret() {
-        SmartDashboard.putNumber("Turret detected angle", currentAngle);
-        if(turretAtGoal) {
-            turret.set(0.0);
-        } else {
-            double angleOffset = goalAngle - currentAngle;
-            SmartDashboard.putNumber("Turret angle offset", angleOffset);
-            double turnSpeed = MathUtil.clamp(angleOffset/TURRET_ANGLE_SLOW_THRESHOLD, -1.0, 1.0) * TURRET_MAX_SPEED;
-
-            double rampedTurnAccel = clamp(turnSpeed - lastTurnSpeed, -TURRET_MAX_ACCEL, TURRET_MAX_ACCEL);
-            double rampedTurnSpeed = lastTurnSpeed + rampedTurnAccel;
-
-            if(Math.abs(rampedTurnSpeed) < TURRET_MIN_SPEED) rampedTurnSpeed = TURRET_MIN_SPEED * Math.signum(rampedTurnSpeed);
-            turret.set(rampedTurnSpeed);
-        }
-    }
-
-
-
     public void setFlywheelGoalVelocity(double goalVelocity) {
         integralError = 0;
         System.out.println("flywheel goal velocity: "+goalVelocity); // TODO remove print
         this.goalVelocity = clamp(goalVelocity, -FLYWHEEL_MAX_VELOCITY, FLYWHEEL_MAX_VELOCITY);
     }
 
+
+
+    private void spinTurret() {
+        SmartDashboard.putNumber("Turret detected angle", currentAngle);
+        if(turretAtGoal) {
+            setTurretSpeed(0);
+        } else {
+            double angleOffset = goalAngle - currentAngle;
+            SmartDashboard.putNumber("Turret angle offset", angleOffset);
+            double turnSpeed = MathUtil.clamp(angleOffset/TURRET_ANGLE_SLOW_THRESHOLD, -1.0, 1.0) * TURRET_MAX_SPEED;
+            setTurretSpeed(turnSpeed);
+        }
+    }
+	public void setTurretSpeed(double turnSpeed) {
+        double rampedTurnAccel = clamp(turnSpeed - lastTurnSpeed, -TURRET_MAX_ACCEL, TURRET_MAX_ACCEL);
+        double rampedTurnSpeed = lastTurnSpeed + rampedTurnAccel;
+        lastTurnSpeed = rampedTurnSpeed;
+
+        if(Math.abs(rampedTurnSpeed) < TURRET_MIN_SPEED) rampedTurnSpeed = TURRET_MIN_SPEED * Math.signum(rampedTurnSpeed);
+        turret.set(rampedTurnSpeed);
+	}
     public double getTurretAngle() {
         return currentAngle;
     }

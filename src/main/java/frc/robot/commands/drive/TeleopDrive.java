@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 
 import static frc.robot.Constants.DriveTrain.*;
+import static frc.robot.Constants.Controller.*;
 import static frc.robot.Robot.*;
 
 public class TeleopDrive extends CommandBase {
