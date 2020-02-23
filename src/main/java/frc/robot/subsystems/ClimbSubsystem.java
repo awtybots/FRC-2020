@@ -10,6 +10,6 @@ public class ClimbSubsystem extends SubsystemBase {
     private final DoubleSolenoid pistons = new DoubleSolenoid(SolenoidChannels.CLIMB_FWD, SolenoidChannels.CLIMB_REV);
 
 	public void setPistons(Value direction) {
-        // pistons.set(direction);
+        pistons.set(direction);
 	}
 }
