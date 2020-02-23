@@ -21,22 +21,22 @@ import frc.robot.util.Vector3;
 public final class Constants {
 
     public final static class MotorIDs {
-        public static final int DRIVE_L1 = 8; // TODO real values
-        public static final int DRIVE_L2 = 10;
+        public static final int DRIVE_L1 = 1; // TODO real values
+        public static final int DRIVE_L2 = 9;
 
-        public static final int DRIVE_R1 = 7;
-        public static final int DRIVE_R2 = 9;
+        public static final int DRIVE_R1 = 10;
+        public static final int DRIVE_R2 = 4;
 
         public static final int INTAKE = 5;
 
-        public static final int INDEXER_L = 3;
-        public static final int INDEXER_R = 2;
-        public static final int TOWER = 4;
+        public static final int INDEXER_L = 8;
+        public static final int INDEXER_R = 3;
+        public static final int TOWER = 7;
 
-        public static final int SHOOTER_FLYWHEEL = 6;
-        public static final int SHOOTER_TURRET = 13;
+        public static final int SHOOTER_FLYWHEEL = 11; // TODO connect to CAN Bus
+        public static final int SHOOTER_TURRET = 6;
 
-        public static final int CONTROL_PANEL_SPINNER = 14;
+        public static final int CONTROL_PANEL_SPINNER = 2;
     }
 
     public final static class SolenoidChannels {
@@ -124,7 +124,7 @@ public final class Constants {
         // FLYWHEEL
         public final static double FLYWHEEL_RATIO = 12.0 / 36.0 * 72.0 / 22.0;
         public final static double FLYWHEEL_CIRCUMFERENCE = 4.0 * Math.PI;
-        public final static double FLYWHEEL_SLIPPING_FACTOR = 1; // percent of energy not lost to friction 
+        public final static double FLYWHEEL_SLIPPING_FACTOR = 1; // percent of energy not lost to friction
         public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 10.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
         public final static double FLYWHEEL_MAX_VELOCITY = 5000.0 / 60.0;

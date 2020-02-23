@@ -130,6 +130,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        // set LED color (failsafe)
+        LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
+
         driveTrainSubsystem.setDriveMode(AUTON_DRIVE_MODE);
         autonCommand = new Auton(autonChooser.getSelected()); // get chosen AutonType
         autonCommand.schedule(); // start auton

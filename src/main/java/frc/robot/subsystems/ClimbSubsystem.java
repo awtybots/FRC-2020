@@ -7,15 +7,15 @@ import frc.robot.Constants.SolenoidChannels;
 
 public class ClimbSubsystem extends SubsystemBase {
 
-    private final DoubleSolenoid miniPistons = new DoubleSolenoid(SolenoidChannels.CLIMB_MINI_FWD, SolenoidChannels.CLIMB_MINI_REV);
+    // private final DoubleSolenoid miniPistons = new DoubleSolenoid(SolenoidChannels.CLIMB_MINI_FWD, SolenoidChannels.CLIMB_MINI_REV);
 
-    private final DoubleSolenoid pistons = new DoubleSolenoid(SolenoidChannels.CLIMB_FWD, SolenoidChannels.CLIMB_REV);
+    // private final DoubleSolenoid pistons = new DoubleSolenoid(SolenoidChannels.CLIMB_FWD, SolenoidChannels.CLIMB_REV);
 
     public void setMiniPistons(Value direction) {
-        miniPistons.set(direction);
+        // miniPistons.set(direction);
     }
 
 	public void setPistons(Value direction) {
-        pistons.set(direction);
+        // pistons.set(direction);
 	}
 }
