@@ -107,8 +107,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Rotation", getRotation());
         }
 
-        System.out.println("total velocity: "+getWheelVelocity(ALL)); // TODO remove prints
-        System.out.println("total distance: "+getWheelDistance(ALL));
+        // System.out.println("total velocity: "+getWheelVelocity(ALL)); // TODO remove prints
+        // System.out.println("total distance: "+getWheelDistance(ALL));
     }
 
     private void drivePID(MotorGroup motorGroup) {

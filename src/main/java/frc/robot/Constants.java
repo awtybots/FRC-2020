@@ -34,7 +34,7 @@ public final class Constants {
         public static final int INDEXER_R = 2;
         public static final int TOWER = 7;
 
-        public static final int SHOOTER_FLYWHEEL = 11;
+        public static final int SHOOTER_FLYWHEEL = 16;
         public static final int SHOOTER_TURRET = 6;
 
         public static final int CONTROL_PANEL_SPINNER = 5;
@@ -50,7 +50,7 @@ public final class Constants {
 
     public final static class DriveTrain {
         // OPTIONS
-        public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.VELOCITY;
+        public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.DIRECT;
         public final static DriveMode AUTON_DRIVE_MODE = DriveMode.DIRECT;
         public final static JoystickSmoothing JOYSTICK_SMOOTHING = JoystickSmoothing.NONE; // TODO change to square
         public final static DriveTrainSubsystem.MotorControlMode MOTOR_CONTROL_MODE = DriveTrainSubsystem.MotorControlMode.PID;
@@ -126,7 +126,7 @@ public final class Constants {
         public final static double FLYWHEEL_SLIPPING_FACTOR = 1; // percent of energy not lost to friction
         public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 10.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
-        public final static double FLYWHEEL_MAX_VELOCITY = 5000.0 / 60.0;
+        public final static double FLYWHEEL_MAX_VELOCITY = 7000.0 / 60.0;
         public final static double FLYWHEEL_MIN_OUTPUT = 0.1;
         public final static double FLYWHEEL_MAX_OUTPUT = 0.8;
 

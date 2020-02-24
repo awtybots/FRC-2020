@@ -1,10 +1,10 @@
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import static frc.robot.Robot.*;
 
-public class SetShooterSpeed extends InstantCommand {
+public class SetShooterSpeed extends CommandBase {
 
     private double rps;
 
@@ -15,6 +15,17 @@ public class SetShooterSpeed extends InstantCommand {
     @Override
     public void initialize() {
         shooterSubsystem.setFlywheelGoalVelocity(rps);
+    }
+
+    @Override
+    public void execute() {
+        //indexerTowerSubsystem.toggle(shooterSubsystem.isVelocityAtGoal());
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        shooterSubsystem.setFlywheelGoalVelocity(0);
+        indexerTowerSubsystem.toggle(false);
     }
 
 }

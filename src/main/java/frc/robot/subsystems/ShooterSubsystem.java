@@ -116,7 +116,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setFlywheelGoalVelocity(double goalVelocity) {
         integralError = 0;
         System.out.println("flywheel goal velocity: "+goalVelocity); // TODO remove print
-        this.goalVelocity = clamp(goalVelocity, -FLYWHEEL_MAX_VELOCITY, FLYWHEEL_MAX_VELOCITY);
+        this.goalVelocity = clamp(goalVelocity, 0, FLYWHEEL_MAX_VELOCITY);
     }
 
 
@@ -149,6 +149,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public boolean readyToShoot() {
         return velocityAtGoal && turretAtGoal;
+    }
+    public boolean isVelocityAtGoal() {
+        return velocityAtGoal;
     }
 
     public enum MotorControlMode {
