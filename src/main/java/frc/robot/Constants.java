@@ -50,8 +50,8 @@ public final class Constants {
 
     public final static class DriveTrain {
         // OPTIONS
-        public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.DIRECT;
-        public final static DriveMode AUTON_DRIVE_MODE = DriveMode.DIRECT;
+        public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.PERCENT; // TODO change to ramped
+        public final static DriveMode AUTON_DRIVE_MODE = DriveMode.RAMPED_PERCENT;
         public final static JoystickSmoothing JOYSTICK_SMOOTHING = JoystickSmoothing.NONE; // TODO change to square
         public final static DriveTrainSubsystem.MotorControlMode MOTOR_CONTROL_MODE = DriveTrainSubsystem.MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
@@ -97,7 +97,7 @@ public final class Constants {
     public final static class IndexerTower {
         public final static double INDEXER_L_MOTOR_SPEED = 0.4;
         public final static double INDEXER_R_MOTOR_SPEED = 0.6;
-        public final static double TOWER_MOTOR_SPEED = 0.5;
+        public final static double TOWER_MOTOR_SPEED = 1.0;
     }
 
     public final static class Shooter {
@@ -198,6 +198,6 @@ public final class Constants {
         public static final int PORT_1 = 0;
         public static final int PORT_2 = 1;
 
-        public final static double DEADZONE = 0.1;
+        public final static double DEADZONE = 0.3;
     }
 }

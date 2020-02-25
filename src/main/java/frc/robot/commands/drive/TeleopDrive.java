@@ -37,8 +37,10 @@ public class TeleopDrive extends CommandBase {
         double rotation = smooth(xboxController1.getX(ROTATION_HAND));
         double left = speed + rotation;
         double right = speed - rotation;
-        if(TELEOP_DRIVE_MODE == DriveMode.DIRECT) {
+        if(TELEOP_DRIVE_MODE == DriveMode.PERCENT) {
             driveTrainSubsystem.setMotorOutput(left * MAX_MOTOR_OUTPUT, right * MAX_MOTOR_OUTPUT);
+        } else if(TELEOP_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
+            driveTrainSubsystem.setGoalOutput(left * MAX_MOTOR_OUTPUT, right * MAX_MOTOR_OUTPUT);
         } else {
             driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
         }

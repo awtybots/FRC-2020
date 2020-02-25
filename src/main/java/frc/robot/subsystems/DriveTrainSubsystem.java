@@ -8,7 +8,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -54,7 +53,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     private double initialAngle;
 
-    private DriveMode CURRENT_DRIVE_MODE = DriveMode.DIRECT;
+    private DriveMode CURRENT_DRIVE_MODE = DriveMode.RAMPED_PERCENT;
     private static double PERIOD = 0.02;
 
 
@@ -77,9 +76,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
             motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); // sets which encoder the motor is using
         }
 
-        for(WPI_TalonFX motor : RIGHT.getMotors()) {
-            motor.setInverted(TalonFXInvertType.CounterClockwise);
-        }
+        RIGHT.getGroup().setInverted(true);
 
         if(TUNING_MODE) {
             SmartDashboard.setDefaultNumber("DriveTrain PID_P", PID_P);
@@ -94,9 +91,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(CURRENT_DRIVE_MODE != DriveTrainSubsystem.DriveMode.DIRECT) {
+        if(CURRENT_DRIVE_MODE == DriveMode.VELOCITY || CURRENT_DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
             MOTOR_CONTROL_MODE.getMotorControlFunction(this).accept(LEFT);
             MOTOR_CONTROL_MODE.getMotorControlFunction(this).accept(RIGHT);
+        } else if(CURRENT_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
+
         }
 
         if(odometry != null) {
@@ -114,7 +113,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private void drivePID(MotorGroup motorGroup) {
         double currentVelocity = getWheelVelocity(motorGroup);
         double goalAcceleration = goalVelocity.getOrDefault(motorGroup, 0.0) - currentVelocity;
-        double velocityError = CURRENT_DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY
+        double velocityError = CURRENT_DRIVE_MODE == DriveMode.RAMPED_VELOCITY
             ? clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD)
             : goalAcceleration;
         double accelerationError = (velocityError - lastVelocityError.getOrDefault(motorGroup, 0.0)) / PERIOD;
@@ -132,7 +131,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private void driveFeedforward(MotorGroup motorGroup) {
         double currentVelocity = getWheelVelocity(motorGroup);
         double goalAcceleration = goalVelocity.getOrDefault(motorGroup, 0.0) - currentVelocity;
-        double constrainedGoalAcceleration = CURRENT_DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY
+        double constrainedGoalAcceleration = CURRENT_DRIVE_MODE == DriveMode.RAMPED_VELOCITY
             ? clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD)
             : goalAcceleration;
         double constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
@@ -164,8 +163,13 @@ public class DriveTrainSubsystem extends SubsystemBase {
         setMotorVoltage(LEFT, left);
         setMotorVoltage(RIGHT, right);
     }
+	public void setGoalOutput(double left, double right) {
+        goalVelocity.put(LEFT, clamp(left, -MAX_MOTOR_OUTPUT, MAX_MOTOR_OUTPUT));
+        goalVelocity.put(RIGHT, clamp(right, -MAX_MOTOR_OUTPUT, MAX_MOTOR_OUTPUT));
+	}
 
     public void setDriveMode(DriveMode mode) {
+        goalVelocity.clear();
         CURRENT_DRIVE_MODE = mode;
     }
     public void setGoalVelocity(double left, double right) {
@@ -256,9 +260,10 @@ public class DriveTrainSubsystem extends SubsystemBase {
     }
 
     public enum DriveMode {
-        DIRECT,
+        PERCENT,
+        RAMPED_PERCENT,
         VELOCITY,
-        TRAPEZOIDAL_VELOCITY;
+        RAMPED_VELOCITY;
     }
 
     public enum MotorGroup {

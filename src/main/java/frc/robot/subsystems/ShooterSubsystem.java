@@ -108,7 +108,7 @@ public class ShooterSubsystem extends SubsystemBase {
             : (PID_P * velocityError)
             + (PID_I * integralError)
             + (PID_D * accelerationError);
-        percentOutput = clamp(percentOutput, FLYWHEEL_MIN_OUTPUT, FLYWHEEL_MAX_OUTPUT);
+        percentOutput = clamp(percentOutput, FLYWHEEL_MIN_OUTPUT, FLYWHEEL_MAX_OUTPUT) * Math.signum(goalVelocity);
         SmartDashboard.putNumber("Shooter percent output", percentOutput);
         flywheel.set(percentOutput);
     }

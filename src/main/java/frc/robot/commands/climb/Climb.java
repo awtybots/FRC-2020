@@ -7,7 +7,7 @@ import static frc.robot.Robot.*;
 
 public class Climb extends InstantCommand {
 
-    private static ClimbDirection currentPosition;
+    private static ClimbDirection currentPosition = ClimbDirection.DOWN;
 
     private ClimbDirection pos;
 

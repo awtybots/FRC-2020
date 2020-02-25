@@ -32,7 +32,7 @@ public class RotateDegrees extends CommandBase {
         currentRotation = driveTrainSubsystem.getRotation();
 
         // stopping distance
-        if(AUTON_DRIVE_MODE == DriveMode.TRAPEZOIDAL_VELOCITY) {
+        if(AUTON_DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
             double remainingDistance = goalRotation - currentRotation;
             if(ROTATE_DEGREES_SLOW_THRESHOLD >= remainingDistance) {
                 goalVelocity = 0; // start slowing down before we hit the target
@@ -40,8 +40,10 @@ public class RotateDegrees extends CommandBase {
         }
 
         // motors
-        if(AUTON_DRIVE_MODE == DriveMode.DIRECT) {
-            driveTrainSubsystem.setMotorOutput(goalVelocity/MAX_VELOCITY, -goalVelocity/MAX_VELOCITY);
+        if(AUTON_DRIVE_MODE == DriveMode.PERCENT) {
+            driveTrainSubsystem.setMotorOutput(Math.signum(goalVelocity), -Math.signum(goalVelocity));
+        } else if(AUTON_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
+            driveTrainSubsystem.setGoalOutput(Math.signum(goalVelocity), -Math.signum(goalVelocity));
         } else {
             driveTrainSubsystem.setGoalVelocity(goalVelocity, -goalVelocity);
         }
