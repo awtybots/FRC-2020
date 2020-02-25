@@ -41,7 +41,7 @@ public class Climb extends InstantCommand {
             switch(this) {
                 case UP: return DOWN;
                 case DOWN: return UP;
-                default: return null;
+                default: return DOWN;
             }
         }
     }

@@ -16,6 +16,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private final DoubleSolenoid pistons = new DoubleSolenoid(SolenoidChannels.INTAKE_FWD, SolenoidChannels.INTAKE_REV);
 
     public IntakeSubsystem() {
+        motor.configFactoryDefault();
+
         toggle(false);
     }
 

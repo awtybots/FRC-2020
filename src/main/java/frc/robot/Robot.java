@@ -92,17 +92,17 @@ public class Robot extends TimedRobot {
         musicSubsystem = new MusicSubsystem();
 
         // button mappings
-        getButton(xboxController1, kA).whenHeld(new ToggleIntake()).whenPressed(new MoveIntake(IntakePosition.DOWN)).whenReleased(new MoveIntake(IntakePosition.UP));
-        getButton(xboxController1, kB).whenPressed(new AutoSpinControlPanel());
+        getButton(xboxController1, kA).whenPressed(new AutoSpinControlPanel());
+        getButton(xboxController1, kB);
         getButton(xboxController1, kX);
         getButton(xboxController1, kY).whenPressed(new Climb());
-        getButton(xboxController2, kBumperLeft);
-        getButton(xboxController2, kBumperRight);
+        getButton(xboxController2, kBumperLeft).whenHeld(new ToggleIndexerTower());
+        getButton(xboxController2, kBumperRight).whenHeld(new ToggleIntake()).whenPressed(new MoveIntake(IntakePosition.DOWN)).whenReleased(new MoveIntake(IntakePosition.UP));
 
         getButton(xboxController2, kA).whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_1));
         getButton(xboxController2, kB).whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_2));
         getButton(xboxController2, kX).whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_3));
-        getButton(xboxController2, kY).whenHeld(new ToggleIndexerTower());
+        getButton(xboxController2, kY).whenHeld(new AutoShoot());
         getButton(xboxController2, kBumperLeft).whenHeld(new SpinTurret(TurretDirection.LEFT));
         getButton(xboxController2, kBumperRight).whenHeld(new SpinTurret(TurretDirection.RIGHT));
     }

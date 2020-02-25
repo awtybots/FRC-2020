@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -71,7 +72,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
             motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor); // sets which encoder the motor is using
         }
 
-        RIGHT.getGroup().setInverted(true);
+        for(WPI_TalonFX motor : RIGHT.getMotors()) {
+            motor.setInverted(TalonFXInvertType.Clockwise);
+        }
 
         if(TUNING_MODE) {
             SmartDashboard.setDefaultNumber("DriveTrain PID_P", PID_P);
@@ -212,8 +215,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
     public double getRotation() {
         return Math.floorMod((int)(initialAngle + navX.getAngle()), 360);
     }
-
-
     private Rotation2d getRawRotation() {
         return Rotation2d.fromDegrees(navX.getAngle());
     }
