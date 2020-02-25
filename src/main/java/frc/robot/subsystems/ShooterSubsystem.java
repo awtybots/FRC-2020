@@ -133,7 +133,7 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 	public void setTurretSpeed(double turnSpeed) {
-        double rampedTurnAccel = clamp(turnSpeed - lastTurnSpeed, -TURRET_MAX_ACCEL, TURRET_MAX_ACCEL);
+        double rampedTurnAccel = clamp(turnSpeed - lastTurnSpeed, -TURRET_MAX_ACCEL * PERIOD, TURRET_MAX_ACCEL * PERIOD);
         double rampedTurnSpeed = lastTurnSpeed + rampedTurnAccel;
         lastTurnSpeed = rampedTurnSpeed;
 

@@ -35,13 +35,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     // this is the subsystem that interacts with the drivetrain motors
 
-    private static WPI_TalonFX motorL1;
-    private static WPI_TalonFX motorL2;
+    private static WPI_TalonFX motorL1 = new WPI_TalonFX(MotorIDs.DRIVE_L1);
+    private static WPI_TalonFX motorL2 = new WPI_TalonFX(MotorIDs.DRIVE_L2);
 
-    private static WPI_TalonFX motorR1;
-    private static WPI_TalonFX motorR2;
+    private static WPI_TalonFX motorR1 = new WPI_TalonFX(MotorIDs.DRIVE_R1);
+    private static WPI_TalonFX motorR2 = new WPI_TalonFX(MotorIDs.DRIVE_R2);
 
     private HashMap<MotorGroup, Double> goalVelocity = new HashMap<>();
+    private HashMap<MotorGroup, Double> currentPercent = new HashMap<>();
     private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
     private HashMap<MotorGroup, Double> integralError = new HashMap<>();
 
@@ -61,12 +62,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     public DriveTrainSubsystem() {
         PERIOD = Robot.getLoopTime();
-
-        motorL1 = new WPI_TalonFX(MotorIDs.DRIVE_L1);
-        motorL2 = new WPI_TalonFX(MotorIDs.DRIVE_L2);
-
-        motorR1 = new WPI_TalonFX(MotorIDs.DRIVE_R1);
-        motorR2 = new WPI_TalonFX(MotorIDs.DRIVE_R2);
 
         for(WPI_TalonFX motor : ALL.getMotors()) {
             motor.set(0); // start all motors at 0% speed to stop the blinking
@@ -95,7 +90,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
             MOTOR_CONTROL_MODE.getMotorControlFunction(this).accept(LEFT);
             MOTOR_CONTROL_MODE.getMotorControlFunction(this).accept(RIGHT);
         } else if(CURRENT_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
-
+            driveRampedPercent(LEFT);
+            driveRampedPercent(RIGHT);
         }
 
         if(odometry != null) {
@@ -142,6 +138,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
         double voltage = S + V + A;
         setMotorVoltage(motorGroup, voltage);
+    }
+
+    private void driveRampedPercent(MotorGroup motorGroup) {
+        double goalPercent = goalVelocity.getOrDefault(motorGroup, 0.0);
+        double rampedPercentAccel = clamp(goalPercent - currentPercent.getOrDefault(motorGroup, 0.0), -MAX_MOTOR_ACCEL*PERIOD, MAX_MOTOR_ACCEL*PERIOD);
+        double rampedPercent = currentPercent.getOrDefault(motorGroup, 0.0) + rampedPercentAccel;
+        setMotorOutput(motorGroup, rampedPercent);
+        currentPercent.put(motorGroup, rampedPercent);
     }
 
 
