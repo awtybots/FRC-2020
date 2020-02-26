@@ -15,12 +15,12 @@ public class SpinTurret extends CommandBase {
     }
 
     @Override
-    public void initialize() {
-        shooterSubsystem.setTurretSpeed(direction * TURRET_MAX_SPEED);
+    public void execute() {
+        shooterSubsystem.setTurretSpeed(direction * TURRET_MAX_SPEED, true);
     }
     @Override
     public void end(boolean interrupted) {
-        shooterSubsystem.setTurretSpeed(0);
+        shooterSubsystem.setTurretSpeed(0, false);
     }
 
     public enum TurretDirection {

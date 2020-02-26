@@ -36,6 +36,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private boolean velocityAtGoal = false;
     private boolean turretAtGoal = false;
 
+    private boolean turretManual = false;
+
     public ShooterSubsystem() {
         PERIOD = Robot.getLoopTime();
 
@@ -47,8 +49,10 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheel.configVelocityMeasurementWindow(8);
 
         turret.configFactoryDefault();
+        turret.setInverted(true);
+        turret.setSensorPhase(true);
         turret.setNeutralMode(TURRET_BRAKE_MODE);
-        turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+        turret.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
         turret.setSelectedSensorPosition((int)(TURRET_START_ANGLE * angleFactor));
 
         if(TUNING_MODE) {
@@ -122,23 +126,29 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     private void spinTurret() {
+        SmartDashboard.putNumber("Turret position", turret.getSelectedSensorPosition()); // TODO remove
         SmartDashboard.putNumber("Turret detected angle", currentAngle);
-        if(turretAtGoal) {
-            setTurretSpeed(0);
-        } else {
-            double angleOffset = goalAngle - currentAngle;
-            SmartDashboard.putNumber("Turret angle offset", angleOffset);
-            double turnSpeed = MathUtil.clamp(angleOffset/TURRET_ANGLE_SLOW_THRESHOLD, -1.0, 1.0) * TURRET_MAX_SPEED;
-            setTurretSpeed(turnSpeed);
+        if(!turretManual) {
+            if(turretAtGoal) {
+                setTurretSpeed(0, false);
+            } else {
+                double angleOffset = goalAngle - currentAngle;
+                SmartDashboard.putNumber("Turret angle offset", angleOffset);
+                double turnSpeed = MathUtil.clamp(angleOffset/TURRET_ANGLE_SLOW_THRESHOLD, -1.0, 1.0) * TURRET_MAX_SPEED;
+                setTurretSpeed(turnSpeed, false);
+            }
         }
     }
-	public void setTurretSpeed(double turnSpeed) {
+	public void setTurretSpeed(double turnSpeed, boolean manual) {
+        turretManual = manual;
         double rampedTurnAccel = clamp(turnSpeed - lastTurnSpeed, -TURRET_MAX_ACCEL * PERIOD, TURRET_MAX_ACCEL * PERIOD);
         double rampedTurnSpeed = lastTurnSpeed + rampedTurnAccel;
         lastTurnSpeed = rampedTurnSpeed;
 
+        SmartDashboard.putNumber("Turret output", rampedTurnSpeed); // TODO remove
+
         if(Math.abs(rampedTurnSpeed) < TURRET_MIN_SPEED) rampedTurnSpeed = TURRET_MIN_SPEED * Math.signum(rampedTurnSpeed);
-        turret.set(rampedTurnSpeed);
+        //turret.set(rampedTurnSpeed); TODO add back motor set
 	}
     public double getTurretAngle() {
         return currentAngle;

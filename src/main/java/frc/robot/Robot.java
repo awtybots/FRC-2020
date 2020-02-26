@@ -96,8 +96,8 @@ public class Robot extends TimedRobot {
         getButton(xboxController1, kB);
         getButton(xboxController1, kX);
         getButton(xboxController1, kY).whenPressed(new Climb());
-        getButton(xboxController2, kBumperLeft).whenHeld(new ToggleIndexerTower());
-        getButton(xboxController2, kBumperRight).whenHeld(new ToggleIntake()).whenPressed(new MoveIntake(IntakePosition.DOWN)).whenReleased(new MoveIntake(IntakePosition.UP));
+        getButton(xboxController1, kBumperLeft).whenHeld(new ToggleIndexerTower());
+        getButton(xboxController1, kBumperRight).whenHeld(new ToggleIntake()).whenPressed(new MoveIntake(IntakePosition.DOWN)).whenReleased(new MoveIntake(IntakePosition.UP));
 
         getButton(xboxController2, kA).whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_1));
         getButton(xboxController2, kB).whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_2));

@@ -1,6 +1,7 @@
 package frc.robot.commands.main;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.climb.Climb;
@@ -16,6 +17,8 @@ import frc.robot.commands.music.PlayMusic;
 import frc.robot.commands.shooter.AutoShoot;
 import frc.robot.commands.shooter.ResetNavX;
 
+import static frc.robot.Robot.*;
+
 public class Auton extends ParallelCommandGroup {
 
     public Auton(AutonType autonType) {
@@ -28,16 +31,37 @@ public class Auton extends ParallelCommandGroup {
 
     public enum AutonType {
         DO_NOTHING,
+        MOVE_FORWARD,
+        PATH_1,
+
+        SQUARE_TEST,
         AUTOSHOOT_TEST,
         CLIMB_TEST,
-        SHUFFLE_PLAY,
-
-        SQUARE,
-        PATH_1;
+        SHUFFLE_PLAY;
     }
 
     private Command getAutonSequence(AutonType autonType) {
         switch(autonType) {
+
+            case MOVE_FORWARD: return
+                sequence(
+                    new InstantCommand(() -> driveTrainSubsystem.setMotorOutput(1.0, 1.0), driveTrainSubsystem),
+                    new WaitCommand(3),
+                    new InstantCommand(() -> driveTrainSubsystem.stop())
+                );
+
+            case PATH_1: return
+                parallel(
+                    new AutoShoot(),
+                    new ToggleIntake(true),
+                    new ToggleIndexerTower(true),
+
+                    sequence(
+                        new DriveTrajectory("GoToCenter", true),
+                        new WaitCommand(3),
+                        new DriveTrajectory("GoToControlPanel")
+                    )
+                );
 
             case AUTOSHOOT_TEST: return
                 parallel(
@@ -53,10 +77,7 @@ public class Auton extends ParallelCommandGroup {
                     new Climb(ClimbDirection.DOWN)
                 );
 
-            case SHUFFLE_PLAY: return
-                new PlayMusic();
-
-            case SQUARE: return
+            case SQUARE_TEST: return
                 sequence(
                     new ResetNavX(),
                     new DriveInches(24),
@@ -69,18 +90,8 @@ public class Auton extends ParallelCommandGroup {
                     new RotateDegrees(90)
                 );
 
-            case PATH_1: return
-                parallel(
-                    new AutoShoot(),
-                    new ToggleIntake(true),
-                    new ToggleIndexerTower(true),
-
-                    sequence(
-                        new DriveTrajectory("GoToCenter", true),
-                        new WaitCommand(3),
-                        new DriveTrajectory("GoToControlPanel")
-                    )
-                );
+            case SHUFFLE_PLAY: return
+                new PlayMusic();
 
             default: return
                 new ResetNavX();

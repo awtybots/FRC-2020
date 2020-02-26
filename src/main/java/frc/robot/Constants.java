@@ -133,9 +133,9 @@ public final class Constants {
 
         // TURRET
         public final static double TURRET_RATIO = 1.0;
-        public final static double TURRET_MIN_SPEED = 0.2;
+        public final static double TURRET_MIN_SPEED = 0.15;
         public final static double TURRET_MAX_SPEED = 0.5;
-        public final static double TURRET_MAX_ACCEL = 0.1; // max % to increase by every second
+        public final static double TURRET_MAX_ACCEL = 0.5; // max % to increase by every second
         public final static double TURRET_GOAL_ANGLE_THRESHOLD = 1; // degrees to be satisfied with result
         public final static double TURRET_ANGLE_SLOW_THRESHOLD = 5; // degrees to start slowing down
         public final static double TURRET_WRAP_AROUND_THRESHOLD = 6; // if we don't see a target, how far away from 360 should we start moving the other direction
