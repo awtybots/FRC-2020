@@ -21,13 +21,8 @@ public class LimelightSubsystem extends SubsystemBase {
         currentPipeline = Pipeline.POWER_PORT;
 
         SmartDashboard.setDefaultBoolean("Limelight LED", true);
+        toggleLight(false);
     }
-    @Override
-    public void periodic() {
-        Number ledMode = SmartDashboard.getBoolean("Limelight LED", true) ? 3 : 1;
-        setNumber("ledMode", ledMode);
-    }
-
 
 
     private double getDouble(String name) {
@@ -58,6 +53,10 @@ public class LimelightSubsystem extends SubsystemBase {
             targetHeight // inches
         ).print("Limelight data");
     }
+
+	public void toggleLight(boolean on) {
+        setNumber("ledMode", on ? 3 : 1);
+	}
 
 
     public void setPipeline(Pipeline pipeline) {

@@ -34,6 +34,7 @@ public class AutoShoot extends CommandBase {
     @Override
     public void initialize() {
         limelightSubsystem.setPipeline(Pipeline.POWER_PORT);
+        limelightSubsystem.toggleLight(true);
     }
 
     @Override
@@ -62,6 +63,7 @@ public class AutoShoot extends CommandBase {
     public void end(boolean interrupted) {
         shooterSubsystem.setFlywheelGoalVelocity(0);
         shooterSubsystem.setTurretGoalAngle(0);
+        limelightSubsystem.toggleLight(false);
     }
 
     @Override
