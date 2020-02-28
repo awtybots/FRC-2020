@@ -9,10 +9,8 @@ import frc.robot.commands.climb.Climb.ClimbDirection;
 import frc.robot.commands.drive.DriveInches;
 import frc.robot.commands.drive.DriveTrajectory;
 import frc.robot.commands.drive.RotateDegrees;
-import frc.robot.commands.intake.MoveIntake;
 import frc.robot.commands.intake.ToggleIndexerTower;
 import frc.robot.commands.intake.ToggleIntake;
-import frc.robot.commands.intake.MoveIntake.IntakePosition;
 import frc.robot.commands.music.PlayMusic;
 import frc.robot.commands.shooter.AutoShoot;
 import frc.robot.commands.shooter.ResetNavX;
@@ -23,8 +21,6 @@ public class Auton extends ParallelCommandGroup {
 
     public Auton(AutonType autonType) {
         addCommands(
-            new Climb(ClimbDirection.DOWN),
-            new MoveIntake(IntakePosition.DOWN),
             getAutonSequence(autonType)
         );
     }

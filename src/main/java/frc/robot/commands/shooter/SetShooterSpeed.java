@@ -22,7 +22,7 @@ public class SetShooterSpeed extends CommandBase {
     @Override
     public void execute() {
         if((!toggled) && shooterSubsystem.isVelocityAtGoal()) {
-            indexerTowerSubsystem.toggle(true);
+            // indexerTowerSubsystem.toggle(true); TODO
             toggled = true;
         }
     }

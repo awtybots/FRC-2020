@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 import static edu.wpi.first.wpilibj.XboxController.Button.*;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -57,6 +58,7 @@ public class Robot extends TimedRobot {
     private static PowerDistributionPanel pdp;
 
     private DigitalOutput LEDOutput = new DigitalOutput(0);
+    private Compressor compressor = new Compressor();
 
     @Override
     public void robotInit() {
@@ -64,8 +66,10 @@ public class Robot extends TimedRobot {
         period = getPeriod();
         pdp = new PowerDistributionPanel();
 
-        // set LED color
+        // electrical
         LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
+        compressor.setClosedLoopControl(true);
+        compressor.start();
 
         // auton chooser
         autonChooser = new SendableChooser<>();
@@ -132,10 +136,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        // set LED color (failsafe)
         LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
-
         driveTrainSubsystem.setDriveMode(AUTON_DRIVE_MODE);
+        limelightSubsystem.toggleLight(false);
+
         autonCommand = new Auton(autonChooser.getSelected()); // get chosen AutonType
         autonCommand.schedule(); // start auton
     }

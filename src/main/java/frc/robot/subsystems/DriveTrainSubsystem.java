@@ -55,7 +55,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     private double initialAngle;
 
-    private DriveMode CURRENT_DRIVE_MODE = DriveMode.RAMPED_PERCENT;
+    private DriveMode CURRENT_DRIVE_MODE = DriveMode.PERCENT;
     private static double PERIOD = 0.02;
 
 
@@ -105,8 +105,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
             SmartDashboard.putNumber("Rotation", getRotation());
         }
 
-        // System.out.println("total velocity: "+getWheelVelocity(ALL)); // TODO remove prints
-        // System.out.println("total distance: "+getWheelDistance(ALL));
+        System.out.println("total velocity: "+getWheelVelocity(ALL)); // TODO remove prints
+        System.out.println("total distance: "+getWheelDistance(ALL));
     }
 
     private void drivePID(MotorGroup motorGroup) {

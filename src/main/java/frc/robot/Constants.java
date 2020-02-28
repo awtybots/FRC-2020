@@ -50,9 +50,9 @@ public final class Constants {
 
     public final static class DriveTrain {
         // OPTIONS
-        public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.PERCENT; // TODO change to ramped
-        public final static DriveMode AUTON_DRIVE_MODE = DriveMode.RAMPED_PERCENT;
-        public final static JoystickSmoothing JOYSTICK_SMOOTHING = JoystickSmoothing.NONE; // TODO change to square
+        public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.PERCENT;
+        public final static DriveMode AUTON_DRIVE_MODE = DriveMode.PERCENT;
+        public final static JoystickSmoothing JOYSTICK_SMOOTHING = JoystickSmoothing.NONE; // TODO maybe change to square
         public final static DriveTrainSubsystem.MotorControlMode MOTOR_CONTROL_MODE = DriveTrainSubsystem.MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public static final Hand SPEED_HAND = Hand.kLeft;
@@ -60,7 +60,7 @@ public final class Constants {
         public final static boolean TUNING_MODE = false; // change to true if you want to tune PID / FF in SmartDashboard
 
         // LIMITS
-        public final static double MIN_MOTOR_OUTPUT = 0.1;
+        public final static double MIN_MOTOR_OUTPUT = 0;
         public final static double MAX_MOTOR_OUTPUT = 0.9;
         public final static double MAX_MOTOR_ACCEL = 0.3;
         public final static double MAX_VELOCITY = 36; // inches per second
@@ -128,11 +128,11 @@ public final class Constants {
         public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 10.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
         public final static double FLYWHEEL_MAX_VELOCITY = 7000.0 / 60.0;
-        public final static double FLYWHEEL_MIN_OUTPUT = 0.1;
-        public final static double FLYWHEEL_MAX_OUTPUT = 0.8;
+        public final static double FLYWHEEL_MIN_OUTPUT = 0;
+        public final static double FLYWHEEL_MAX_OUTPUT = 0.8; // TODO raise
 
         // TURRET
-        public final static double TURRET_RATIO = 1.0;
+        public final static double TURRET_RATIO = 1.0 / 10.0;
         public final static double TURRET_MIN_SPEED = 0.15;
         public final static double TURRET_MAX_SPEED = 0.5;
         public final static double TURRET_MAX_ACCEL = 0.5; // max % to increase by every second

@@ -119,7 +119,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void setFlywheelGoalVelocity(double goalVelocity) {
         integralError = 0;
-        System.out.println("flywheel goal velocity: "+goalVelocity); // TODO remove print
         this.goalVelocity = clamp(goalVelocity, 0, FLYWHEEL_MAX_VELOCITY);
     }
 
@@ -145,10 +144,8 @@ public class ShooterSubsystem extends SubsystemBase {
         double rampedTurnSpeed = lastTurnSpeed + rampedTurnAccel;
         lastTurnSpeed = rampedTurnSpeed;
 
-        SmartDashboard.putNumber("Turret output", rampedTurnSpeed); // TODO remove
-
         if(Math.abs(rampedTurnSpeed) < TURRET_MIN_SPEED) rampedTurnSpeed = TURRET_MIN_SPEED * Math.signum(rampedTurnSpeed);
-        //turret.set(rampedTurnSpeed); TODO add back motor set
+        turret.set(rampedTurnSpeed);
 	}
     public double getTurretAngle() {
         return currentAngle;
