@@ -129,7 +129,7 @@ public final class Constants {
         public final static int FLYWHEEL_GOAL_RPS_AVERAGE_COUNT = 10; // how many frames of RPS to get the average from
         public final static double FLYWHEEL_MAX_VELOCITY = 7000.0 / 60.0;
         public final static double FLYWHEEL_MIN_OUTPUT = 0;
-        public final static double FLYWHEEL_MAX_OUTPUT = 0.8; // TODO raise
+        public final static double FLYWHEEL_MAX_OUTPUT = 0.9;
 
         // TURRET
         public final static double TURRET_RATIO = 1.0 / 10.0;
