@@ -52,7 +52,7 @@ public class Auton extends ParallelCommandGroup {
                 sequence(
                     deadline(
                         new WaitCommand(10),
-                        new SetShooterSpeed(4000)
+                        new SetShooterSpeed(4000, true)
                     ),
                     new InstantCommand(() -> driveTrainSubsystem.setMotorOutput(1.0, 1.0), driveTrainSubsystem),
                     new WaitCommand(3),
