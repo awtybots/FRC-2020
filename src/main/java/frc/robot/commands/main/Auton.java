@@ -14,6 +14,7 @@ import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.music.PlayMusic;
 import frc.robot.commands.shooter.AutoShoot;
 import frc.robot.commands.shooter.ResetNavX;
+import frc.robot.commands.shooter.SetShooterSpeed;
 
 import static frc.robot.Robot.*;
 
@@ -28,6 +29,7 @@ public class Auton extends ParallelCommandGroup {
     public enum AutonType {
         DO_NOTHING,
         MOVE_FORWARD,
+        SHOOT_AND_MOVE_FORWARD,
         PATH_1,
 
         SQUARE_TEST,
@@ -41,6 +43,17 @@ public class Auton extends ParallelCommandGroup {
 
             case MOVE_FORWARD: return
                 sequence(
+                    new InstantCommand(() -> driveTrainSubsystem.setMotorOutput(1.0, 1.0), driveTrainSubsystem),
+                    new WaitCommand(3),
+                    new InstantCommand(() -> driveTrainSubsystem.stop())
+                );
+
+            case SHOOT_AND_MOVE_FORWARD: return
+                sequence(
+                    deadline(
+                        new WaitCommand(10),
+                        new SetShooterSpeed(4000)
+                    ),
                     new InstantCommand(() -> driveTrainSubsystem.setMotorOutput(1.0, 1.0), driveTrainSubsystem),
                     new WaitCommand(3),
                     new InstantCommand(() -> driveTrainSubsystem.stop())

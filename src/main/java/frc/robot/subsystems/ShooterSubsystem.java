@@ -69,10 +69,8 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // get encoder measurements
-        currentVelocity = flywheel.getSelectedSensorVelocity() * 10.0 / 2048.0 * FLYWHEEL_RATIO;
-        currentAngle = ((double)turret.getSelectedSensorPosition()) / angleFactor;
-        velocityAtGoal = Math.abs(currentVelocity - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;
-        turretAtGoal = Math.abs(currentAngle - goalAngle) <= TURRET_GOAL_ANGLE_THRESHOLD;
+        velocityAtGoal = isVelocityAtGoal();
+        turretAtGoal = isTurretAtGoal();
 
         // shooter motor
         FLYWHEEL_MOTOR_CONTROL_MODE.getFunction(this).run();
@@ -155,10 +153,15 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public boolean readyToShoot() {
-        return velocityAtGoal && turretAtGoal;
+        return isVelocityAtGoal() && isTurretAtGoal();
     }
     public boolean isVelocityAtGoal() {
-        return velocityAtGoal;
+        currentVelocity = flywheel.getSelectedSensorVelocity() * 10.0 / 2048.0 * FLYWHEEL_RATIO;
+        return Math.abs(currentVelocity - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;
+    }
+    public boolean isTurretAtGoal() {
+        currentAngle = ((double)turret.getSelectedSensorPosition()) / angleFactor;
+        return Math.abs(currentAngle - goalAngle) <= TURRET_GOAL_ANGLE_THRESHOLD;
     }
 
     public enum MotorControlMode {

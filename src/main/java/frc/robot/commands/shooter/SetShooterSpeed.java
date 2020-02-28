@@ -8,8 +8,13 @@ public class SetShooterSpeed extends CommandBase {
 
     private double rps;
     private boolean toggled;
+    private boolean autoIndex;
 
     public SetShooterSpeed(double rps) {
+        this(rps, false);
+    }
+
+    public SetShooterSpeed(double rps, boolean autoIndex) {
         this.rps = rps;
         toggled = false;
     }
@@ -21,8 +26,8 @@ public class SetShooterSpeed extends CommandBase {
 
     @Override
     public void execute() {
-        if((!toggled) && shooterSubsystem.isVelocityAtGoal()) {
-            // indexerTowerSubsystem.toggle(true); TODO
+        if(autoIndex && (!toggled) && shooterSubsystem.isVelocityAtGoal()) {
+            indexerTowerSubsystem.toggle(true);
             toggled = true;
         }
     }
