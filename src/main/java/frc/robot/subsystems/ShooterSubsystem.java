@@ -123,7 +123,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     private void spinTurret() {
-        SmartDashboard.putNumber("Turret position", turret.getSelectedSensorPosition()); // TODO remove
         SmartDashboard.putNumber("Turret detected angle", currentAngle);
         if(!turretManual) {
             if(turretAtGoal) {
