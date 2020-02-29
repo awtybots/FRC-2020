@@ -35,12 +35,11 @@ public class TeleopDrive extends CommandBase {
     public void execute() {
         double speed = smooth(-xboxController1.getY(SPEED_HAND));
         double rotation = smooth(xboxController1.getX(ROTATION_HAND));
+        if(speed < 0.0) rotation = -rotation;
         double left = speed + rotation;
         double right = speed - rotation;
-        if(TELEOP_DRIVE_MODE == DriveMode.PERCENT) {
+        if(TELEOP_DRIVE_MODE == DriveMode.PERCENT || TELEOP_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
             driveTrainSubsystem.setMotorOutput(left * MAX_MOTOR_OUTPUT, right * MAX_MOTOR_OUTPUT);
-        } else if(TELEOP_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
-            driveTrainSubsystem.setGoalOutput(left * MAX_MOTOR_OUTPUT, right * MAX_MOTOR_OUTPUT);
         } else {
             driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
         }

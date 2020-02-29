@@ -40,10 +40,8 @@ public class RotateDegrees extends CommandBase {
         }
 
         // motors
-        if(AUTON_DRIVE_MODE == DriveMode.PERCENT) {
+        if(AUTON_DRIVE_MODE == DriveMode.PERCENT || AUTON_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
             driveTrainSubsystem.setMotorOutput(Math.signum(goalVelocity), -Math.signum(goalVelocity));
-        } else if(AUTON_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
-            driveTrainSubsystem.setGoalOutput(Math.signum(goalVelocity), -Math.signum(goalVelocity));
         } else {
             driveTrainSubsystem.setGoalVelocity(goalVelocity, -goalVelocity);
         }

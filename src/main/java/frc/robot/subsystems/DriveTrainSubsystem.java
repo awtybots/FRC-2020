@@ -43,7 +43,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private static WPI_TalonFX motorR2 = new WPI_TalonFX(MotorIDs.DRIVE_R2);
 
     private HashMap<MotorGroup, Double> goalVelocity = new HashMap<>();
-    private HashMap<MotorGroup, Double> currentPercent = new HashMap<>();
     private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
     private HashMap<MotorGroup, Double> integralError = new HashMap<>();
 
@@ -92,9 +91,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
         if(CURRENT_DRIVE_MODE == DriveMode.VELOCITY || CURRENT_DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
             MOTOR_CONTROL_MODE.getMotorControlFunction(this).accept(LEFT);
             MOTOR_CONTROL_MODE.getMotorControlFunction(this).accept(RIGHT);
-        } else if(CURRENT_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
-            driveRampedPercent(LEFT);
-            driveRampedPercent(RIGHT);
         }
 
         if(odometry != null) {
@@ -143,14 +139,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
         setMotorVoltage(motorGroup, voltage);
     }
 
-    private void driveRampedPercent(MotorGroup motorGroup) {
-        double goalPercent = goalVelocity.getOrDefault(motorGroup, 0.0);
-        double rampedPercentAccel = clamp(goalPercent - currentPercent.getOrDefault(motorGroup, 0.0), -MAX_MOTOR_ACCEL*PERIOD, MAX_MOTOR_ACCEL*PERIOD);
-        double rampedPercent = currentPercent.getOrDefault(motorGroup, 0.0) + rampedPercentAccel;
-        setMotorOutput(motorGroup, rampedPercent);
-        currentPercent.put(motorGroup, rampedPercent);
-    }
-
 
     // DRIVE COMMAND FUNCTIONS
 
@@ -170,14 +158,19 @@ public class DriveTrainSubsystem extends SubsystemBase {
         setMotorVoltage(LEFT, left);
         setMotorVoltage(RIGHT, right);
     }
-	public void setGoalOutput(double left, double right) {
-        goalVelocity.put(LEFT, clamp(left, -MAX_MOTOR_OUTPUT, MAX_MOTOR_OUTPUT));
-        goalVelocity.put(RIGHT, clamp(right, -MAX_MOTOR_OUTPUT, MAX_MOTOR_OUTPUT));
-	}
 
     public void setDriveMode(DriveMode mode) {
         goalVelocity.clear();
         CURRENT_DRIVE_MODE = mode;
+        if(mode == DriveMode.RAMPED_PERCENT) {
+            for(WPI_TalonFX motor : ALL.getMotors()) {
+                motor.configOpenloopRamp(1.0/MAX_MOTOR_ACCEL);
+            }
+        } else {
+            for(WPI_TalonFX motor : ALL.getMotors()) {
+                motor.configOpenloopRamp(0.0);
+            }
+        }
     }
     public void setGoalVelocity(double left, double right) {
         goalVelocity.put(LEFT, clamp(left, -MAX_VELOCITY, MAX_VELOCITY));
