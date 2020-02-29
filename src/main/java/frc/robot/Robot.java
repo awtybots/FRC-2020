@@ -65,11 +65,6 @@ public class Robot extends TimedRobot {
         period = getPeriod();
         pdp = new PowerDistributionPanel();
 
-        // electrical
-        LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
-        compressor.setClosedLoopControl(true);
-        compressor.start();
-
         // auton chooser
         autonChooser = new SendableChooser<>();
         AutonType[] autonTypes = AutonType.values();
@@ -111,6 +106,12 @@ public class Robot extends TimedRobot {
 
         // getButton(xboxController2, kBumperLeft).whenHeld(new SpinTurret(TurretDirection.LEFT));
         // getButton(xboxController2, kBumperRight).whenHeld(new SpinTurret(TurretDirection.RIGHT));
+
+        // electrical
+        LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
+        limelightSubsystem.toggleLight(false);
+        compressor.setClosedLoopControl(true);
+        compressor.start();
     }
 
     /**
@@ -128,7 +129,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-
+        limelightSubsystem.toggleLight(false);
     }
 
     @Override

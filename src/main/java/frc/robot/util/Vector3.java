@@ -115,7 +115,7 @@ public class Vector3 {
 
     public Vector3 print(String name) {
         SmartDashboard.putString(name, toString());
-        //System.out.println(String.format("Vector3 '%s': ", name) + toString());
+        // System.out.println(String.format("Vector3 '%s': ", name) + toString());
         return this;
     }
     public Translation2d toTranslation2d() {

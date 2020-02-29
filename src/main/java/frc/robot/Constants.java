@@ -41,11 +41,11 @@ public final class Constants {
     }
 
     public final static class SolenoidChannels {
-        public static final int INTAKE_FWD = 4;
-        public static final int INTAKE_REV = 5;
+        public static final int INTAKE_FWD = 7;
+        public static final int INTAKE_REV = 6;
 
-        public static final int CLIMB_FWD = 6;
-        public static final int CLIMB_REV = 7;
+        public static final int CLIMB_FWD = 5;
+        public static final int CLIMB_REV = 4;
     }
 
     public final static class DriveTrain {

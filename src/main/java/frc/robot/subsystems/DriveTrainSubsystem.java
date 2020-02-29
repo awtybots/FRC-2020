@@ -214,7 +214,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     public double getWheelDistance(MotorGroup motorGroup) {
         double totalUnits = 0;
         for(WPI_TalonFX motor : motorGroup.getMotors()) {
-            System.out.println("distance: "+motor.getSelectedSensorPosition());
+            // System.out.println("distance: "+motor.getSelectedSensorPosition());
             totalUnits += motor.getSelectedSensorPosition();
         }
         double revolutions = totalUnits / 2048.0 / motorGroup.getMotors().length;
@@ -223,7 +223,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     public double getWheelVelocity(MotorGroup motorGroup) {
         double totalUnits = 0;
         for(WPI_TalonFX motor : motorGroup.getMotors()) {
-            System.out.println("velocity: "+motor.getSelectedSensorVelocity());
+            // System.out.println("velocity: "+motor.getSelectedSensorVelocity());
             totalUnits += motor.getSelectedSensorVelocity();
         }
         double revolutions = totalUnits / 2048.0 * 10.0 / motorGroup.getMotors().length;
