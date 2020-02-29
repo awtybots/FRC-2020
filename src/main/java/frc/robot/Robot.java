@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
         autonChooser = new SendableChooser<>();
         AutonType[] autonTypes = AutonType.values();
         for(AutonType autonType : autonTypes) {
-            if(autonType == AutonType.DO_NOTHING) {
+            if(autonType == AutonType.SHOOT_AND_MOVE_FORWARD) {
                 autonChooser.setDefaultOption(autonType.toString(), autonType);
             } else {
                 autonChooser.addOption(autonType.toString(), autonType);
