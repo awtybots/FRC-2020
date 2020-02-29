@@ -143,8 +143,8 @@ public class DriveTrainSubsystem extends SubsystemBase {
     // DRIVE COMMAND FUNCTIONS
 
     private void setMotorOutput(MotorGroup group, double pct) {
-        if(Math.abs(pct) < MIN_MOTOR_OUTPUT) pct = 0;
-        pct = clamp(pct, -MAX_MOTOR_OUTPUT, MAX_MOTOR_OUTPUT);
+       /* if(Math.abs(pct) < MIN_MOTOR_OUTPUT) pct = 0;
+        pct = clamp(pct, -MAX_MOTOR_OUTPUT, MAX_MOTOR_OUTPUT);*/
         group.getGroup().set(pct);
     }
     public void setMotorVoltage(MotorGroup group, double voltage) {

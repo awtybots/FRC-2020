@@ -44,7 +44,7 @@ public class Auton extends ParallelCommandGroup {
             case MOVE_FORWARD: return
                 sequence(
                     new InstantCommand(() -> driveTrainSubsystem.setMotorOutput(0.5, 0.5), driveTrainSubsystem),
-                    new WaitCommand(0.5),
+                    new WaitCommand(0.3),
                     new InstantCommand(() -> driveTrainSubsystem.stop())
                 );
 
@@ -52,10 +52,14 @@ public class Auton extends ParallelCommandGroup {
                 sequence(
                     deadline(
                         new WaitCommand(10),
-                        new SetShooterSpeed(4000.0/60.0, true)
+                        new SetShooterSpeed(4000.0/60.0, true),
+                        sequence(
+                            new WaitCommand(3),
+                            new ToggleIndexerTower(true)
+                        )
                     ),
                     new InstantCommand(() -> driveTrainSubsystem.setMotorOutput(0.5, 0.5), driveTrainSubsystem),
-                    new WaitCommand(0.5),
+                    new WaitCommand(0.3),
                     new InstantCommand(() -> driveTrainSubsystem.stop())
                 );
 

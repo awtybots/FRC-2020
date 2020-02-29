@@ -52,7 +52,7 @@ public final class Constants {
         // OPTIONS
         public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.PERCENT;
         public final static DriveMode AUTON_DRIVE_MODE = DriveMode.PERCENT;
-        public final static JoystickSmoothing JOYSTICK_SMOOTHING = JoystickSmoothing.SQUARE;
+        public final static JoystickSmoothing JOYSTICK_SMOOTHING = JoystickSmoothing.NONE; // TODO
         public final static DriveTrainSubsystem.MotorControlMode MOTOR_CONTROL_MODE = DriveTrainSubsystem.MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public static final Hand SPEED_HAND = Hand.kLeft;
