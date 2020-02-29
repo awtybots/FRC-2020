@@ -30,7 +30,6 @@ import frc.robot.commands.intake.MoveIntake.IntakePosition;
 import frc.robot.commands.main.*;
 import frc.robot.commands.main.Auton.AutonType;
 import frc.robot.commands.shooter.*;
-import frc.robot.commands.shooter.SpinTurret.TurretDirection;
 import frc.robot.subsystems.*;
 import static frc.robot.Constants.Shooter.*;
 import static frc.robot.Constants.DriveTrain.*;
@@ -100,15 +99,18 @@ public class Robot extends TimedRobot {
         getButton(xboxController1, kB);
         getButton(xboxController1, kX);
         getButton(xboxController1, kY).whenPressed(new Climb());
-        getButton(xboxController1, kBumperLeft).whenHeld(new ToggleIndexerTower());
+        getButton(xboxController1, kBumperLeft);
         getButton(xboxController1, kBumperRight).whenHeld(new ToggleIntake()).whenPressed(new MoveIntake(IntakePosition.DOWN)).whenReleased(new MoveIntake(IntakePosition.UP));
 
         getButton(xboxController2, kA).whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_1));
         getButton(xboxController2, kB).whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_2));
         getButton(xboxController2, kX).whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_3));
         getButton(xboxController2, kY).whenHeld(new AutoShoot());
-        getButton(xboxController2, kBumperLeft).whenHeld(new SpinTurret(TurretDirection.LEFT));
-        getButton(xboxController2, kBumperRight).whenHeld(new SpinTurret(TurretDirection.RIGHT));
+        getButton(xboxController2, kBumperLeft).whenHeld(new ReverseTower());
+        getButton(xboxController2, kBumperRight).whenHeld(new ToggleIndexerTower());
+
+        // getButton(xboxController2, kBumperLeft).whenHeld(new SpinTurret(TurretDirection.LEFT));
+        // getButton(xboxController2, kBumperRight).whenHeld(new SpinTurret(TurretDirection.RIGHT));
     }
 
     /**

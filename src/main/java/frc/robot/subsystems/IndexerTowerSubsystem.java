@@ -28,4 +28,8 @@ public class IndexerTowerSubsystem extends SubsystemBase {
         indexerR.set(on ? INDEXER_R_MOTOR_SPEED : 0.0);
         tower.set(on ? TOWER_MOTOR_SPEED : 0.0);
     }
+
+    public void reverse() {
+        tower.set(-TOWER_MOTOR_SPEED);
+    }
 }
