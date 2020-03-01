@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.climb.Climb;
-import frc.robot.commands.climb.Climb.ClimbDirection;
+//import frc.robot.commands.climb.Climb.ClimbDirection;
 import frc.robot.commands.drive.DriveInches;
-import frc.robot.commands.drive.DriveTrajectory;
+//import frc.robot.commands.drive.DriveTrajectory;
 import frc.robot.commands.drive.RotateDegrees;
 import frc.robot.commands.intake.ToggleIndexerTower;
 import frc.robot.commands.intake.ToggleIntake;
@@ -70,9 +70,9 @@ public class Auton extends ParallelCommandGroup {
                     new ToggleIndexerTower(true),
 
                     sequence(
-                        new DriveTrajectory("GoToCenter", true),
-                        new WaitCommand(3),
-                        new DriveTrajectory("GoToControlPanel")
+                       // new DriveTrajectory("GoToCenter", true),
+                        new WaitCommand(3)
+                       // new DriveTrajectory("GoToControlPanel")
                     )
                 );
 
@@ -85,9 +85,9 @@ public class Auton extends ParallelCommandGroup {
 
             case CLIMB_TEST: return
                 sequence(
-                    new Climb(ClimbDirection.UP),
+                    new Climb(true),
                     new DriveInches(12),
-                    new Climb(ClimbDirection.DOWN)
+                    new Climb(false)
                 );
 
             case SQUARE_TEST: return

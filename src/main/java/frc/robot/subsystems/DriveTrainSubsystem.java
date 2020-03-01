@@ -8,46 +8,49 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+//import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+//import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.kauailabs.navx.frc.AHRS;
+//import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
+/*import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;*/
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
+/*import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 import edu.wpi.first.wpilibj.SPI;
-import frc.robot.Robot;
+import frc.robot.Robot;*/
 import frc.robot.Constants.MotorIDs;
-import frc.robot.util.Vector3;
+/*import frc.robot.util.Vector3;
 
 import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.Constants.NavX.*;
 import static frc.robot.subsystems.DriveTrainSubsystem.MotorGroup.*;
 
 import java.util.HashMap;
-import java.util.function.Consumer;
+import java.util.function.Consumer;*/
 
 public class DriveTrainSubsystem extends SubsystemBase {
 
     // this is the subsystem that interacts with the drivetrain motors
-
+    private static double lastLeftSpeed;
+    private static double lastRightSpeed;
+    private static final double rampLimit = 0.1;
     private static WPI_TalonFX motorL1 = new WPI_TalonFX(MotorIDs.DRIVE_L1);
     private static WPI_TalonFX motorL2 = new WPI_TalonFX(MotorIDs.DRIVE_L2);
 
     private static WPI_TalonFX motorR1 = new WPI_TalonFX(MotorIDs.DRIVE_R1);
     private static WPI_TalonFX motorR2 = new WPI_TalonFX(MotorIDs.DRIVE_R2);
 
-    private HashMap<MotorGroup, Double> goalVelocity = new HashMap<>();
-    private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
-    private HashMap<MotorGroup, Double> integralError = new HashMap<>();
+    //private HashMap<MotorGroup, Double> goalVelocity = new HashMap<>();
+    //private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
+    //private HashMap<MotorGroup, Double> integralError = new HashMap<>();
 
-    private final AHRS navX = new AHRS(SPI.Port.kMXP);
+   /* private final AHRS navX = new AHRS(SPI.Port.kMXP);
 
     private DifferentialDriveOdometry odometry;
     private Vector3 lastPosition = new Vector3();
@@ -55,14 +58,14 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
     private double initialAngle;
 
-    private DriveMode CURRENT_DRIVE_MODE = DriveMode.PERCENT;
-    private static double PERIOD = 0.02;
+    //private DriveMode CURRENT_DRIVE_MODE = DriveMode.PERCENT;
+    private static double PERIOD = 0.02;*/
 
 
     // DRIVING
 
     public DriveTrainSubsystem() {
-        PERIOD = Robot.getLoopTime();
+        /*PERIOD = Robot.getLoopTime();
 
         for(WPI_TalonFX motor : ALL.getMotors()) {
             motor.set(0); // start all motors at 0% speed to stop the blinking
@@ -84,12 +87,24 @@ public class DriveTrainSubsystem extends SubsystemBase {
             SmartDashboard.setDefaultNumber("DriveTrain FF_S", FF_S);
             SmartDashboard.setDefaultNumber("DriveTrain FF_V", FF_V);
             SmartDashboard.setDefaultNumber("DriveTrain FF_A", FF_A);
-        }
+        }*/
+
+        // Invert Left Motors
+    motorL1.setInverted(true);
+    motorL2.setInverted(true);
+
+    motorL1.setNeutralMode(NeutralMode.Coast);
+    motorL2.setNeutralMode(NeutralMode.Coast);
+    motorR1.setNeutralMode(NeutralMode.Coast);
+    motorR2.setNeutralMode(NeutralMode.Coast);
     }
+
+    // Set all motors to coast
+
 
     @Override
     public void periodic() {
-        if(CURRENT_DRIVE_MODE == DriveMode.VELOCITY || CURRENT_DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
+       /* if(CURRENT_DRIVE_MODE == DriveMode.VELOCITY || CURRENT_DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
             MOTOR_CONTROL_MODE.getMotorControlFunction(this).accept(LEFT);
             MOTOR_CONTROL_MODE.getMotorControlFunction(this).accept(RIGHT);
         }
@@ -100,13 +115,13 @@ public class DriveTrainSubsystem extends SubsystemBase {
             position = new Vector3(odometry.getPoseMeters()).print("Position");
             getVelocity().print("Velocity");
             SmartDashboard.putNumber("Rotation", getRotation());
-        }
+        }*/
 
         // System.out.println("total velocity: "+getWheelVelocity(ALL)); // TODO remove prints
         // System.out.println("total distance: "+getWheelDistance(ALL));
     }
 
-    private void drivePID(MotorGroup motorGroup) {
+    /*private void drivePID(MotorGroup motorGroup) {
         double currentVelocity = getWheelVelocity(motorGroup);
         double goalAcceleration = goalVelocity.getOrDefault(motorGroup, 0.0) - currentVelocity;
         double velocityError = CURRENT_DRIVE_MODE == DriveMode.RAMPED_VELOCITY
@@ -144,22 +159,32 @@ public class DriveTrainSubsystem extends SubsystemBase {
     // DRIVE COMMAND FUNCTIONS
 
     private void setMotorOutput(MotorGroup group, double pct) {
-       /* if(Math.abs(pct) < MIN_MOTOR_OUTPUT) pct = 0;
-        pct = clamp(pct, -MAX_MOTOR_OUTPUT, MAX_MOTOR_OUTPUT);*/
+        if(Math.abs(pct) < MIN_MOTOR_OUTPUT) pct = 0;
+        pct = clamp(pct, -MAX_MOTOR_OUTPUT, MAX_MOTOR_OUTPUT);
         group.getGroup().set(pct);
     }
     public void setMotorVoltage(MotorGroup group, double voltage) {
         setMotorOutput(group, voltage/12.0);
-    }
+    }*/
     public void setMotorOutput(double left, double right) {
         // setMotorOutput(LEFT, left);
         // setMotorOutput(RIGHT, right);
+        if( (left - lastLeftSpeed) > rampLimit)
+            left = lastLeftSpeed + rampLimit;
+        else if( (lastLeftSpeed - left) > rampLimit)
+            left = lastLeftSpeed - rampLimit;
+
+        if( (lastRightSpeed - right) > rampLimit)
+            right = lastRightSpeed - rampLimit;
+        else if( (right - lastRightSpeed) > rampLimit)
+            right = lastRightSpeed + rampLimit;
+
         motorL1.set(ControlMode.PercentOutput, left);
         motorL2.set(ControlMode.PercentOutput, left);
         motorR1.set(ControlMode.PercentOutput, right);
         motorR2.set(ControlMode.PercentOutput, right);
     }
-    public void setMotorVoltage(double left, double right) {
+   /* public void setMotorVoltage(double left, double right) {
         setMotorVoltage(LEFT, left);
         setMotorVoltage(RIGHT, right);
     }
@@ -180,16 +205,16 @@ public class DriveTrainSubsystem extends SubsystemBase {
     public void setGoalVelocity(double left, double right) {
         goalVelocity.put(LEFT, clamp(left, -MAX_VELOCITY, MAX_VELOCITY));
         goalVelocity.put(RIGHT, clamp(left, -MAX_VELOCITY, MAX_VELOCITY));
-    }
+    }*/
     public void stop() {
-        setGoalVelocity(0, 0);
+        //setGoalVelocity(0, 0);
         setMotorOutput(0, 0);
     }
 
 
     // SENSORS
 
-    public void setDisplacement(Vector3 displacement, double initialAngle) {
+    /*public void setDisplacement(Vector3 displacement, double initialAngle) {
         resetEncoders();
         navX.reset();
         odometry = new DifferentialDriveOdometry(
@@ -302,5 +327,5 @@ public class DriveTrainSubsystem extends SubsystemBase {
         public Vector3 getPosition() {
             return position.clone();
         }
-    }
+    }*/
 }

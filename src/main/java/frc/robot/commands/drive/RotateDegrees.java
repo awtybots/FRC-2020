@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import static frc.robot.Constants.DriveTrain.*;
 
-import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
+//import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 import static frc.robot.Robot.*;
 
 public class RotateDegrees extends CommandBase {
@@ -22,13 +22,13 @@ public class RotateDegrees extends CommandBase {
 
     @Override
     public void initialize() {
-        goalRotation = Math.floorMod((int)(driveTrainSubsystem.getRotation() + goalRotation), 360);
-        driveTrainSubsystem.resetEncoders();
+        //goalRotation = Math.floorMod((int)(driveTrainSubsystem.getRotation() + goalRotation), 360);
+       // driveTrainSubsystem.resetEncoders();
     }
 
     @Override
     public void execute() {
-        // rotation values
+        /*// rotation values
         currentRotation = driveTrainSubsystem.getRotation();
 
         // stopping distance
@@ -48,7 +48,7 @@ public class RotateDegrees extends CommandBase {
 
         // SmartDashbaord
         SmartDashboard.putNumber("RD - Current Distance", currentRotation);
-        SmartDashboard.putNumber("RD - Goal Distance", goalRotation);
+        SmartDashboard.putNumber("RD - Goal Distance", goalRotation);*/
     }
 
     @Override

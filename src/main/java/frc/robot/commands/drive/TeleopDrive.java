@@ -8,7 +8,7 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
+//import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 
 import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.Constants.Controller.*;
@@ -33,8 +33,9 @@ public class TeleopDrive extends CommandBase {
 
     @Override
     public void execute() {
-        double speed = -xboxController1.getY(SPEED_HAND);
+        double speed = xboxController1.getY(SPEED_HAND);
         double rotation = xboxController1.getX(ROTATION_HAND);
+
 
         if(Math.abs(speed) < DEADZONE)
         {
@@ -44,10 +45,9 @@ public class TeleopDrive extends CommandBase {
         {
             rotation = 0;
         }
-
         //if(speed < 0.0) rotation = -rotation;
-        double left = speed + rotation;
-        double right = speed - rotation;
+        double left = speed - rotation;
+        double right = speed + rotation;
 
         driveTrainSubsystem.setMotorOutput(left, right);
         /*if(TELEOP_DRIVE_MODE == DriveMode.PERCENT || TELEOP_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
@@ -59,7 +59,7 @@ public class TeleopDrive extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        driveTrainSubsystem.stop();
+
     }
 
     @Override
@@ -67,7 +67,7 @@ public class TeleopDrive extends CommandBase {
         return false;
     }
 
-    public enum JoystickSmoothing {
+   /* public enum JoystickSmoothing {
         NONE, SQUARE;
-    }
+    }*/
 }

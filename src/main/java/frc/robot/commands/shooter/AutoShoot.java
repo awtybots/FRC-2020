@@ -3,7 +3,7 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.LimelightSubsystem.Pipeline;
-import frc.robot.subsystems.DriveTrainSubsystem.FieldObject;
+//import frc.robot.subsystems.DriveTrainSubsystem.FieldObject;
 import frc.robot.util.Vector3;
 import static frc.robot.Constants.Shooter.*;
 import static java.lang.Math.*;
@@ -39,7 +39,7 @@ public class AutoShoot extends CommandBase {
 
     @Override
     public void execute() {
-        switch(AUTO_SHOOT_MODE) {
+        /*switch(AUTO_SHOOT_MODE) {
             case JUST_AIM_TURRET:
                 shooterSubsystem.setTurretGoalAngle(calculateAngleOffset());
                 break;
@@ -56,7 +56,7 @@ public class AutoShoot extends CommandBase {
                 boolean enableIndexerTower = (accurateTrajectory && shooterSubsystem.readyToShoot());
                 indexerTowerSubsystem.toggle(enableIndexerTower);
                 break;
-        }
+        }*/
     }
 
     @Override
@@ -74,7 +74,7 @@ public class AutoShoot extends CommandBase {
 
 
     @CheckForNull
-    private boolean calculateTrajectory() { // calculates necessary RPM and angle from limelight data (or NavX)
+    /*private boolean calculateTrajectory() { // calculates necessary RPM and angle from limelight data (or NavX)
         // gather navx and vision info
         double robotAngle = driveTrainSubsystem.getRotation();
         Vector3 visionTargetInfo = limelightSubsystem.getTargetInfo();
@@ -139,7 +139,7 @@ public class AutoShoot extends CommandBase {
 
         // don't shoot if we used the NavX for displacement, wait for the camera to see the power port
         return !useNavX;
-    }
+    }*/
 
     private Vector3 calculateVisionTargetOffset(Vector3 visionTargetInfo) {
         if(visionTargetInfo == null) return null;
@@ -180,7 +180,7 @@ public class AutoShoot extends CommandBase {
 
     }
 
-    private double calculateOptimalRevsPerSecond(double velocity) {
+    /*private double calculateOptimalRevsPerSecond(double velocity) {
         double rpsNow = velocity * shooterVelocityToRPSFactor;
         rpsList.add(rpsNow);
         if(rpsList.size() > FLYWHEEL_GOAL_RPS_AVERAGE_COUNT) rpsList.remove(0);
@@ -189,17 +189,17 @@ public class AutoShoot extends CommandBase {
             total += rps;
         }
         return total/(double)rpsList.size();
-    }
+    }*/
 
-    private double calculateAngleOffset() {
+    /*private double calculateAngleOffset() {
         double robotAngle = driveTrainSubsystem.getRotation();
         Vector3 visionTargetInfo = limelightSubsystem.getTargetInfo();
         Vector3 navXTargetDisplacement = driveTrainSubsystem.getDisplacement(FieldObject.POWER_PORT);
 
         return calculateAngleOffset(robotAngle, visionTargetInfo, navXTargetDisplacement);
-    }
+    }*/
 
-    private double calculateAngleOffset(double robotAngle, Vector3 visionTargetInfo, Vector3 navXTargetDisplacement) {
+    /*private double calculateAngleOffset(double robotAngle, Vector3 visionTargetInfo, Vector3 navXTargetDisplacement) {
         switch(TRAJECTORY_CALCULATION_MODE) {
             case VISION_ONLY:
                 if(visionTargetInfo == null) {
@@ -230,7 +230,7 @@ public class AutoShoot extends CommandBase {
             default:
                 return 0;
         }
-    }
+    }*/
 
     public enum TrajectoryCalculationMode {
         VISION_ONLY,

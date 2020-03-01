@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import static frc.robot.Constants.DriveTrain.*;
 
-import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
-import frc.robot.subsystems.DriveTrainSubsystem.MotorGroup;
+//import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
+//import frc.robot.subsystems.DriveTrainSubsystem.MotorGroup;
 import static frc.robot.Robot.*;
 
 public class DriveInches extends CommandBase {
@@ -23,13 +23,13 @@ public class DriveInches extends CommandBase {
 
     @Override
     public void initialize() {
-        driveTrainSubsystem.resetEncoders();
+        //driveTrainSubsystem.resetEncoders();
     }
 
     @Override
     public void execute() {
         // encoders
-        double currentVelocity = driveTrainSubsystem.getWheelVelocity(MotorGroup.ALL);
+       /* double currentVelocity = driveTrainSubsystem.getWheelVelocity(MotorGroup.ALL);
         currentDistance = driveTrainSubsystem.getWheelDistance(MotorGroup.ALL);
 
         // stopping distance
@@ -52,7 +52,7 @@ public class DriveInches extends CommandBase {
         // SmartDashbaord
         SmartDashboard.putNumber("DI - Current Distance", currentDistance);
         SmartDashboard.putNumber("DI - Goal Distance", goalDistance);
-        SmartDashboard.putNumber("DI - Current Velocity", currentVelocity);
+        SmartDashboard.putNumber("DI - Current Velocity", currentVelocity);*/
     }
 
     @Override

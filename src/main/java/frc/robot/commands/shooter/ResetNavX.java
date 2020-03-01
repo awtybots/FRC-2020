@@ -23,7 +23,7 @@ public class ResetNavX extends InstantCommand {
 
     @Override
     public void initialize() {
-        driveTrainSubsystem.setDisplacement(displacement, startAngle);
+        //driveTrainSubsystem.setDisplacement(displacement, startAngle);
     }
 
 }

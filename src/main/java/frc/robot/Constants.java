@@ -11,12 +11,12 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import frc.robot.commands.drive.TeleopDrive.JoystickSmoothing;
+//import frc.robot.commands.drive.TeleopDrive.JoystickSmoothing;
 import frc.robot.commands.shooter.AutoShoot.AutoShootMode;
 import frc.robot.commands.shooter.AutoShoot.TrajectoryCalculationMode;
-import frc.robot.subsystems.DriveTrainSubsystem;
+//import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
+//import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 import frc.robot.util.Vector3;
 
 public final class Constants {
@@ -44,16 +44,16 @@ public final class Constants {
         public static final int INTAKE_FWD = 7;
         public static final int INTAKE_REV = 6;
 
-        public static final int CLIMB_FWD = 5;
-        public static final int CLIMB_REV = 4;
+        public static final int CLIMB_FWD = 1;
+        public static final int CLIMB_REV = 0;
     }
 
     public final static class DriveTrain {
         // OPTIONS
-        public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.PERCENT;
-        public final static DriveMode AUTON_DRIVE_MODE = DriveMode.PERCENT;
-        public final static JoystickSmoothing JOYSTICK_SMOOTHING = JoystickSmoothing.NONE; // TODO
-        public final static DriveTrainSubsystem.MotorControlMode MOTOR_CONTROL_MODE = DriveTrainSubsystem.MotorControlMode.PID;
+        //public final static DriveMode TELEOP_DRIVE_MODE = DriveMode.PERCENT;
+        //public final static DriveMode AUTON_DRIVE_MODE = DriveMode.PERCENT;
+        //public final static JoystickSmoothing JOYSTICK_SMOOTHING = JoystickSmoothing.NONE; // TODO
+       // public final static DriveTrainSubsystem.MotorControlMode MOTOR_CONTROL_MODE = DriveTrainSubsystem.MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public static final Hand SPEED_HAND = Hand.kLeft;
         public static final Hand ROTATION_HAND = Hand.kRight;

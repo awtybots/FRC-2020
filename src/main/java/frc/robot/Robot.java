@@ -32,7 +32,7 @@ import frc.robot.commands.main.Auton.AutonType;
 import frc.robot.commands.shooter.*;
 import frc.robot.subsystems.*;
 import static frc.robot.Constants.Shooter.*;
-import static frc.robot.Constants.DriveTrain.*;
+//import static frc.robot.Constants.DriveTrain.*;
 
 public class Robot extends TimedRobot {
 
@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     public static ClimbSubsystem climbSubsystem;
     public static MusicSubsystem musicSubsystem;
 
-    //private Teleop teleopCommand;
+    private Teleop teleopCommand;
     private Auton autonCommand;
 
     private SendableChooser<AutonType> autonChooser;
@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
         getButton(xboxController1, kA).whenPressed(new AutoSpinControlPanel());
         getButton(xboxController1, kB);
         getButton(xboxController1, kX);
-        getButton(xboxController1, kY).whenPressed(new Climb());
+        getButton(xboxController1, kY).toggleWhenPressed(new Climb());
         getButton(xboxController1, kBumperLeft);
         getButton(xboxController1, kBumperRight).whenHeld(new ToggleIntake()).whenPressed(new MoveIntake(IntakePosition.DOWN)).whenReleased(new MoveIntake(IntakePosition.UP));
 
@@ -140,7 +140,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         //LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
-        driveTrainSubsystem.setDriveMode(AUTON_DRIVE_MODE);
+        //driveTrainSubsystem.setDriveMode(AUTON_DRIVE_MODE);
         limelightSubsystem.toggleLight(false);
 
         autonCommand = new Auton(autonChooser.getSelected()); // get chosen AutonType
@@ -156,8 +156,9 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         if(autonCommand != null) autonCommand.cancel(); // finish auton
 
-        driveTrainSubsystem.setDriveMode(TELEOP_DRIVE_MODE);
-        //teleopCommand.schedule(); // start teleop
+        //driveTrainSubsystem.setDriveMode(TELEOP_DRIVE_MODE);
+        teleopCommand = new Teleop();
+        teleopCommand.schedule(); // start teleop
     }
 
     @Override

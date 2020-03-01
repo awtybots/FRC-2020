@@ -1,28 +1,33 @@
 package frc.robot.commands.climb;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import static frc.robot.Robot.*;
 
 public class Climb extends InstantCommand {
 
-    private static ClimbDirection currentPosition = ClimbDirection.DOWN;
+    //private static ClimbDirection currentPosition = ClimbDirection.DOWN;
 
-    private ClimbDirection pos;
+    private boolean pos;
 
     public Climb() {
-        this.pos = null;
+        this.pos = false;
     }
-    public Climb(ClimbDirection dir) {
+    public Climb(boolean dir) {
         this.pos = dir;
     }
 
     @Override
     public void initialize() {
-        if(pos == null) pos = currentPosition.getOpposite();
-        currentPosition = pos;
-        climbSubsystem.setPistons(pos.getDirection());
+        if(pos == false){
+            pos = true;
+            climbSubsystem.setPistons(Value.kForward);
+        } else {
+            pos = false;
+            climbSubsystem.setPistons(Value.kReverse);
+        }
     }
 
     public enum ClimbDirection {
