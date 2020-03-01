@@ -22,19 +22,29 @@ public class TeleopDrive extends CommandBase {
         addRequirements(driveTrainSubsystem);
     }
 
-    private double smooth(double x) {
+    /*private double smooth(double x) {
         if(Math.abs(x) < DEADZONE) return 0;
         if(JOYSTICK_SMOOTHING == JoystickSmoothing.NONE) {
             return x;
         } else {
             return Math.pow(x, 2) * Math.signum(x);
         }
-    }
+    }*/
 
     @Override
     public void execute() {
         double speed = -xboxController1.getY(SPEED_HAND);
         double rotation = xboxController1.getX(ROTATION_HAND);
+
+        if(Math.abs(speed) < DEADZONE)
+        {
+            speed = 0;
+        }
+        if(Math.abs(rotation) < DEADZONE)
+        {
+            rotation = 0;
+        }
+
         //if(speed < 0.0) rotation = -rotation;
         double left = speed + rotation;
         double right = speed - rotation;

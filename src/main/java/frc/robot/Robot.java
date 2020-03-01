@@ -10,13 +10,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+//import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 import static edu.wpi.first.wpilibj.XboxController.Button.*;
 
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DigitalOutput;
-import edu.wpi.first.wpilibj.DriverStation;
+//import edu.wpi.first.wpilibj.DigitalOutput;
+//import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     public static ClimbSubsystem climbSubsystem;
     public static MusicSubsystem musicSubsystem;
 
-    private Teleop teleopCommand;
+    //private Teleop teleopCommand;
     private Auton autonCommand;
 
     private SendableChooser<AutonType> autonChooser;
@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
     private static double period;
     private static PowerDistributionPanel pdp;
 
-    private DigitalOutput LEDOutput = new DigitalOutput(0);
+    //private DigitalOutput LEDOutput = new DigitalOutput(0);
     private Compressor compressor = new Compressor();
 
     @Override
@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
         // getButton(xboxController2, kBumperRight).whenHeld(new SpinTurret(TurretDirection.RIGHT));
 
         // electrical
-        LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
+        //LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
         limelightSubsystem.toggleLight(false);
         compressor.setClosedLoopControl(true);
         compressor.start();
@@ -139,7 +139,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
+        //LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
         driveTrainSubsystem.setDriveMode(AUTON_DRIVE_MODE);
         limelightSubsystem.toggleLight(false);
 
@@ -157,8 +157,7 @@ public class Robot extends TimedRobot {
         if(autonCommand != null) autonCommand.cancel(); // finish auton
 
         driveTrainSubsystem.setDriveMode(TELEOP_DRIVE_MODE);
-        teleopCommand = new Teleop(); // overlaying teleop command for the teleop period
-        teleopCommand.schedule(); // start teleop
+        //teleopCommand.schedule(); // start teleop
     }
 
     @Override

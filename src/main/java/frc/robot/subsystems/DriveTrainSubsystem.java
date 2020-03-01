@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -151,8 +152,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
         setMotorOutput(group, voltage/12.0);
     }
     public void setMotorOutput(double left, double right) {
-        setMotorOutput(LEFT, left);
-        setMotorOutput(RIGHT, right);
+        // setMotorOutput(LEFT, left);
+        // setMotorOutput(RIGHT, right);
+        motorL1.set(ControlMode.PercentOutput, left);
+        motorL2.set(ControlMode.PercentOutput, left);
+        motorR1.set(ControlMode.PercentOutput, right);
+        motorR2.set(ControlMode.PercentOutput, right);
     }
     public void setMotorVoltage(double left, double right) {
         setMotorVoltage(LEFT, left);
