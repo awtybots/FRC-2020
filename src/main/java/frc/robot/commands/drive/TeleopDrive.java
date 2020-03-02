@@ -7,6 +7,7 @@
 
 package frc.robot.commands.drive;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 
@@ -32,6 +33,12 @@ public class TeleopDrive extends CommandBase {
     public void execute() {
         double speed = deadzone(-xboxController1.getY(SPEED_HAND));
         double rotation = deadzone(xboxController1.getX(ROTATION_HAND));
+
+        // TODO remove logging
+        System.out.println("Controller input speed: " + speed);
+        System.out.println("Controller input rotation: " + rotation);
+        SmartDashboard.putNumber("Controller input speed: ", speed);
+        SmartDashboard.putNumber("Controller input rotation: ", rotation);
 
         if(speed < 0.0) rotation = -rotation;
         double left = speed - rotation;

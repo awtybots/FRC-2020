@@ -127,6 +127,12 @@ public class DriveTrainSubsystem extends SubsystemBase {
     public void setMotorOutput(double left, double right) {
         setMotorOutput(LEFT, left);
         setMotorOutput(RIGHT, right);
+
+        // TODO remove logging
+        System.out.println("Drive output left: " + motorL1.get());
+        System.out.println("Drive output right: " + motorR1.get());
+        SmartDashboard.putNumber("Drive output left", motorL1.get());
+        SmartDashboard.putNumber("Drive output right", motorR1.get());
     }
 
     public void setMotorVoltage(MotorGroup group, double voltage) {
