@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ColorSensor;
 import frc.robot.Constants.ControlPanelSpinner;
 import frc.robot.Constants.MotorIDs;
 
@@ -17,7 +16,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
     private final WPI_TalonSRX spinner = new WPI_TalonSRX(MotorIDs.CONTROL_PANEL_SPINNER);
 
-    private final ColorSensorV3 colorSensor = new ColorSensorV3(ColorSensor.PORT);
+    private final ColorSensorV3 colorSensor = new ColorSensorV3(ControlPanelSpinner.PORT);
     private final ColorMatch colorMatcher = new ColorMatch();
 
     private PanelColor detectedColor;
@@ -42,7 +41,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
         detectedColor = getDetectedColor();
 
         if(detectedColor == pendingColor) {
-            if(verifyColorTimer.get() >= ColorSensor.VERIFY_COLOR_TIME) {
+            if(verifyColorTimer.get() >= ControlPanelSpinner.VERIFY_COLOR_TIME) {
                 verifyColorTimer.stop();
 
                 currentColor = pendingColor;
@@ -73,7 +72,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
         SmartDashboard.putString("Detected color", (int)(detectedColorRaw.red*100) + ", " + (int)(detectedColorRaw.green*100) + ", " + (int)(detectedColorRaw.blue*100));
         ColorMatchResult colorMatchResult = colorMatcher.matchClosestColor(detectedColorRaw);
         SmartDashboard.putNumber("Color confidence", colorMatchResult.confidence);
-        if(colorMatchResult.confidence < ColorSensor.MINIMUM_COLOR_CONFIDENCE) return PanelColor.NONE;
+        if(colorMatchResult.confidence < ControlPanelSpinner.MINIMUM_COLOR_CONFIDENCE) return PanelColor.NONE;
         for(PanelColor color : PanelColor.getColors()) {
             if(colorMatchResult.color == color.getColor()) {
                 return color;
@@ -86,10 +85,10 @@ public class ControlPanelSubsystem extends SubsystemBase {
     }
 
     public enum PanelColor {
-        RED     (ColorSensor.RED),
-        GREEN   (ColorSensor.GREEN),
-        BLUE    (ColorSensor.BLUE),
-        YELLOW  (ColorSensor.YELLOW),
+        RED     (ControlPanelSpinner.RED),
+        GREEN   (ControlPanelSpinner.GREEN),
+        BLUE    (ControlPanelSpinner.BLUE),
+        YELLOW  (ControlPanelSpinner.YELLOW),
         NONE    (new double[]{0, 0, 0});
 
         private Color color;

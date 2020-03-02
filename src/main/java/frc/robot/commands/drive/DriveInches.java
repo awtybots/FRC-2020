@@ -1,58 +1,49 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import static frc.robot.Constants.DriveTrain.*;
 
-//import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
-//import frc.robot.subsystems.DriveTrainSubsystem.MotorGroup;
+import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
+import frc.robot.subsystems.DriveTrainSubsystem.MotorGroup;
 import static frc.robot.Robot.*;
 
 public class DriveInches extends CommandBase {
 
     private final double goalDistance;
-    private double goalVelocity;
+    private double goalSpeed;
     private double currentDistance = 0;
 
     public DriveInches(double inches) {
         addRequirements(driveTrainSubsystem);
         this.goalDistance = inches;
-        this.goalVelocity = Math.signum(goalDistance) * MAX_VELOCITY;
+        this.goalSpeed = Math.signum(goalDistance);
     }
 
     @Override
     public void initialize() {
-        //driveTrainSubsystem.resetEncoders();
+        driveTrainSubsystem.resetSensors();
     }
 
     @Override
     public void execute() {
-        // encoders
-       /* double currentVelocity = driveTrainSubsystem.getWheelVelocity(MotorGroup.ALL);
         currentDistance = driveTrainSubsystem.getWheelDistance(MotorGroup.ALL);
 
-        // stopping distance
-        if(AUTON_DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
+        // stopping distance (ramped velocity only)
+        if(DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
+            double currentVelocity = driveTrainSubsystem.getWheelVelocity(MotorGroup.ALL);
             double remainingDistance = Math.abs(goalDistance - currentDistance);
             double stoppingDistance = currentVelocity * currentVelocity / MAX_ACCELERATION / 2.0;
-            SmartDashboard.putNumber("DI - Stopping Distance", stoppingDistance);
             if(stoppingDistance >= remainingDistance) {
-                goalVelocity = 0; // start slowing down before we hit the target
+                goalSpeed = 0; // start slowing down before we hit the target
             }
         }
 
-        // motors
-        if(AUTON_DRIVE_MODE == DriveMode.PERCENT || AUTON_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
-            driveTrainSubsystem.setMotorOutput(Math.signum(goalVelocity), Math.signum(goalVelocity));
+        if(DRIVE_MODE == DriveMode.PERCENT || DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
+            driveTrainSubsystem.setMotorOutput(goalSpeed * MAX_OUTPUT_AUTON, goalSpeed * MAX_OUTPUT_AUTON);
         } else {
-            driveTrainSubsystem.setGoalVelocity(goalVelocity, goalVelocity);
+            driveTrainSubsystem.setGoalVelocity(goalSpeed * MAX_VELOCITY_AUTON, goalSpeed * MAX_VELOCITY_AUTON);
         }
-
-        // SmartDashbaord
-        SmartDashboard.putNumber("DI - Current Distance", currentDistance);
-        SmartDashboard.putNumber("DI - Goal Distance", goalDistance);
-        SmartDashboard.putNumber("DI - Current Velocity", currentVelocity);*/
     }
 
     @Override

@@ -13,13 +13,8 @@ public class LimelightSubsystem extends SubsystemBase {
 
     private final NetworkTable table;
 
-    private Pipeline currentPipeline;
-
     public LimelightSubsystem() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
-        currentPipeline = Pipeline.POWER_PORT;
-
-        toggleLight(false);
     }
 
 
@@ -32,7 +27,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
 
     @CheckForNull
-    public Vector3 getTargetInfo() {
+    public Vector3 getTargetData() {
         boolean targetExists = getDouble("tv") == 1.0;
         if(!targetExists) {
             return null;
@@ -40,15 +35,11 @@ public class LimelightSubsystem extends SubsystemBase {
 
         double tx = getDouble("tx");
         double ty = getDouble("ty");
-        //double targetArea = getDouble("ta");
-        //double targetSkew = getDouble("ts");
-
-        double targetHeight = currentPipeline.getTargetHeight();
 
         return new Vector3(
-            tx, // horizontal offset angle
-            CAMERA_MOUNTING_ANGLE + ty, // vertical offset angle
-            targetHeight // inches
+            tx,
+            CAMERA_MOUNTING_ANGLE + ty,
+            0
         ).print("Limelight data");
     }
 
@@ -58,27 +49,21 @@ public class LimelightSubsystem extends SubsystemBase {
 
 
     public void setPipeline(Pipeline pipeline) {
-        this.currentPipeline = pipeline;
         setNumber("pipeline", pipeline.getID());
     }
 
     public enum Pipeline {
-        POWER_PORT(0, SHOOTER_VISION_HEIGHT_OFFSET),
-        LOADING_STATION(1, LOADING_STATION_VISION_HEIGHT_OFFSET);
+        POWER_PORT(0),
+        LOADING_STATION(1);
 
         private int num;
-        private double height;
 
-        private Pipeline(int num, double height) {
+        private Pipeline(int num) {
             this.num = num;
-            this.height = height;
         }
 
         private int getID() {
             return num;
-        }
-        private double getTargetHeight() {
-            return height;
         }
     }
 

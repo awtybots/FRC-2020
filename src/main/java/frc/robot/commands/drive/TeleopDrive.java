@@ -8,7 +8,7 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-//import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
+import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 
 import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.Constants.Controller.*;
@@ -16,58 +16,41 @@ import static frc.robot.Robot.*;
 
 public class TeleopDrive extends CommandBase {
 
-    // this command runs the entire teleop period
-
     public TeleopDrive() {
         addRequirements(driveTrainSubsystem);
     }
 
-    /*private double smooth(double x) {
-        if(Math.abs(x) < DEADZONE) return 0;
-        if(JOYSTICK_SMOOTHING == JoystickSmoothing.NONE) {
-            return x;
+    private double deadzone(double x) {
+        if(Math.abs(x) < DEADZONE) {
+            return 0;
         } else {
-            return Math.pow(x, 2) * Math.signum(x);
+            return x;
         }
-    }*/
+    }
 
     @Override
     public void execute() {
-        double speed = xboxController1.getY(SPEED_HAND);
-        double rotation = xboxController1.getX(ROTATION_HAND);
+        double speed = deadzone(-xboxController1.getY(SPEED_HAND));
+        double rotation = deadzone(xboxController1.getX(ROTATION_HAND));
 
-
-        if(Math.abs(speed) < DEADZONE)
-        {
-            speed = 0;
-        }
-        if(Math.abs(rotation) < DEADZONE)
-        {
-            rotation = 0;
-        }
-        //if(speed < 0.0) rotation = -rotation;
+        if(speed < 0.0) rotation = -rotation;
         double left = speed - rotation;
         double right = speed + rotation;
 
-        driveTrainSubsystem.setMotorOutput(left, right);
-        /*if(TELEOP_DRIVE_MODE == DriveMode.PERCENT || TELEOP_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
-            driveTrainSubsystem.setMotorOutput(left * MAX_MOTOR_OUTPUT, right * MAX_MOTOR_OUTPUT);
+        if(DRIVE_MODE == DriveMode.PERCENT || DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
+            driveTrainSubsystem.setMotorOutput(left * MAX_OUTPUT, right * MAX_OUTPUT);
         } else {
             driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
-        }*/
+        }
     }
 
     @Override
     public void end(boolean interrupted) {
-
+        driveTrainSubsystem.stop();
     }
 
     @Override
     public boolean isFinished() {
         return false;
     }
-
-   /* public enum JoystickSmoothing {
-        NONE, SQUARE;
-    }*/
 }

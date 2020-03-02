@@ -1,54 +1,41 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
 
 import static frc.robot.Constants.DriveTrain.*;
 
-//import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
+import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 import static frc.robot.Robot.*;
 
 public class RotateDegrees extends CommandBase {
 
+    private double currentRotation;
     private double goalRotation;
-    private double goalVelocity;
-    private double currentRotation = 0;
+    private double goalSpeed;
 
     public RotateDegrees(double degrees) {
         addRequirements(driveTrainSubsystem);
-        goalRotation = -degrees;
-        goalVelocity = Math.signum(-degrees) * MAX_VELOCITY;
+        goalRotation = degrees;
+        goalSpeed = Math.signum(degrees);
     }
 
     @Override
     public void initialize() {
-        //goalRotation = Math.floorMod((int)(driveTrainSubsystem.getRotation() + goalRotation), 360);
-       // driveTrainSubsystem.resetEncoders();
+
     }
 
     @Override
     public void execute() {
-        /*// rotation values
         currentRotation = driveTrainSubsystem.getRotation();
-
-        // stopping distance
-        if(AUTON_DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
-            double remainingDistance = goalRotation - currentRotation;
-            if(ROTATE_DEGREES_SLOW_THRESHOLD >= remainingDistance) {
-                goalVelocity = 0; // start slowing down before we hit the target
-            }
-        }
+        goalSpeed = MathUtil.clamp((goalRotation - currentRotation) / ROTATE_DEGREES_SLOW_THRESHOLD, -1.0, 1.0);
 
         // motors
-        if(AUTON_DRIVE_MODE == DriveMode.PERCENT || AUTON_DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
-            driveTrainSubsystem.setMotorOutput(Math.signum(goalVelocity), -Math.signum(goalVelocity));
+        if(DRIVE_MODE == DriveMode.PERCENT || DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
+            driveTrainSubsystem.setMotorOutput(goalSpeed * MAX_OUTPUT_AUTON, -goalSpeed * MAX_OUTPUT_AUTON);
         } else {
-            driveTrainSubsystem.setGoalVelocity(goalVelocity, -goalVelocity);
+            driveTrainSubsystem.setGoalVelocity(goalSpeed * MAX_VELOCITY_AUTON, -goalSpeed * MAX_VELOCITY_AUTON);
         }
-
-        // SmartDashbaord
-        SmartDashboard.putNumber("RD - Current Distance", currentRotation);
-        SmartDashboard.putNumber("RD - Goal Distance", goalRotation);*/
     }
 
     @Override
@@ -58,7 +45,7 @@ public class RotateDegrees extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(currentRotation - goalRotation) <= ROTATE_DEGREES_GOAL_TOLERANCE;
+        return Math.abs(currentRotation) >= Math.abs(goalRotation);
     }
 
 }

@@ -7,16 +7,15 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-//import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 import static edu.wpi.first.wpilibj.XboxController.Button.*;
 
 import edu.wpi.first.wpilibj.Compressor;
-//import edu.wpi.first.wpilibj.DigitalOutput;
-//import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -25,14 +24,15 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.*;
 import frc.robot.commands.climb.*;
 import frc.robot.commands.controlpanel.*;
+import frc.robot.commands.drive.TeleopDrive;
 import frc.robot.commands.intake.*;
+import frc.robot.commands.indexer.*;
 import frc.robot.commands.intake.MoveIntake.IntakePosition;
 import frc.robot.commands.main.*;
 import frc.robot.commands.main.Auton.AutonType;
 import frc.robot.commands.shooter.*;
 import frc.robot.subsystems.*;
 import static frc.robot.Constants.Shooter.*;
-//import static frc.robot.Constants.DriveTrain.*;
 
 public class Robot extends TimedRobot {
 
@@ -46,25 +46,19 @@ public class Robot extends TimedRobot {
     public static LimelightSubsystem limelightSubsystem;
     public static IndexerTowerSubsystem indexerTowerSubsystem;
     public static ClimbSubsystem climbSubsystem;
-    public static MusicSubsystem musicSubsystem;
 
     private Teleop teleopCommand;
     private Auton autonCommand;
 
     private SendableChooser<AutonType> autonChooser;
 
-    private static double period;
-    private static PowerDistributionPanel pdp;
-
-    //private DigitalOutput LEDOutput = new DigitalOutput(0);
+    private DigitalOutput LEDOutput = new DigitalOutput(0);
     private Compressor compressor = new Compressor();
+
+    public static double PERIOD = 0.02;
 
     @Override
     public void robotInit() {
-        // runtime constants
-        period = getPeriod();
-        pdp = new PowerDistributionPanel();
-
         // auton chooser
         autonChooser = new SendableChooser<>();
         AutonType[] autonTypes = AutonType.values();
@@ -87,7 +81,6 @@ public class Robot extends TimedRobot {
         limelightSubsystem = new LimelightSubsystem();
         indexerTowerSubsystem = new IndexerTowerSubsystem();
         climbSubsystem = new ClimbSubsystem();
-        musicSubsystem = new MusicSubsystem();
 
         // button mappings
         getButton(xboxController1, kA).whenPressed(new AutoSpinControlPanel());
@@ -100,16 +93,12 @@ public class Robot extends TimedRobot {
         getButton(xboxController2, kA).whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_1));
         getButton(xboxController2, kB).whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_2));
         getButton(xboxController2, kX).whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_3));
-        getButton(xboxController2, kY).whenHeld(new AutoShoot());
+        getButton(xboxController2, kY).whenHeld(new AutoAim());
         getButton(xboxController2, kBumperLeft).whenHeld(new ReverseTower());
         getButton(xboxController2, kBumperRight).whenHeld(new ToggleIndexerTower());
 
-        // getButton(xboxController2, kBumperLeft).whenHeld(new SpinTurret(TurretDirection.LEFT));
-        // getButton(xboxController2, kBumperRight).whenHeld(new SpinTurret(TurretDirection.RIGHT));
-
         // electrical
-        //LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
-        limelightSubsystem.toggleLight(false);
+        LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
         compressor.setClosedLoopControl(true);
         compressor.start();
     }
@@ -139,12 +128,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        //LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
-        //driveTrainSubsystem.setDriveMode(AUTON_DRIVE_MODE);
+        LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
         limelightSubsystem.toggleLight(false);
 
-        autonCommand = new Auton(autonChooser.getSelected()); // get chosen AutonType
-        autonCommand.schedule(); // start auton
+        autonCommand = new Auton(autonChooser.getSelected());
+        autonCommand.schedule();
     }
 
     @Override
@@ -154,11 +142,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        if(autonCommand != null) autonCommand.cancel(); // finish auton
+        if(autonCommand != null) autonCommand.cancel();
 
-        //driveTrainSubsystem.setDriveMode(TELEOP_DRIVE_MODE);
+        CommandScheduler.getInstance().setDefaultCommand(driveTrainSubsystem, new TeleopDrive());
         teleopCommand = new Teleop();
-        teleopCommand.schedule(); // start teleop
+        teleopCommand.schedule();
     }
 
     @Override
@@ -178,13 +166,6 @@ public class Robot extends TimedRobot {
 
     private JoystickButton getButton(XboxController controller, XboxController.Button btn) {
         return new JoystickButton(controller, btn.value);
-    }
-
-    public static double getLoopTime() {
-        return period;
-    }
-    public static PowerDistributionPanel getPDP() {
-        return pdp;
     }
 
 }

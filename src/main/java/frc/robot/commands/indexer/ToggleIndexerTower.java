@@ -1,4 +1,4 @@
-package frc.robot.commands.intake;
+package frc.robot.commands.indexer;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
