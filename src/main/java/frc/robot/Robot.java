@@ -47,7 +47,6 @@ public class Robot extends TimedRobot {
     public static IndexerTowerSubsystem indexerTowerSubsystem;
     public static ClimbSubsystem climbSubsystem;
 
-    private Teleop teleopCommand;
     private Auton autonCommand;
 
     private SendableChooser<AutonType> autonChooser;
@@ -145,8 +144,6 @@ public class Robot extends TimedRobot {
         if(autonCommand != null) autonCommand.cancel();
 
         CommandScheduler.getInstance().setDefaultCommand(driveTrainSubsystem, new TeleopDrive());
-        teleopCommand = new Teleop();
-        teleopCommand.schedule();
     }
 
     @Override

@@ -22,9 +22,6 @@ import static frc.robot.Robot.*;
 import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.subsystems.DriveTrainSubsystem.MotorGroup.*;
 
-import java.util.HashMap;
-import java.util.function.Consumer;
-
 public class DriveTrainSubsystem extends SubsystemBase {
 
     // motors
@@ -33,16 +30,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
     private static WPI_TalonFX motorR1 = new WPI_TalonFX(MotorIDs.DRIVE_R1);
     private static WPI_TalonFX motorR2 = new WPI_TalonFX(MotorIDs.DRIVE_R2);
 
-    // PID data
-    private HashMap<MotorGroup, Double> goalVelocity = new HashMap<>();
-    private HashMap<MotorGroup, Double> lastVelocityError = new HashMap<>();
-    private HashMap<MotorGroup, Double> integralError = new HashMap<>();
-
     // NavX
     private final AHRS navX = new AHRS(SPI.Port.kMXP);
 
     public DriveTrainSubsystem() {
-        for(WPI_TalonFX motor : ALL.getMotors()) {
+        for(WPI_TalonFX motor : ALL.motorList) {
             motor.configFactoryDefault();
             motor.setNeutralMode(BRAKE_MODE);
             motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
@@ -52,7 +44,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
             }
         }
 
-        for(WPI_TalonFX motor : RIGHT.getMotors()) {
+        for(WPI_TalonFX motor : RIGHT.motorList) {
             motor.setInverted(TalonFXInvertType.Clockwise);
         }
 
@@ -70,78 +62,33 @@ public class DriveTrainSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if(DRIVE_MODE == DriveMode.VELOCITY || DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
-            Consumer<MotorGroup> motorControlFunction = (MOTOR_CONTROL_MODE == MotorControlMode.PID) ? this::drivePID : this::driveFeedforward;
-            motorControlFunction.accept(LEFT);
-            motorControlFunction.accept(RIGHT);
+            if(MOTOR_CONTROL_MODE == MotorControlMode.PID) {
+                LEFT.drivePID();
+                RIGHT.drivePID();
+            } else {
+                LEFT.driveFeedforward();
+                RIGHT.driveFeedforward();
+            }
         }
 
-        // System.out.println("total velocity: "+getWheelVelocity(ALL)); // TODO remove prints
-        // System.out.println("total distance: "+getWheelDistance(ALL));
+        // System.out.println("total velocity: "+getWheelVelocity()); // TODO remove prints
+        // System.out.println("total distance: "+getWheelDistance());
     }
-
-    public void drivePID(MotorGroup motorGroup) {
-        double currentVelocity = getWheelVelocity(motorGroup);
-        double goalAcceleration = goalVelocity.getOrDefault(motorGroup, 0.0) - currentVelocity;
-        double velocityError = DRIVE_MODE == DriveMode.RAMPED_VELOCITY
-            ? clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD)
-            : goalAcceleration;
-        double accelerationError = (velocityError - lastVelocityError.getOrDefault(motorGroup, 0.0)) / PERIOD;
-        lastVelocityError.put(motorGroup, velocityError);
-        integralError.put(motorGroup, clamp(integralError.getOrDefault(motorGroup, 0.0) + (velocityError * PERIOD), -INTEGRAL_MAX / PID_I, INTEGRAL_MAX / PID_I));
-
-        double P = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain PID_P", PID_P) : PID_P) * velocityError;
-        double I = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain PID_I", PID_I) : PID_I) * integralError.get(motorGroup);
-        double D = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain PID_D", PID_D) : PID_D) * accelerationError;
-
-        double output = P + I + D;
-        setMotorOutput(motorGroup, output);
-    }
-
-    public void driveFeedforward(MotorGroup motorGroup) {
-        double currentVelocity = getWheelVelocity(motorGroup);
-        double goalAcceleration = goalVelocity.getOrDefault(motorGroup, 0.0) - currentVelocity;
-        double constrainedGoalAcceleration = DRIVE_MODE == DriveMode.RAMPED_VELOCITY
-            ? clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD)
-            : goalAcceleration;
-        double constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
-
-        double S = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain FF_S", FF_S) : FF_S) * Math.signum(constrainedGoalVelocity);
-        double V = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain FF_V", FF_V) : FF_V) * constrainedGoalVelocity;
-        double A = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain FF_A", FF_A) : FF_A) * constrainedGoalAcceleration;
-
-        double voltage = S + V + A;
-        setMotorVoltage(motorGroup, voltage);
-    }
-
 
     // DRIVE COMMAND FUNCTIONS
 
-    private void setMotorOutput(MotorGroup group, double pct) {
-        if(Math.abs(pct) < MIN_OUTPUT) pct = 0;
-        pct = clamp(pct, -MAX_OUTPUT, MAX_OUTPUT);
-        for(WPI_TalonFX motor : group.getMotors()) {
-            motor.set(pct);
-        }
-    }
-
     public void setMotorOutput(double left, double right) {
-        setMotorOutput(LEFT, left);
-        setMotorOutput(RIGHT, right);
+        LEFT.setMotorOutput(left);
+        RIGHT.setMotorOutput(right);
 
         // TODO remove logging
-        System.out.println("Drive output left: " + motorL1.get());
-        System.out.println("Drive output right: " + motorR1.get());
         SmartDashboard.putNumber("Drive output left", motorL1.get());
         SmartDashboard.putNumber("Drive output right", motorR1.get());
     }
 
-    public void setMotorVoltage(MotorGroup group, double voltage) {
-        setMotorOutput(group, voltage/12.0);
-    }
-
     public void setGoalVelocity(double left, double right) {
-        goalVelocity.put(LEFT, clamp(left, -MAX_VELOCITY, MAX_VELOCITY));
-        goalVelocity.put(RIGHT, clamp(left, -MAX_VELOCITY, MAX_VELOCITY));
+        LEFT.setGoalVelocity(left);
+        RIGHT.setGoalVelocity(right);
     }
 
     public void stop() {
@@ -153,7 +100,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     // SENSORS
 
     public void resetSensors() {
-        for(WPI_TalonFX motor : ALL.getMotors()) {
+        for(WPI_TalonFX motor : ALL.motorList) {
             motor.setSelectedSensorPosition(0);
         }
         navX.reset();
@@ -162,27 +109,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
     public double getRotation() {
         return -navX.getAngle();
     }
-
-    public double getWheelDistance(MotorGroup motorGroup) {
-        double totalUnits = 0;
-        for(WPI_TalonFX motor : motorGroup.getMotors()) {
-            // System.out.println("distance: "+motor.getSelectedSensorPosition());
-            totalUnits += motor.getSelectedSensorPosition();
-        }
-        double revolutions = totalUnits / 2048.0 / motorGroup.getMotors().length;
-        return revolutions * WHEEL_CIRCUMFERENCE;
-    }
-
-    public double getWheelVelocity(MotorGroup motorGroup) {
-        double totalUnits = 0;
-        for(WPI_TalonFX motor : motorGroup.getMotors()) {
-            // System.out.println("velocity: "+motor.getSelectedSensorVelocity());
-            totalUnits += motor.getSelectedSensorVelocity();
-        }
-        double revolutions = totalUnits / 2048.0 * 10.0 / motorGroup.getMotors().length;
-        return revolutions * WHEEL_CIRCUMFERENCE;
-    }
-
 
 
     // ENUMS
@@ -205,12 +131,67 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
         private WPI_TalonFX[] motorList;
 
+        public double goalVelocity = 0;
+        public double integralError = 0;
+        public double lastVelocityError = 0;
+
         private MotorGroup(WPI_TalonFX[] motorList) {
             this.motorList = motorList;
         }
 
-        public WPI_TalonFX[] getMotors() {
-            return motorList;
+        public double getWheelDistance() {
+            return motorList[0].getSelectedSensorPosition() / 2048.0 * WHEEL_CIRCUMFERENCE;
+        }
+        public double getWheelVelocity() {
+            return motorList[0].getSelectedSensorVelocity() / 2048.0 * 10.0 * WHEEL_CIRCUMFERENCE;
+        }
+
+        private void setGoalVelocity(double goalVelocity) {
+            this.integralError = 0;
+            this.lastVelocityError = 0;
+            this.goalVelocity = clamp(goalVelocity, -MAX_VELOCITY, MAX_VELOCITY);
+        }
+
+        private void drivePID() {
+            double currentVelocity = getWheelVelocity();
+            double goalAcceleration = goalVelocity - currentVelocity;
+            double velocityError = DRIVE_MODE == DriveMode.RAMPED_VELOCITY
+                ? clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD)
+                : goalAcceleration;
+            double accelerationError = (velocityError - lastVelocityError) / PERIOD;
+            lastVelocityError = velocityError;
+            integralError = clamp(integralError + (velocityError * PERIOD), -INTEGRAL_MAX / PID_I, INTEGRAL_MAX / PID_I);
+
+            double P = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain PID_P", PID_P) : PID_P) * velocityError;
+            double I = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain PID_I", PID_I) : PID_I) * integralError;
+            double D = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain PID_D", PID_D) : PID_D) * accelerationError;
+
+            double output = P + I + D;
+            setMotorOutput(output);
+        }
+
+        private void driveFeedforward() {
+            double currentVelocity = getWheelVelocity();
+            double goalAcceleration = goalVelocity - currentVelocity;
+            double constrainedGoalAcceleration = DRIVE_MODE == DriveMode.RAMPED_VELOCITY
+                ? clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD)
+                : goalAcceleration;
+            double constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
+
+            double S = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain FF_S", FF_S) : FF_S) * Math.signum(constrainedGoalVelocity);
+            double V = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain FF_V", FF_V) : FF_V) * constrainedGoalVelocity;
+            double A = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain FF_A", FF_A) : FF_A) * constrainedGoalAcceleration;
+
+            double voltage = S + V + A;
+            setMotorOutput(voltage/12.0);
+        }
+
+        private void setMotorOutput(double pct) {
+            if(Math.abs(pct) < MIN_OUTPUT) pct = 0;
+            pct = clamp(pct, -MAX_OUTPUT, MAX_OUTPUT);
+            for(WPI_TalonFX motor : motorList) {
+                motor.set(pct);
+            }
         }
     }
 }

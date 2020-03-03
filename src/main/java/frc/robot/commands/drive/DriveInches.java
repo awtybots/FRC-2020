@@ -27,11 +27,11 @@ public class DriveInches extends CommandBase {
 
     @Override
     public void execute() {
-        currentDistance = driveTrainSubsystem.getWheelDistance(MotorGroup.ALL);
+        currentDistance = MotorGroup.ALL.getWheelDistance();
 
         // stopping distance (ramped velocity only)
         if(DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
-            double currentVelocity = driveTrainSubsystem.getWheelVelocity(MotorGroup.ALL);
+            double currentVelocity = MotorGroup.ALL.getWheelVelocity();
             double remainingDistance = Math.abs(goalDistance - currentDistance);
             double stoppingDistance = currentVelocity * currentVelocity / MAX_ACCELERATION / 2.0;
             if(stoppingDistance >= remainingDistance) {
