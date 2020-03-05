@@ -131,9 +131,9 @@ public class DriveTrainSubsystem extends SubsystemBase {
 
         private WPI_TalonFX[] motorList;
 
-        public double goalVelocity = 0;
-        public double integralError = 0;
-        public double lastVelocityError = 0;
+        private double goalVelocity = 0;
+        private double integralError = 0;
+        private double lastVelocityError = 0;
 
         private MotorGroup(WPI_TalonFX[] motorList) {
             this.motorList = motorList;

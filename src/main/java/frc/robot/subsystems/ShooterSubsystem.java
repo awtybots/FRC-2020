@@ -23,8 +23,6 @@ public class ShooterSubsystem extends SubsystemBase {
     private double integralError = 0;
     private double lastVelocityError = 0;
 
-    private boolean velocityAtGoal = false;
-
     public ShooterSubsystem() {
         flywheel.configFactoryDefault();
         flywheel.setNeutralMode(FLYWHEEL_BRAKE_MODE);
@@ -42,12 +40,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        velocityAtGoal = isVelocityAtGoal();
+        currentVelocity = flywheel.getSelectedSensorVelocity() * 10.0 / 2048.0 * FLYWHEEL_RATIO;
         flywheelPID();
 
         SmartDashboard.putNumber("Shooter RPM", currentVelocity*60.0);
         SmartDashboard.putNumber("Shooter goal RPM", goalVelocity*60.0);
-        SmartDashboard.putBoolean("Shooter velocity at goal", velocityAtGoal);
+        SmartDashboard.putBoolean("Shooter velocity at goal", isVelocityAtGoal());
     }
 
     private void flywheelPID() {
@@ -68,13 +66,13 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheel.set(percentOutput);
     }
 
-    public void setFlywheelGoalVelocity(double goalVelocity) {
+    public void setFlywheelGoalVelocity(double v) {
         integralError = 0;
-        this.goalVelocity = clamp(goalVelocity, 0, FLYWHEEL_MAX_VELOCITY);
+        lastVelocityError = 0;
+        goalVelocity = clamp(v, 0, FLYWHEEL_MAX_VELOCITY);
     }
 
     public boolean isVelocityAtGoal() {
-        currentVelocity = flywheel.getSelectedSensorVelocity() * 10.0 / 2048.0 * FLYWHEEL_RATIO;
         return Math.abs(currentVelocity - goalVelocity) <= FLYWHEEL_GOAL_VELOCITY_THRESHOLD;
     }
 

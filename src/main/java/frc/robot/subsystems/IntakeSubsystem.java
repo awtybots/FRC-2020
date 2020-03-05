@@ -19,14 +19,11 @@ public class IntakeSubsystem extends SubsystemBase {
         motor.configFactoryDefault();
 
         toggle(false);
-        setPistons(Value.kReverse);
     }
 
     public void toggle(boolean on) {
         motor.set(ControlMode.PercentOutput, on ? MOTOR_SPEED : 0);
+        pistons.set(on ? Value.kForward : Value.kReverse);
     }
-
-	public void setPistons(Value direction) {
-        pistons.set(direction);
-	}
+    
 }

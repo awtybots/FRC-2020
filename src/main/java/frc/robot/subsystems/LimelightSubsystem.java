@@ -49,21 +49,17 @@ public class LimelightSubsystem extends SubsystemBase {
 
 
     public void setPipeline(Pipeline pipeline) {
-        setNumber("pipeline", pipeline.getID());
+        setNumber("pipeline", pipeline.num);
     }
 
     public enum Pipeline {
         POWER_PORT(0),
         LOADING_STATION(1);
 
-        private int num;
+        public int num;
 
         private Pipeline(int num) {
             this.num = num;
-        }
-
-        private int getID() {
-            return num;
         }
     }
 

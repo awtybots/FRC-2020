@@ -27,9 +27,14 @@ public final class Constants {
 
         public static final int INDEXER_L = 8;
         public static final int INDEXER_R = 2;
-        public static final int TOWER = 7;
+
+        public static final int TOWER_1 = 7;
+        public static final int TOWER_2 = 6;
 
         public static final int FLYWHEEL = 16;
+
+        public static final int CLIMB_1 = 11;
+        public static final int CLIMB_2 = 12;
 
         public static final int CONTROL_PANEL_SPINNER = 5;
     }
@@ -37,14 +42,11 @@ public final class Constants {
     public final static class SolenoidChannels {
         public static final int INTAKE_FWD = 7;
         public static final int INTAKE_REV = 6;
-
-        public static final int CLIMB_FWD = 1;
-        public static final int CLIMB_REV = 0;
     }
 
     public final static class DriveTrain {
         // OPTIONS
-        public final static DriveMode DRIVE_MODE = DriveMode.PERCENT;
+        public final static DriveMode DRIVE_MODE = DriveMode.RAMPED_PERCENT;
         public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
         public static final Hand SPEED_HAND = Hand.kLeft;
@@ -89,6 +91,10 @@ public final class Constants {
         public final static double INDEXER_L_MOTOR_SPEED = 0.4;
         public final static double INDEXER_R_MOTOR_SPEED = 0.6;
         public final static double TOWER_MOTOR_SPEED = 1.0;
+    }
+
+    public final static class Climb {
+        public final static double MOTOR_SPEED = 0.7;
     }
 
     public final static class Shooter {
