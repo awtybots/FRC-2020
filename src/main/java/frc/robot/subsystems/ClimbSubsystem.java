@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.MotorIDs;
+import static frc.robot.Constants.Climb.*;
 
 public class ClimbSubsystem extends SubsystemBase {
 
@@ -24,7 +25,7 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public enum ClimbDirection {
-        UP(1.0), DOWN(-1.0), NONE(0.0);
+        UP(MOTOR_SPEED), DOWN(-MOTOR_SPEED), NONE(0.0);
 
         public double pct;
         private ClimbDirection(double pct) {
