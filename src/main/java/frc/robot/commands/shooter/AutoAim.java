@@ -25,8 +25,17 @@ public class AutoAim extends CommandBase {
     @Override
     public void execute() {
         Vector3 limelightData = limelightSubsystem.getTargetData();
+        if(limelightData == null) {
+            driveTrainSubsystem.stop();
+            System.err.println("Cannot auto-aim without a target!");
+            return;
+        }
+
         onTarget = Math.abs(limelightData.x) < TARGET_ANGLE_THRESHOLD;
-        if(!onTarget) {
+
+        if(onTarget) {
+            driveTrainSubsystem.stop();
+        } else {
             double speed = MathUtil.clamp(limelightData.x / TARGET_ANGLE_SLOW_THRESHOLD, -1.0, 1.0);
             driveTrainSubsystem.setMotorOutput(speed * MAX_AIMING_DRIVE_OUTPUT, -speed * MAX_AIMING_DRIVE_OUTPUT);
         }
