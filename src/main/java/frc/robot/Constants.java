@@ -40,8 +40,8 @@ public final class Constants {
     }
 
     public final static class SolenoidChannels {
-        public static final int INTAKE_FWD = 7;
-        public static final int INTAKE_REV = 6;
+        public static final int INTAKE_FWD = 0;
+        public static final int INTAKE_REV = 4;
     }
 
     public final static class DriveTrain {
