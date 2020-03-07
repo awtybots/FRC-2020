@@ -35,14 +35,11 @@ public class TeleopDrive extends CommandBase {
         double rotation = deadzone(xboxController1.getX(ROTATION_HAND));
 
         // TODO remove logging
-        System.out.println("Controller input speed: " + speed);
-        System.out.println("Controller input rotation: " + rotation);
         SmartDashboard.putNumber("Controller input speed: ", speed);
         SmartDashboard.putNumber("Controller input rotation: ", rotation);
 
-        if(speed < 0.0) rotation = -rotation;
-        double left = speed - rotation;
-        double right = speed + rotation;
+        double left = speed + rotation;
+        double right = speed - rotation;
 
         if(DRIVE_MODE == DriveMode.PERCENT || DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
             driveTrainSubsystem.setMotorOutput(left * MAX_OUTPUT, right * MAX_OUTPUT);

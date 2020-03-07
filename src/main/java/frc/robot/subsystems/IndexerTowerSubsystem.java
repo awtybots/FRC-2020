@@ -21,6 +21,7 @@ public class IndexerTowerSubsystem extends SubsystemBase {
 
         indexerL.setInverted(true);
         tower1.setInverted(true);
+        tower2.setInverted(true);
 
         toggle(false);
     }

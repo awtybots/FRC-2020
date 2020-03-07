@@ -56,7 +56,7 @@ public final class Constants {
         // LIMITS
         public final static double MIN_OUTPUT = 0;
         public final static double MAX_OUTPUT = 0.9;
-        public final static double MAX_OUTPUT_ACCELERATION = 0.3;
+        public final static double MAX_OUTPUT_ACCELERATION = 0.6;
 
         public final static double MAX_VELOCITY = 36; // inches per second
         public final static double MAX_ACCELERATION = 6; // inches per second^2
