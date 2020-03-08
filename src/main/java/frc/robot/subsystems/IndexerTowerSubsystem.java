@@ -19,7 +19,8 @@ public class IndexerTowerSubsystem extends SubsystemBase {
         tower1.configFactoryDefault();
         tower2.configFactoryDefault();
 
-        indexerL.setInverted(true);
+        indexerL.setInverted(false);
+        indexerR.setInverted(true);
         tower1.setInverted(true);
         tower2.setInverted(true);
 

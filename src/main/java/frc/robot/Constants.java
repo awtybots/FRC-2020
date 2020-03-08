@@ -90,7 +90,7 @@ public final class Constants {
     public final static class IndexerTower {
         public final static double INDEXER_L_MOTOR_SPEED = 0.4;
         public final static double INDEXER_R_MOTOR_SPEED = 0.6;
-        public final static double TOWER_MOTOR_SPEED = 1.0;
+        public final static double TOWER_MOTOR_SPEED = 0.75;
     }
 
     public final static class Climb {
@@ -104,13 +104,13 @@ public final class Constants {
 
         // SPEEDS
         public final static double FLYWHEEL_TELEOP_SPEED_1 = 4000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
-        public final static double FLYWHEEL_TELEOP_SPEED_2 = 5000.0 / 60.0; // 3 presets (buttons A, B, X)
+        public final static double FLYWHEEL_TELEOP_SPEED_2 = 4250.0 / 60.0; // 3 presets (buttons A, B, X)
         public final static double FLYWHEEL_TELEOP_SPEED_3 = 6000.0 / 60.0;
 
         // AUTO AIM
-        public final static double MAX_AIMING_DRIVE_OUTPUT = 0.5;
-        public final static double TARGET_ANGLE_THRESHOLD = 2; // degrees
-        public final static double TARGET_ANGLE_SLOW_THRESHOLD = 10; // degrees
+        public final static double MAX_AIMING_DRIVE_OUTPUT = 0.3;
+        public final static double TARGET_ANGLE_THRESHOLD = 1; // degrees
+        public final static double TARGET_ANGLE_SLOW_THRESHOLD = 15; // degrees
 
         // FLYWHEEL
         public final static double FLYWHEEL_RATIO = 12.0 / 36.0 * 72.0 / 22.0;
@@ -127,6 +127,7 @@ public final class Constants {
     }
 
     public final static class Limelight {
+        public final static double CAMERA_X_OFFSET = 1.75;
         public final static double CAMERA_MOUNTING_ANGLE = 41;
     }
 

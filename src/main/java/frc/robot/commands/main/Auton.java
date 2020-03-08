@@ -45,7 +45,7 @@ public class Auton extends ParallelCommandGroup {
                     ),
                     new ToggleIndexerTower(false),
                     new InstantCommand(() -> driveTrainSubsystem.setMotorOutput(0.5, 0.5), driveTrainSubsystem),
-                    new WaitCommand(0.3),
+                    new WaitCommand(1),
                     new InstantCommand(() -> driveTrainSubsystem.stop())
                 );
 

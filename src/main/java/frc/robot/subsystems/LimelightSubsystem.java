@@ -37,7 +37,7 @@ public class LimelightSubsystem extends SubsystemBase {
         double ty = getDouble("ty");
 
         return new Vector3(
-            tx,
+            tx - CAMERA_X_OFFSET,
             CAMERA_MOUNTING_ANGLE + ty,
             0
         ).print("Limelight data");

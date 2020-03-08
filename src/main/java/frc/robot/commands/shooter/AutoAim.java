@@ -1,5 +1,6 @@
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.subsystems.LimelightSubsystem.Pipeline;
@@ -31,6 +32,7 @@ public class AutoAim extends CommandBase {
             return;
         }
 
+        SmartDashboard.putNumber("Limelight Angle", limelightData.x);
         onTarget = Math.abs(limelightData.x) < TARGET_ANGLE_THRESHOLD;
 
         if(onTarget) {

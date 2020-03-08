@@ -33,6 +33,7 @@ public class TeleopDrive extends CommandBase {
     public void execute() {
         double speed = deadzone(-xboxController1.getY(SPEED_HAND));
         double rotation = deadzone(xboxController1.getX(ROTATION_HAND));
+        rotation = Math.pow(rotation, 2.0) * Math.signum(rotation);
 
         // TODO remove logging
         SmartDashboard.putNumber("Controller input speed: ", speed);
