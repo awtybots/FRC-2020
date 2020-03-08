@@ -6,8 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands.drive;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 
@@ -25,19 +23,19 @@ public class TeleopDrive extends CommandBase {
         if(Math.abs(x) < DEADZONE) {
             return 0;
         } else {
-            return x;
+            return (x - DEADZONE * Math.signum(x)) / (1.0 - DEADZONE);
         }
+    }
+
+    private double smooth(double x) {
+        return ((0.6 * Math.pow(Math.abs(x), 10.0)) + (0.4 * Math.abs(x))) * Math.signum(x);
     }
 
     @Override
     public void execute() {
         double speed = deadzone(-xboxController1.getY(SPEED_HAND));
         double rotation = deadzone(xboxController1.getX(ROTATION_HAND));
-        rotation = Math.pow(rotation, 2.0) * Math.signum(rotation);
-
-        // TODO remove logging
-        SmartDashboard.putNumber("Controller input speed: ", speed);
-        SmartDashboard.putNumber("Controller input rotation: ", rotation);
+        rotation = smooth(rotation);
 
         double left = speed + rotation;
         double right = speed - rotation;

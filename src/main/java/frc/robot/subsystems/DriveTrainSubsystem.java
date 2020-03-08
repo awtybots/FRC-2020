@@ -80,10 +80,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
     public void setMotorOutput(double left, double right) {
         LEFT.setMotorOutput(left);
         RIGHT.setMotorOutput(right);
-
-        // TODO remove logging
-        SmartDashboard.putNumber("Drive output left", motorL1.get());
-        SmartDashboard.putNumber("Drive output right", motorR1.get());
     }
 
     public void setGoalVelocity(double left, double right) {

@@ -152,6 +152,6 @@ public final class Constants {
         public static final int PORT_1 = 0;
         public static final int PORT_2 = 1;
 
-        public final static double DEADZONE = 0.3;
+        public final static double DEADZONE = 0.2;
     }
 }
