@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
         getButton(xboxController1, kB);
         getButton(xboxController1, kX).whenPressed(new AutoSpinControlPanel());
         getButton(xboxController1, kY).whenPressed(new ToggleClimb(ClimbDirection.UP));
-        getButton(xboxController1, kBumperLeft).whenHeld(new JustMotor());
+        getButton(xboxController1, kBumperLeft).whenHeld(new ToggleIntakeMotor());
         getButton(xboxController1, kBumperRight).whenHeld(new ToggleIntake());
 
         getButton(xboxController2, kA).whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_1));

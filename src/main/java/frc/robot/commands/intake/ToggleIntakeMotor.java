@@ -4,15 +4,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import static frc.robot.Robot.*;
 
-public class JustMotor extends CommandBase {
+public class ToggleIntakeMotor extends CommandBase {
 
     private boolean button;
     private boolean on;
 
-    public JustMotor() {
+    public ToggleIntakeMotor() {
         button = true;
     }
-    public JustMotor(boolean on) {
+    public ToggleIntakeMotor(boolean on) {
         button = false;
         this.on = on;
     }
@@ -20,16 +20,16 @@ public class JustMotor extends CommandBase {
     @Override
     public void initialize() {
         if(button) {
-            intakeSubsystem.justMotor(true);
+            intakeSubsystem.toggleMotor(true);
         } else {
-            intakeSubsystem.justMotor(on);
+            intakeSubsystem.toggleMotor(on);
         }
     }
 
     @Override
     public void end(boolean interrupted) {
         if(button) {
-            intakeSubsystem.justMotor(false);
+            intakeSubsystem.toggleMotor(false);
         }
     }
 

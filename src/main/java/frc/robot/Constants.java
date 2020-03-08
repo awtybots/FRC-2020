@@ -88,7 +88,7 @@ public final class Constants {
     }
 
     public final static class IndexerTower {
-        public final static double INDEXER_L_MOTOR_SPEED = 0.4;
+        public final static double INDEXER_L_MOTOR_SPEED = 0.8;
         public final static double INDEXER_R_MOTOR_SPEED = 0.6;
         public final static double TOWER_MOTOR_SPEED = 0.75;
     }

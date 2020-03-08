@@ -26,7 +26,7 @@ public class IntakeSubsystem extends SubsystemBase {
         pistons.set(on ? Value.kForward : Value.kReverse);
     }
 
-    public void justMotor(boolean on){
+    public void toggleMotor(boolean on){
         motor.set(ControlMode.PercentOutput, on ? MOTOR_SPEED : 0);
     }
 

@@ -18,40 +18,55 @@ public class Auton extends ParallelCommandGroup {
     }
 
     public enum AutonType {
-        DO_NOTHING,
-        MOVE_FORWARD,
         SHOOT_AND_MOVE_FORWARD,
+        SHOOT_AND_MOVE_BACKWARD,
+        MOVE_FORWARD,
+        MOVE_BACKWARD,
+        DO_NOTHING,
     }
 
     private Command getAutonSequence(AutonType autonType) {
         switch(autonType) {
 
-            case MOVE_FORWARD: return
-                sequence(
-                    new InstantCommand(() -> driveTrainSubsystem.setMotorOutput(0.5, 0.5), driveTrainSubsystem),
-                    new WaitCommand(0.3),
-                    new InstantCommand(() -> driveTrainSubsystem.stop())
-                );
+            case SHOOT_AND_MOVE_FORWARD:
+                return shootAndMove(true);
 
-            case SHOOT_AND_MOVE_FORWARD: return
-                sequence(
-                    deadline(
-                        new WaitCommand(10),
-                        new SetShooterSpeed(4000.0/60.0, true),
-                        sequence(
-                            new WaitCommand(3),
-                            new ToggleIndexerTower(true)
-                        )
-                    ),
-                    new ToggleIndexerTower(false),
-                    new InstantCommand(() -> driveTrainSubsystem.setMotorOutput(0.5, 0.5), driveTrainSubsystem),
-                    new WaitCommand(1),
-                    new InstantCommand(() -> driveTrainSubsystem.stop())
-                );
+            case SHOOT_AND_MOVE_BACKWARD:
+                return shootAndMove(false);
 
-            default: return
-                new InstantCommand();
+            case MOVE_FORWARD:
+                return move(true);
+
+            case MOVE_BACKWARD:
+                return move(false);
+
+            default:
+                return new InstantCommand();
 
         }
+    }
+
+    private Command shootAndMove(boolean forward) {
+        return sequence(
+            deadline(
+                new WaitCommand(10),
+                new SetShooterSpeed(4000.0/60.0, true),
+                sequence(
+                    new WaitCommand(3),
+                    new ToggleIndexerTower(true)
+                )
+            ),
+            new ToggleIndexerTower(false),
+            move(forward)
+        );
+    }
+
+    private Command move(boolean forward) {
+        double amt = forward ? 0.5 : -0.5;
+        return sequence(
+            new InstantCommand(() -> driveTrainSubsystem.setMotorOutput(amt, amt), driveTrainSubsystem),
+            new WaitCommand(1),
+            new InstantCommand(() -> driveTrainSubsystem.stop())
+        );
     }
 }
