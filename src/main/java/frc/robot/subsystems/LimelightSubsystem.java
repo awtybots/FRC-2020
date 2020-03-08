@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.Limelight.*;
 
@@ -13,8 +14,20 @@ public class LimelightSubsystem extends SubsystemBase {
 
     private final NetworkTable table;
 
+    private boolean startupDone = false;
+    private Timer timer = new Timer();
+
     public LimelightSubsystem() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
+        timer.reset();
+    }
+
+    @Override
+    public void periodic() {
+        if(!startupDone && timer.get() > STARTUP_TIME) {
+            startupDone = true;
+            toggleLight(false);
+        }
     }
 
 

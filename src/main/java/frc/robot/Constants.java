@@ -33,15 +33,18 @@ public final class Constants {
 
         public static final int FLYWHEEL = 10;
 
-        public static final int CLIMB_1 = 11;
-        public static final int CLIMB_2 = 12;
-
         public static final int CONTROL_PANEL_SPINNER = 13;
     }
 
     public final static class SolenoidChannels {
         public static final int INTAKE_FWD = 0;
         public static final int INTAKE_REV = 4;
+
+        public static final int CLIMB_FWD = 1;
+        public static final int CLIMB_REV = 2;
+
+        public static final int ANGLE_CLIMB_FWD = 6;
+        public static final int ANGLE_CLIMB_REV = 7;
     }
 
     public final static class DriveTrain {
@@ -93,10 +96,6 @@ public final class Constants {
         public final static double TOWER_MOTOR_SPEED = 0.75;
     }
 
-    public final static class Climb {
-        public final static double MOTOR_SPEED = 0.7;
-    }
-
     public final static class Shooter {
         // OPTIONS
         public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
@@ -129,6 +128,8 @@ public final class Constants {
     public final static class Limelight {
         public final static double CAMERA_X_OFFSET = 1.75;
         public final static double CAMERA_MOUNTING_ANGLE = 41;
+
+        public final static double STARTUP_TIME = 45; // seconds
     }
 
     public final static class ControlPanelSpinner {

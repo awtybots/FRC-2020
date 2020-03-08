@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.Constants.*;
 import frc.robot.commands.climb.*;
-import frc.robot.commands.controlpanel.*;
 import frc.robot.commands.drive.TeleopDrive;
 import frc.robot.commands.intake.*;
 import frc.robot.commands.indexer.*;
@@ -31,7 +30,6 @@ import frc.robot.commands.main.*;
 import frc.robot.commands.main.Auton.AutonType;
 import frc.robot.commands.shooter.*;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.ClimbSubsystem.ClimbDirection;
 
 import static frc.robot.Constants.Shooter.*;
 
@@ -83,10 +81,10 @@ public class Robot extends TimedRobot {
         climbSubsystem = new ClimbSubsystem();
 
         // button mappings
-        getButton(xboxController1, kA).whenPressed(new ToggleClimb(ClimbDirection.DOWN));
+        getButton(xboxController1, kA).whenPressed(new AngleClimb());
         getButton(xboxController1, kB);
-        getButton(xboxController1, kX).whenPressed(new AutoSpinControlPanel());
-        getButton(xboxController1, kY).whenPressed(new ToggleClimb(ClimbDirection.UP));
+        getButton(xboxController1, kX);
+        getButton(xboxController1, kY).whenPressed(new RaiseClimb());
         getButton(xboxController1, kBumperLeft).whenHeld(new ToggleIntakeMotor());
         getButton(xboxController1, kBumperRight).whenHeld(new ToggleIntake());
 

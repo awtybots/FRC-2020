@@ -1,36 +1,32 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import frc.robot.Constants.MotorIDs;
-import static frc.robot.Constants.Climb.*;
+import static frc.robot.Constants.SolenoidChannels.*;
 
 public class ClimbSubsystem extends SubsystemBase {
 
-    private WPI_TalonSRX climb1 = new WPI_TalonSRX(MotorIDs.CLIMB_1);
-    private WPI_TalonSRX climb2 = new WPI_TalonSRX(MotorIDs.CLIMB_2);
+    private DoubleSolenoid anglePistons = new DoubleSolenoid(ANGLE_CLIMB_FWD, ANGLE_CLIMB_REV);
+    private DoubleSolenoid pistons = new DoubleSolenoid(CLIMB_FWD, CLIMB_REV);
+
+    public boolean anglePistonsUp = false;
+    public boolean pistonsUp = false;
 
     public ClimbSubsystem() {
-        climb1.configFactoryDefault();
-        climb2.configFactoryDefault();
-
-        climb2.setInverted(true);
+        angleClimb(false);
+        climb(false);
     }
 
-    public void climb(ClimbDirection dir) {
-        climb1.set(dir.pct);
-        climb2.set(dir.pct);
+    public void angleClimb(boolean up) {
+        anglePistonsUp = up;
+        anglePistons.set(up ? Value.kForward : Value.kReverse);
     }
 
-    public enum ClimbDirection {
-        UP(MOTOR_SPEED), DOWN(-MOTOR_SPEED), NONE(0.0);
-
-        public double pct;
-        private ClimbDirection(double pct) {
-            this.pct = pct;
-        }
+    public void climb(boolean up) {
+        pistonsUp = up;
+        pistons.set(up ? Value.kForward : Value.kReverse);
     }
 
 }
