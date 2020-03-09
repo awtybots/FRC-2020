@@ -35,6 +35,7 @@ public class TeleopDrive extends CommandBase {
     public void execute() {
         double speed = deadzone(-xboxController1.getY(SPEED_HAND));
         double rotation = deadzone(xboxController1.getX(ROTATION_HAND));
+        speed = smooth(speed);
         rotation = smooth(rotation);
 
         double left = speed + rotation;
