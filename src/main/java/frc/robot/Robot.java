@@ -81,10 +81,10 @@ public class Robot extends TimedRobot {
         climbSubsystem = new ClimbSubsystem();
 
         // button mappings
-        getButton(xboxController1, kA).whenPressed(new AngleClimb());
+        getButton(xboxController1, kA);
         getButton(xboxController1, kB);
         getButton(xboxController1, kX);
-        getButton(xboxController1, kY).whenPressed(new RaiseClimb());
+        getButton(xboxController1, kY).whenPressed(new ToggleClimb());
         getButton(xboxController1, kBumperLeft).whenHeld(new ToggleIntakeMotor());
         getButton(xboxController1, kBumperRight).whenHeld(new ToggleIntake());
 
