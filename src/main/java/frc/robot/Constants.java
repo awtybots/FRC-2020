@@ -113,7 +113,7 @@ public final class Constants {
 
         // FLYWHEEL
         public final static double FLYWHEEL_RATIO = 12.0 / 36.0 * 72.0 / 22.0;
-        public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 10.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
+        public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 50.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
         public final static double FLYWHEEL_MAX_VELOCITY = 7000.0 / 60.0;
         public final static double FLYWHEEL_MIN_OUTPUT = 0;
         public final static double FLYWHEEL_MAX_OUTPUT = 0.9;
