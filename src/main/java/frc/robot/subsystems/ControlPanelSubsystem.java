@@ -6,7 +6,6 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ControlPanelSpinner;
@@ -58,8 +57,8 @@ public class ControlPanelSubsystem extends SubsystemBase {
             }
         }
 
-        if(currentColor != null)
-            // SmartDashboard.putString("Current color", currentColor.getName());
+        // if(currentColor != null)
+        //     SmartDashboard.putString("Current color", currentColor.getName());
     }
 
     public void toggle(boolean on) {

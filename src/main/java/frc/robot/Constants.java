@@ -10,7 +10,7 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
+import frc.robot.commands.drive.TeleopDrive.DriveControls;
 import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
 import frc.robot.subsystems.DriveTrainSubsystem.MotorControlMode;
 
@@ -49,11 +49,10 @@ public final class Constants {
 
     public final static class DriveTrain {
         // OPTIONS
+        public final static DriveControls DRIVE_CONTROLS = DriveControls.ARCADE_DRIVE;
         public final static DriveMode DRIVE_MODE = DriveMode.RAMPED_PERCENT;
         public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID;
         public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
-        public static final Hand SPEED_HAND = Hand.kLeft;
-        public static final Hand ROTATION_HAND = Hand.kRight;
         public final static boolean TUNING_MODE = false; // change to true if you want to tune PID / FF in SmartDashboard
 
         // LIMITS
@@ -152,6 +151,7 @@ public final class Constants {
         public static final int PORT_1 = 0;
         public static final int PORT_2 = 1;
 
-        public final static double DEADZONE = 0.2;
+        public final static double STICK_DEADZONE = 0.2;
+        public final static double TRIGGER_DEADZONE = 0.1;
     }
 }
