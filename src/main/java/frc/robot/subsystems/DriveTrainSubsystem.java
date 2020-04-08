@@ -18,7 +18,7 @@ import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Constants.MotorIDs;
 
-import static frc.robot.Robot.*;
+import frc.robot.Robot;
 import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.subsystems.DriveTrainSubsystem.MotorGroup.*;
 
@@ -152,11 +152,11 @@ public class DriveTrainSubsystem extends SubsystemBase {
             double currentVelocity = getWheelVelocity();
             double goalAcceleration = goalVelocity - currentVelocity;
             double velocityError = DRIVE_MODE == DriveMode.RAMPED_VELOCITY
-                ? clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD)
+                ? clamp(goalAcceleration, -MAX_ACCELERATION * Robot.PERIOD, MAX_ACCELERATION * Robot.PERIOD)
                 : goalAcceleration;
-            double accelerationError = (velocityError - lastVelocityError) / PERIOD;
+            double accelerationError = (velocityError - lastVelocityError) / Robot.PERIOD;
             lastVelocityError = velocityError;
-            integralError = clamp(integralError + (velocityError * PERIOD), -INTEGRAL_MAX / PID_I, INTEGRAL_MAX / PID_I);
+            integralError = clamp(integralError + (velocityError * Robot.PERIOD), -INTEGRAL_MAX / PID_I, INTEGRAL_MAX / PID_I);
 
             double P = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain PID_P", PID_P) : PID_P) * velocityError;
             double I = (TUNING_MODE ? SmartDashboard.getNumber("DriveTrain PID_I", PID_I) : PID_I) * integralError;
@@ -170,7 +170,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
             double currentVelocity = getWheelVelocity();
             double goalAcceleration = goalVelocity - currentVelocity;
             double constrainedGoalAcceleration = DRIVE_MODE == DriveMode.RAMPED_VELOCITY
-                ? clamp(goalAcceleration, -MAX_ACCELERATION * PERIOD, MAX_ACCELERATION * PERIOD)
+                ? clamp(goalAcceleration, -MAX_ACCELERATION * Robot.PERIOD, MAX_ACCELERATION * Robot.PERIOD)
                 : goalAcceleration;
             double constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
 

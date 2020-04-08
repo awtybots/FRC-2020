@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorIDs;
 
 import frc.robot.Constants.Shooter;
-import static frc.robot.Robot.*;
+import frc.robot.Robot;
 
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 
@@ -24,15 +24,16 @@ public class ShooterSubsystem extends SubsystemBase {
     public final static double INTEGRAL_MAX = 1.0;
     // Velocity Constants
     public final static double RPS_MAX = 7000.0 / 60.0;
-    public final static double RPS_THRESHOLD = 50.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
+    public final static double RPS_THRESHOLD = 50.0 / 60.0; // Flywheel must be within threshold to shoot balls
     public final static double PCT_MAX = 0.9;
     public final static double PCT_MIN = 0;
     // Flywheel Constants
-    public final static double FLYWHEEL_RATIO = 12.0 / 36.0 * 72.0 / 22.0; // (12:36) -> (72:22)
+    public final static double FLYWHEEL_RATIO = (12.0 / 36.0)
+                                              * (72.0 / 22.0); // (12:36) -> (72:22)
 
     private double goalVelocity = 0;
-    private double currentVelocity = 0;
     private double integralError = 0;
+    private double currentVelocity = 0;
     private double lastVelocityError = 0;
 
     public ShooterSubsystem() {
@@ -63,9 +64,9 @@ public class ShooterSubsystem extends SubsystemBase {
     private void flywheelPID() {
         double percentOutput;
         double velocityError = goalVelocity - currentVelocity;
-        double accelerationError = (velocityError - lastVelocityError) / PERIOD;
+        double accelerationError = (velocityError - lastVelocityError) / Robot.PERIOD;
         lastVelocityError = velocityError;
-        integralError = clamp(integralError + (velocityError * PERIOD), -INTEGRAL_MAX/PID_I, INTEGRAL_MAX/PID_I);
+        integralError = clamp(integralError + (velocityError * Robot.PERIOD), -INTEGRAL_MAX/PID_I, INTEGRAL_MAX/PID_I);
 
         if (Shooter.IS_TUNING)
             percentOutput = (SmartDashboard.getNumber("Shooter PID_P", PID_P) * velocityError)
