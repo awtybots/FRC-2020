@@ -97,8 +97,7 @@ public final class Constants {
 
     public final static class Shooter {
         // OPTIONS
-        public final static NeutralMode FLYWHEEL_BRAKE_MODE = NeutralMode.Coast;
-        public final static boolean TUNING_MODE = false; // change to true if you want to tune PID in SmartDashboard
+        public final static boolean IS_TUNING = false; // change to true if you want to tune PID in SmartDashboard
 
         // SPEEDS
         public final static double FLYWHEEL_TELEOP_SPEED_1 = 4000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
@@ -109,19 +108,6 @@ public final class Constants {
         public final static double MAX_AIMING_DRIVE_OUTPUT = 0.3;
         public final static double TARGET_ANGLE_THRESHOLD = 1; // degrees
         public final static double TARGET_ANGLE_SLOW_THRESHOLD = 15; // degrees
-
-        // FLYWHEEL
-        public final static double FLYWHEEL_RATIO = 12.0 / 36.0 * 72.0 / 22.0;
-        public final static double FLYWHEEL_GOAL_VELOCITY_THRESHOLD = 50.0 / 60.0; // RPS threshold flywheel must be within to shoot balls
-        public final static double FLYWHEEL_MAX_VELOCITY = 7000.0 / 60.0;
-        public final static double FLYWHEEL_MIN_OUTPUT = 0;
-        public final static double FLYWHEEL_MAX_OUTPUT = 0.9;
-
-        // PID
-        public final static double PID_P = 0.02;
-        public final static double PID_I = 0.04;
-        public final static double PID_D = 0;
-        public final static double INTEGRAL_MAX = 1.0;
     }
 
     public final static class Limelight {
