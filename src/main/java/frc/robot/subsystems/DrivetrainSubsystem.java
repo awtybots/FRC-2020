@@ -33,7 +33,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // NavX
     private final AHRS navX = new AHRS(SPI.Port.kMXP);
 
-    public DrivetrainSubsystem() {
+    public DrivetrainSubsystem()
+    {//{{{
         for(WPI_TalonFX motor : ALL.motorList) {
             motor.configFactoryDefault();
             motor.setNeutralMode(BRAKE_MODE);
@@ -57,10 +58,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
             SmartDashboard.setDefaultNumber("DriveTrain FF_V", FF_V);
             SmartDashboard.setDefaultNumber("DriveTrain FF_A", FF_A);
         }
-    }
+    }//}}}
 
     @Override
-    public void periodic() {
+    public void periodic()
+    {//{{{
         if(DRIVE_MODE == DriveMode.VELOCITY || DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
             if(MOTOR_CONTROL_MODE == MotorControlMode.PID) {
                 LEFT.drivePID();
@@ -70,7 +72,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 RIGHT.driveFeedforward();
             }
         }
-    }
+    }//}}}
 
     // DRIVE COMMAND FUNCTIONS
 
@@ -117,7 +119,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         RAMPED_VELOCITY;
     }
 
-    public enum MotorGroup {
+    public enum MotorGroup {//{{{
         LEFT(new WPI_TalonFX[]{ motorL1, motorL2 }),
         RIGHT(new WPI_TalonFX[]{ motorR1, motorR2 }),
         ALL(new WPI_TalonFX[]{ motorL1, motorL2, motorR1, motorR2 });
@@ -186,5 +188,5 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 motor.set(pct);
             }
         }
-    }
+    }//}}}
 }

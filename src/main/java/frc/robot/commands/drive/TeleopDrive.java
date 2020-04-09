@@ -7,11 +7,11 @@
 
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem.DriveMode;
 import frc.robot.util.Vector3;
+import frc.robot.util.Controller;
 
 import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.Constants.Controller.*;
@@ -27,7 +27,7 @@ public class TeleopDrive extends CommandBase {
 
     @Override
     public void execute() {
-        Vector3 processedInput = DRIVE_CONTROLS.processInput(oi.firstController.cntrl);
+        Vector3 processedInput = DRIVE_CONTROLS.processInput(oi.firstController);
 
         double left = processedInput.x;
         double right = processedInput.y;
@@ -73,8 +73,8 @@ public class TeleopDrive extends CommandBase {
         }),
         GTA_DRIVE((xboxController) -> {
             double speed = smooth(
-                deadzone(xboxController.getTriggerAxis(Hand.kRight), TRIGGER_DEADZONE)
-                - deadzone(xboxController.getTriggerAxis(Hand.kLeft), TRIGGER_DEADZONE)
+                  deadzone(xboxController.getTrigger(Hand.kRight), TRIGGER_DEADZONE)
+                - deadzone(xboxController.getTrigger(Hand.kLeft), TRIGGER_DEADZONE)
             );
             double rotation = smooth(deadzone(xboxController.getX(Hand.kRight), STICK_DEADZONE));
 
@@ -84,12 +84,13 @@ public class TeleopDrive extends CommandBase {
             return new Vector3(left, right, 0);
         });
 
-        private Function<XboxController, Vector3> controlFunction;
-        private DriveControls(Function<XboxController, Vector3> cf) {
+        private Function<Controller, Vector3> controlFunction;
+
+        private DriveControls(Function<Controller, Vector3> cf) {
             this.controlFunction = cf;
         }
 
-        public Vector3 processInput(XboxController controller) {
+        public Vector3 processInput(Controller controller) {
             return controlFunction.apply(controller);
         }
 
