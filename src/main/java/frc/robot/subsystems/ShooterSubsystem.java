@@ -31,9 +31,9 @@ public class ShooterSubsystem extends SubsystemBase {
     public final static double FLYWHEEL_RATIO = (12.0 / 36.0)
                                               * (72.0 / 22.0); // (12:36) -> (72:22)
 
-    private double goalVelocity = 0;
+    private double goalRPS = 0;
     private double integralError = 0;
-    private double currentVelocity = 0;
+    private double currentRPS = 0;
     private double lastVelocityError = 0;
 
     public ShooterSubsystem() {
@@ -53,17 +53,17 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        currentVelocity = getFlywheelVelocity();
+        currentRPS = getFlywheelVelocity();
         flywheelPID();
 
-        SmartDashboard.putNumber("Shooter RPM", currentVelocity);
-        SmartDashboard.putNumber("Shooter goal RPM", goalVelocity*60.0);
+        SmartDashboard.putNumber("Shooter RPM", currentRPS*60.0);
+        SmartDashboard.putNumber("Shooter goal RPM", goalRPS*60.0);
         SmartDashboard.putBoolean("Shooter velocity at goal", isVelocityAtGoal());
     }
 
     private void flywheelPID() {
         double percentOutput;
-        double velocityError = goalVelocity - currentVelocity;
+        double velocityError = goalRPS - currentRPS;
         double accelerationError = (velocityError - lastVelocityError) / Robot.PERIOD;
         lastVelocityError = velocityError;
         integralError = clamp(integralError + (velocityError * Robot.PERIOD), -INTEGRAL_MAX/PID_I, INTEGRAL_MAX/PID_I);
@@ -75,14 +75,14 @@ public class ShooterSubsystem extends SubsystemBase {
         else
             percentOutput = (PID_P * velocityError) + (PID_I * integralError) + (PID_D * accelerationError);
 
-        percentOutput = clamp(percentOutput, PCT_MIN, PCT_MAX) * Math.signum(goalVelocity);
+        percentOutput = clamp(percentOutput, PCT_MIN, PCT_MAX) * Math.signum(goalRPS);
         flywheel.set(percentOutput);
     }
 
-    public void setFlywheelGoalVelocity(double v) {
+    public void setFlywheelGoalVelocity(double rps) {
         integralError = 0;
         lastVelocityError = 0;
-        goalVelocity = clamp(v, 0, RPS_MAX);
+        goalRPS = clamp(rps, 0, RPS_MAX);
     }
 
     public double getFlywheelVelocity() {
@@ -93,7 +93,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public boolean isVelocityAtGoal() {
-        return Math.abs(getFlywheelVelocity() - goalVelocity) <= RPS_THRESHOLD;
+        return Math.abs(getFlywheelVelocity() - goalRPS) <= RPS_THRESHOLD;
     }
 
 }
