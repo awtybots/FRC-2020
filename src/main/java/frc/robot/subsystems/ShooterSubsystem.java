@@ -52,16 +52,14 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {
-        currentRPS = getFlywheelVelocity();
-        flywheelPID();
-
+    public void periodic() { // TODO do we need these?
         SmartDashboard.putNumber("Shooter RPM", currentRPS*60.0);
         SmartDashboard.putNumber("Shooter goal RPM", goalRPS*60.0);
         SmartDashboard.putBoolean("Shooter velocity at goal", isVelocityAtGoal());
     }
 
-    private void flywheelPID() {
+    public void flywheelPID() {
+        currentRPS = getFlywheelVelocity();
         double percentOutput;
         double velocityError = goalRPS - currentRPS;
         double accelerationError = (velocityError - lastVelocityError) / Robot.PERIOD;

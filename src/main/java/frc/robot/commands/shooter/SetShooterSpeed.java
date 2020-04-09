@@ -27,6 +27,7 @@ public class SetShooterSpeed extends CommandBase {
 
     @Override
     public void execute() {
+        shooterSubsystem.flywheelPID();
         if(autoIndex && (!toggled) && shooterSubsystem.isVelocityAtGoal()) {
             indexerTowerSubsystem.toggle(true);
             toggled = true;
@@ -36,7 +37,8 @@ public class SetShooterSpeed extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         shooterSubsystem.setFlywheelGoalVelocity(0);
-        if(toggled) indexerTowerSubsystem.toggle(false);
+        if(toggled)
+            indexerTowerSubsystem.toggle(false);
     }
 
 }
