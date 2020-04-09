@@ -13,7 +13,7 @@ public class AutoAim extends CommandBase {
     private boolean onTarget = false;
 
     public AutoAim() {
-        addRequirements(driveTrainSubsystem, limelightSubsystem);
+        addRequirements(drivetrainSubsystem, limelightSubsystem);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class AutoAim extends CommandBase {
     public void execute() {
         Vector3 limelightData = limelightSubsystem.getTargetData();
         if(limelightData == null) {
-            driveTrainSubsystem.stop();
+            drivetrainSubsystem.stop();
             System.err.println("Cannot auto-aim without a target!");
             return;
         }
@@ -34,16 +34,16 @@ public class AutoAim extends CommandBase {
         onTarget = Math.abs(limelightData.x) < TARGET_ANGLE_THRESHOLD;
 
         if(onTarget) {
-            driveTrainSubsystem.stop();
+            drivetrainSubsystem.stop();
         } else {
             double speed = MathUtil.clamp(limelightData.x / TARGET_ANGLE_SLOW_THRESHOLD, -1.0, 1.0);
-            driveTrainSubsystem.setMotorOutput(speed * MAX_AIMING_DRIVE_OUTPUT, -speed * MAX_AIMING_DRIVE_OUTPUT);
+            drivetrainSubsystem.setMotorOutput(speed * MAX_AIMING_DRIVE_OUTPUT, -speed * MAX_AIMING_DRIVE_OUTPUT);
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        driveTrainSubsystem.stop();
+        drivetrainSubsystem.stop();
         limelightSubsystem.toggleLight(false);
     }
 

@@ -20,9 +20,9 @@ import frc.robot.Constants.MotorIDs;
 
 import frc.robot.Robot;
 import static frc.robot.Constants.DriveTrain.*;
-import static frc.robot.subsystems.DriveTrainSubsystem.MotorGroup.*;
+import static frc.robot.subsystems.DrivetrainSubsystem.MotorGroup.*;
 
-public class DriveTrainSubsystem extends SubsystemBase {
+public class DrivetrainSubsystem extends SubsystemBase {
 
     // motors
     private static WPI_TalonFX motorL1 = new WPI_TalonFX(MotorIDs.DRIVE_L1);
@@ -33,7 +33,7 @@ public class DriveTrainSubsystem extends SubsystemBase {
     // NavX
     private final AHRS navX = new AHRS(SPI.Port.kMXP);
 
-    public DriveTrainSubsystem() {
+    public DrivetrainSubsystem() {
         for(WPI_TalonFX motor : ALL.motorList) {
             motor.configFactoryDefault();
             motor.setNeutralMode(BRAKE_MODE);
@@ -70,9 +70,6 @@ public class DriveTrainSubsystem extends SubsystemBase {
                 RIGHT.driveFeedforward();
             }
         }
-
-        // System.out.println("total velocity: "+getWheelVelocity()); // TODO remove prints
-        // System.out.println("total distance: "+getWheelDistance());
     }
 
     // DRIVE COMMAND FUNCTIONS

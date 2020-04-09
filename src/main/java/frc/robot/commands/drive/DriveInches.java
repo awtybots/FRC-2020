@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import static frc.robot.Constants.DriveTrain.*;
 
-import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
-import frc.robot.subsystems.DriveTrainSubsystem.MotorGroup;
+import frc.robot.subsystems.DrivetrainSubsystem.DriveMode;
+import frc.robot.subsystems.DrivetrainSubsystem.MotorGroup;
 import static frc.robot.Robot.*;
 
 public class DriveInches extends CommandBase {
@@ -15,14 +15,14 @@ public class DriveInches extends CommandBase {
     private double currentDistance = 0;
 
     public DriveInches(double inches) {
-        addRequirements(driveTrainSubsystem);
+        addRequirements(drivetrainSubsystem);
         this.goalDistance = inches;
         this.goalSpeed = Math.signum(goalDistance);
     }
 
     @Override
     public void initialize() {
-        driveTrainSubsystem.resetSensors();
+        drivetrainSubsystem.resetSensors();
     }
 
     @Override
@@ -40,15 +40,15 @@ public class DriveInches extends CommandBase {
         }
 
         if(DRIVE_MODE == DriveMode.PERCENT || DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
-            driveTrainSubsystem.setMotorOutput(goalSpeed * MAX_OUTPUT_AUTON, goalSpeed * MAX_OUTPUT_AUTON);
+            drivetrainSubsystem.setMotorOutput(goalSpeed * MAX_OUTPUT_AUTON, goalSpeed * MAX_OUTPUT_AUTON);
         } else {
-            driveTrainSubsystem.setGoalVelocity(goalSpeed * MAX_VELOCITY_AUTON, goalSpeed * MAX_VELOCITY_AUTON);
+            drivetrainSubsystem.setGoalVelocity(goalSpeed * MAX_VELOCITY_AUTON, goalSpeed * MAX_VELOCITY_AUTON);
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        driveTrainSubsystem.stop();
+        drivetrainSubsystem.stop();
     }
 
     @Override

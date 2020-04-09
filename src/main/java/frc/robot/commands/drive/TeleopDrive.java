@@ -10,7 +10,7 @@ package frc.robot.commands.drive;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
+import frc.robot.subsystems.DrivetrainSubsystem.DriveMode;
 import frc.robot.util.Vector3;
 
 import static frc.robot.Constants.DriveTrain.*;
@@ -22,7 +22,31 @@ import java.util.function.Function;
 public class TeleopDrive extends CommandBase {
 
     public TeleopDrive() {
-        addRequirements(driveTrainSubsystem);
+        addRequirements(drivetrainSubsystem);
+    }
+
+    @Override
+    public void execute() {
+        Vector3 processedInput = DRIVE_CONTROLS.processInput(oi.firstController.cntrl);
+
+        double left = processedInput.x;
+        double right = processedInput.y;
+
+        if(DRIVE_MODE == DriveMode.PERCENT || DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
+            drivetrainSubsystem.setMotorOutput(left * MAX_OUTPUT, right * MAX_OUTPUT);
+        } else {
+            drivetrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
+        }
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        drivetrainSubsystem.stop();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 
     private static double deadzone(double x, double d) {
@@ -37,35 +61,9 @@ public class TeleopDrive extends CommandBase {
         return ((0.6 * Math.pow(Math.abs(x), 10.0)) + (0.4 * Math.abs(x))) * Math.signum(x);
     }
 
-    @Override
-    public void execute() {
-        Vector3 processedInput = DRIVE_CONTROLS.processInput(xboxController1);
-
-        double left = processedInput.x;
-        double right = processedInput.y;
-
-        if(DRIVE_MODE == DriveMode.PERCENT || DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
-            driveTrainSubsystem.setMotorOutput(left * MAX_OUTPUT, right * MAX_OUTPUT);
-        } else {
-            driveTrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
-        }
-    }
-
-
-
-    @Override
-    public void end(boolean interrupted) {
-        driveTrainSubsystem.stop();
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
-
-    public enum DriveControls {
+    public enum DriveControls { // Maps a mode of input to the appropriate method
         ARCADE_DRIVE((xboxController) -> {
-            double speed = smooth(deadzone(-xboxController.getY(Hand.kLeft), STICK_DEADZONE));
+            double speed = smooth(deadzone(-xboxController.getY(Hand.kLeft), STICK_DEADZONE)); // https://www.desmos.com/calculator/uc1689lozj
             double rotation = smooth(deadzone(xboxController.getX(Hand.kRight), STICK_DEADZONE));
 
             double left = speed + rotation;
@@ -95,5 +93,5 @@ public class TeleopDrive extends CommandBase {
             return controlFunction.apply(controller);
         }
 
-    }
+    }//}}}
 }

@@ -5,8 +5,8 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 
 import static frc.robot.Constants.DriveTrain.*;
 
-import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
-import static frc.robot.Robot.*;
+import static frc.robot.subsystems.DrivetrainSubsystem.DriveMode;
+import static frc.robot.Robot.drivetrainSubsystem;
 
 public class RotateDegrees extends CommandBase {
 
@@ -15,7 +15,7 @@ public class RotateDegrees extends CommandBase {
     private double goalSpeed;
 
     public RotateDegrees(double degrees) {
-        addRequirements(driveTrainSubsystem);
+        addRequirements(drivetrainSubsystem);
         goalRotation = degrees;
         goalSpeed = Math.signum(degrees);
     }
@@ -27,20 +27,20 @@ public class RotateDegrees extends CommandBase {
 
     @Override
     public void execute() {
-        currentRotation = driveTrainSubsystem.getRotation();
+        currentRotation = drivetrainSubsystem.getRotation();
         goalSpeed = MathUtil.clamp((goalRotation - currentRotation) / ROTATE_DEGREES_SLOW_THRESHOLD, -1.0, 1.0);
 
         // motors
         if(DRIVE_MODE == DriveMode.PERCENT || DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
-            driveTrainSubsystem.setMotorOutput(goalSpeed * MAX_OUTPUT_AUTON, -goalSpeed * MAX_OUTPUT_AUTON);
+            drivetrainSubsystem.setMotorOutput(goalSpeed * MAX_OUTPUT_AUTON, -goalSpeed * MAX_OUTPUT_AUTON);
         } else {
-            driveTrainSubsystem.setGoalVelocity(goalSpeed * MAX_VELOCITY_AUTON, -goalSpeed * MAX_VELOCITY_AUTON);
+            drivetrainSubsystem.setGoalVelocity(goalSpeed * MAX_VELOCITY_AUTON, -goalSpeed * MAX_VELOCITY_AUTON);
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        driveTrainSubsystem.stop();
+        drivetrainSubsystem.stop();
     }
 
     @Override

@@ -11,8 +11,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.commands.drive.TeleopDrive.DriveControls;
-import frc.robot.subsystems.DriveTrainSubsystem.DriveMode;
-import frc.robot.subsystems.DriveTrainSubsystem.MotorControlMode;
+import frc.robot.subsystems.DrivetrainSubsystem.DriveMode;
+import frc.robot.subsystems.DrivetrainSubsystem.MotorControlMode;
 
 public final class Constants {
 

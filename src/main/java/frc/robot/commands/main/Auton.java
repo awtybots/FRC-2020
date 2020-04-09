@@ -64,9 +64,9 @@ public class Auton extends ParallelCommandGroup {
     private Command move(boolean forward) {
         double amt = forward ? 0.5 : -0.5;
         return sequence(
-            new InstantCommand(() -> driveTrainSubsystem.setMotorOutput(amt, amt), driveTrainSubsystem),
+            new InstantCommand(() -> drivetrainSubsystem.setMotorOutput(amt, amt), drivetrainSubsystem),
             new WaitCommand(1),
-            new InstantCommand(() -> driveTrainSubsystem.stop())
+            new InstantCommand(() -> drivetrainSubsystem.stop())
         );
     }
 }
