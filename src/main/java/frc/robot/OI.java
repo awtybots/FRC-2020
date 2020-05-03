@@ -20,9 +20,9 @@ public class OI {
         firstController.bmpL.whenHeld( new ToggleIntakeMotor() );
         firstController.bmpR.whenHeld( new ToggleIntake() );
 
-        secondController.btnA.whenHeld( new SetShooterSpeed(FLYWHEEL_TELEOP_RPS_1) );
-        secondController.btnB.whenHeld( new SetShooterSpeed(FLYWHEEL_TELEOP_RPS_2) );
-        secondController.btnX.whenHeld( new SetShooterSpeed(FLYWHEEL_TELEOP_RPS_3) );
+        secondController.btnA.whenHeld( new SetShooterSpeed(FLYWHEEL_MANUAL_RPS_1) );
+        secondController.btnB.whenHeld( new SetShooterSpeed(FLYWHEEL_MANUAL_RPS_2) );
+        secondController.btnX.whenHeld( new SetShooterSpeed(FLYWHEEL_MANUAL_RPS_3) );
         secondController.btnY.whenHeld( new AutoAim() );
         secondController.bmpL.whenHeld( new ReverseTower() );
         secondController.bmpR.whenHeld( new ToggleIndexerTower() );

@@ -38,15 +38,15 @@ public final class Constants {
     }
 
     public final static class Shooter {
-        // OPTIONS
-        public final static boolean IS_TUNING = false; // change to true if you want to tune PID in SmartDashboard
+        // Enable PID tuning TODO this should be tuned before comp
+        public final static boolean IS_TUNING = false;
 
-        // SPEEDS
-        public final static double FLYWHEEL_TELEOP_RPS_1 = 4000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
-        public final static double FLYWHEEL_TELEOP_RPS_2 = 4250.0 / 60.0; // 3 presets (buttons A, B, X)
-        public final static double FLYWHEEL_TELEOP_RPS_3 = 6000.0 / 60.0;
+        // Manual Shooting speeds (RPS)
+        public final static double FLYWHEEL_MANUAL_RPS_1 = 4000.0 / 60.0;
+        public final static double FLYWHEEL_MANUAL_RPS_2 = 4250.0 / 60.0;
+        public final static double FLYWHEEL_MANUAL_RPS_3 = 6000.0 / 60.0;
 
-        // AUTO AIM
+        // Auto Aiming thresholds
         public final static double MAX_AIMING_DRIVE_OUTPUT = 0.3;
         public final static double TARGET_ANGLE_THRESHOLD = 1; // degrees
         public final static double TARGET_ANGLE_SLOW_THRESHOLD = 15; // degrees
