@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
@@ -9,7 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ControlPanelSpinner;
-import frc.robot.Constants.MotorIDs;
+import frc.robot.RobotMap.MotorIDs;
 
 public class ControlPanelSubsystem extends SubsystemBase {
 
@@ -18,8 +19,8 @@ public class ControlPanelSubsystem extends SubsystemBase {
     private final ColorSensorV3 colorSensor = new ColorSensorV3(ControlPanelSpinner.PORT);
     private final ColorMatch colorMatcher = new ColorMatch();
 
+    public PanelColor currentColor = PanelColor.NONE;
     private PanelColor detectedColor;
-    private PanelColor currentColor = PanelColor.NONE;
     private PanelColor pendingColor;
 
     private Timer verifyColorTimer = new Timer();
@@ -77,9 +78,6 @@ public class ControlPanelSubsystem extends SubsystemBase {
             }
         }
         return PanelColor.NONE;
-    }
-    public PanelColor getCurrentColor() {
-        return currentColor;
     }
 
     public enum PanelColor {

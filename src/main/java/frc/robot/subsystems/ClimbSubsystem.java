@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import static frc.robot.Constants.SolenoidChannels.*;
+import static frc.robot.RobotMap.SolenoidChannels.*;
 
 public class ClimbSubsystem extends SubsystemBase {
 

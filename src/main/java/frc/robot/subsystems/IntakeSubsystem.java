@@ -6,8 +6,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.MotorIDs;
-import frc.robot.Constants.SolenoidChannels;
+import frc.robot.RobotMap.MotorIDs;
+import frc.robot.RobotMap.SolenoidChannels;
 
 public class IntakeSubsystem extends SubsystemBase {
 

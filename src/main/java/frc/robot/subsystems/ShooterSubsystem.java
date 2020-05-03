@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.MotorIDs;
+import frc.robot.RobotMap.MotorIDs;
 
 import frc.robot.Constants.Shooter;
 import frc.robot.Robot;

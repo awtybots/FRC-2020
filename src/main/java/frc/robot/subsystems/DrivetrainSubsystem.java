@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 import edu.wpi.first.wpilibj.SPI;
-import frc.robot.Constants.MotorIDs;
+import frc.robot.RobotMap.MotorIDs;
 
 import frc.robot.Robot;
 import static frc.robot.Constants.DriveTrain.*;
