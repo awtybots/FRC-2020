@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorIDs;
-import static frc.robot.Constants.IndexerTower.*;
 
 public class IndexerTowerSubsystem extends SubsystemBase {
 
@@ -12,6 +11,10 @@ public class IndexerTowerSubsystem extends SubsystemBase {
     private final WPI_TalonSRX indexerR = new WPI_TalonSRX(MotorIDs.INDEXER_R);
     private final WPI_TalonSRX tower1 = new WPI_TalonSRX(MotorIDs.TOWER_1);
     private final WPI_TalonSRX tower2 = new WPI_TalonSRX(MotorIDs.TOWER_2);
+
+    public final static double INDEXER_L_MOTOR_SPEED = 0.8;
+    public final static double INDEXER_R_MOTOR_SPEED = 0.6;
+    public final static double TOWER_MOTOR_SPEED = 0.75;
 
     public IndexerTowerSubsystem() {
         indexerL.configFactoryDefault();

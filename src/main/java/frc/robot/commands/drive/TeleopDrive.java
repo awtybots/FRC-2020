@@ -32,11 +32,7 @@ public class TeleopDrive extends CommandBase {
         double left = processedInput.x;
         double right = processedInput.y;
 
-        if(DRIVE_MODE == DriveMode.PERCENT || DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
-            drivetrainSubsystem.setMotorOutput(left * MAX_OUTPUT, right * MAX_OUTPUT);
-        } else {
-            drivetrainSubsystem.setGoalVelocity(left * MAX_VELOCITY, right * MAX_VELOCITY);
-        }
+        drivetrainSubsystem.setMotorOutput(left, right);
     }
 
     @Override
@@ -94,5 +90,5 @@ public class TeleopDrive extends CommandBase {
             return controlFunction.apply(controller);
         }
 
-    }//}}}
+    }
 }

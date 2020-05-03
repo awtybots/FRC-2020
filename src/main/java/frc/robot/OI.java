@@ -16,16 +16,16 @@ public class OI {
         firstController  = new Controller( 0 );
         secondController = new Controller( 1 );
 
-        firstController.btnY.whenPressed(new ToggleClimb());
-        firstController.bmpL.whenHeld(new ToggleIntakeMotor());
-        firstController.bmpR.whenHeld(new ToggleIntake());
+        firstController.btnY.whenPressed( new ToggleClimb() );
+        firstController.bmpL.whenHeld( new ToggleIntakeMotor() );
+        firstController.bmpR.whenHeld( new ToggleIntake() );
 
-        secondController.btnA.whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_1));
-        secondController.btnB.whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_2));
-        secondController.btnX.whenHeld(new SetShooterSpeed(FLYWHEEL_TELEOP_SPEED_3));
-        secondController.btnY.whenHeld(new AutoAim());
-        secondController.bmpL.whenHeld(new ReverseTower());
-        secondController.bmpR.whenHeld(new ToggleIndexerTower());
+        secondController.btnA.whenHeld( new SetShooterSpeed(FLYWHEEL_TELEOP_RPS_1) );
+        secondController.btnB.whenHeld( new SetShooterSpeed(FLYWHEEL_TELEOP_RPS_2) );
+        secondController.btnX.whenHeld( new SetShooterSpeed(FLYWHEEL_TELEOP_RPS_3) );
+        secondController.btnY.whenHeld( new AutoAim() );
+        secondController.bmpL.whenHeld( new ReverseTower() );
+        secondController.bmpR.whenHeld( new ToggleIndexerTower() );
     }
 
 }

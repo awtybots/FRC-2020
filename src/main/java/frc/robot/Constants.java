@@ -16,52 +16,14 @@ import frc.robot.subsystems.DrivetrainSubsystem.MotorControlMode;
 
 public final class Constants {
 
-    public final static class MotorIDs {
-        public static final int DRIVE_L1 = 1;
-        public static final int DRIVE_L2 = 2;
-
-        public static final int DRIVE_R1 = 3;
-        public static final int DRIVE_R2 = 4;
-
-        public static final int INTAKE = 9;
-
-        public static final int INDEXER_L = 8;
-        public static final int INDEXER_R = 7;
-
-        public static final int TOWER_1 = 5;
-        public static final int TOWER_2 = 6;
-
-        public static final int FLYWHEEL = 10;
-
-        public static final int CONTROL_PANEL_SPINNER = 13;
-    }
-
-    public final static class SolenoidChannels {
-        public static final int INTAKE_FWD = 0;
-        public static final int INTAKE_REV = 4;
-
-        public static final int CLIMB_FWD = 1;
-        public static final int CLIMB_REV = 2;
-
-        public static final int ANGLE_CLIMB_FWD = 6;
-        public static final int ANGLE_CLIMB_REV = 7;
-    }
-
     public final static class DriveTrain {
+
+        public final static boolean IS_TUNING = false; // whether or not to tune PID/FeedForward on SmartDashboard
+
         // OPTIONS
-        public final static DriveControls DRIVE_CONTROLS = DriveControls.ARCADE_DRIVE;
-        public final static DriveMode DRIVE_MODE = DriveMode.RAMPED_PERCENT;
-        public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID;
-        public final static NeutralMode BRAKE_MODE = NeutralMode.Coast;
-        public final static boolean TUNING_MODE = false; // change to true if you want to tune PID / FF in SmartDashboard
-
-        // LIMITS
-        public final static double MIN_OUTPUT = 0;
-        public final static double MAX_OUTPUT = 0.9;
-        public final static double MAX_OUTPUT_ACCELERATION = 0.6;
-
-        public final static double MAX_VELOCITY = 36; // inches per second
-        public final static double MAX_ACCELERATION = 6; // inches per second^2
+        public final static MotorControlMode MOTOR_CONTROL_MODE = MotorControlMode.PID; // How the motors are controlled to reach target velocity
+        public final static DriveMode DRIVE_MODE                = DriveMode.RAMPED_PERCENT; // the response curve of the motors
+        public final static DriveControls DRIVE_CONTROLS        = DriveControls.ARCADE_DRIVE;
 
         // AUTON
         public final static double MAX_OUTPUT_AUTON = 0.5;
@@ -69,30 +31,10 @@ public final class Constants {
         public final static double ROTATE_DEGREES_SLOW_THRESHOLD = 5;
 
         // VALUES
-        public final static double GEAR_RATIO = 12.0 / 40.0 * 24.0 / 34.0;
         public final static double WHEEL_CIRCUMFERENCE = 6.375 * Math.PI;
-        public final static double TRACK_WIDTH = 26.5; // inches between left wheels and right wheels
+        public final static double TRACK_WIDTH         = 26.5; // inches between left wheels and right wheels
+        public final static double GEAR_RATIO          = 12.0 / 40.0 * 24.0 / 34.0;
 
-        // PID
-        public final static double PID_P = 0.02;
-        public final static double PID_I = 0;
-        public final static double PID_D = 0;
-        public final static double INTEGRAL_MAX = 1.0;
-
-        // FEEDFORWARD
-        public final static double FF_S = 1.3; // voltage required to move a wheel any amount
-        public final static double FF_V = 0.12; // voltage required to sustain a wheel's speed moving 1 inch per second
-        public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 inch per second per second
-    }
-
-    public final static class Intake {
-        public final static double MOTOR_SPEED = 0.6;
-    }
-
-    public final static class IndexerTower {
-        public final static double INDEXER_L_MOTOR_SPEED = 0.8;
-        public final static double INDEXER_R_MOTOR_SPEED = 0.6;
-        public final static double TOWER_MOTOR_SPEED = 0.75;
     }
 
     public final static class Shooter {
@@ -100,9 +42,9 @@ public final class Constants {
         public final static boolean IS_TUNING = false; // change to true if you want to tune PID in SmartDashboard
 
         // SPEEDS
-        public final static double FLYWHEEL_TELEOP_SPEED_1 = 4000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
-        public final static double FLYWHEEL_TELEOP_SPEED_2 = 4250.0 / 60.0; // 3 presets (buttons A, B, X)
-        public final static double FLYWHEEL_TELEOP_SPEED_3 = 6000.0 / 60.0;
+        public final static double FLYWHEEL_TELEOP_RPS_1 = 4000.0 / 60.0; // RPS when you shoot manually (only plebeians shoot manually)
+        public final static double FLYWHEEL_TELEOP_RPS_2 = 4250.0 / 60.0; // 3 presets (buttons A, B, X)
+        public final static double FLYWHEEL_TELEOP_RPS_3 = 6000.0 / 60.0;
 
         // AUTO AIM
         public final static double MAX_AIMING_DRIVE_OUTPUT = 0.3;
@@ -118,7 +60,6 @@ public final class Constants {
     }
 
     public final static class ControlPanelSpinner {
-        public final static NeutralMode BRAKE_MODE = NeutralMode.Brake;
         public final static double COLOR_PASSES = 7;
         public final static double MOTOR_SPEED = 0.3;
 
@@ -134,9 +75,6 @@ public final class Constants {
     }
 
     public final static class Controller {
-        public static final int PORT_1 = 0;
-        public static final int PORT_2 = 1;
-
         public final static double STICK_DEADZONE = 0.2;
         public final static double TRIGGER_DEADZONE = 0.1;
     }

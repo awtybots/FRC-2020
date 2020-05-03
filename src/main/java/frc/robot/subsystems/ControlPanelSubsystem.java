@@ -26,7 +26,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
     public ControlPanelSubsystem() {
         spinner.configFactoryDefault();
-        spinner.setNeutralMode(ControlPanelSpinner.BRAKE_MODE);
+        spinner.setNeutralMode( NeutralMode.Brake );
 
         toggle(false);
 

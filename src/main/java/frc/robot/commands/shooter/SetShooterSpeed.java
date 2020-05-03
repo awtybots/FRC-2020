@@ -2,7 +2,8 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import static frc.robot.Robot.*;
+import static frc.robot.Robot.shooterSubsystem;
+import static frc.robot.Robot.indexerTowerSubsystem;
 
 public class SetShooterSpeed extends CommandBase {
 

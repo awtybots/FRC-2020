@@ -30,16 +30,18 @@ public class DriveInches extends CommandBase {
         currentDistance = MotorGroup.ALL.getWheelDistance();
 
         // stopping distance (ramped velocity only)
-        if(DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
+        /*if(DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
             double currentVelocity = MotorGroup.ALL.getWheelVelocity();
             double remainingDistance = Math.abs(goalDistance - currentDistance);
             double stoppingDistance = currentVelocity * currentVelocity / MAX_ACCELERATION / 2.0;
             if(stoppingDistance >= remainingDistance) {
                 goalSpeed = 0; // start slowing down before we hit the target
             }
-        }
+        }*/
 
-        if(DRIVE_MODE == DriveMode.PERCENT || DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
+        if ( DRIVE_MODE == DriveMode.PERCENT ||
+             DRIVE_MODE == DriveMode.RAMPED_PERCENT )
+        {
             drivetrainSubsystem.setMotorOutput(goalSpeed * MAX_OUTPUT_AUTON, goalSpeed * MAX_OUTPUT_AUTON);
         } else {
             drivetrainSubsystem.setGoalVelocity(goalSpeed * MAX_VELOCITY_AUTON, goalSpeed * MAX_VELOCITY_AUTON);
