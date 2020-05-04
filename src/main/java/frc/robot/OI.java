@@ -10,22 +10,22 @@ import frc.robot.commands.indexer.*;
 
 public class OI {
 
-    public Controller firstController, secondController;
+    public Controller controller1, controller2;
 
     public OI() {
-        firstController  = new Controller( 0, 0.2 );
-        secondController = new Controller( 1, 0.2 );
+        controller1  = new Controller(0);
+        controller2 = new Controller(1);
 
-        firstController.btnY.whenPressed( new ToggleClimb() );
-        firstController.bmpL.whenHeld( new ToggleIntakeMotor() );
-        firstController.bmpR.whenHeld( new ToggleIntake() );
+        controller1.btnY.whenPressed( new ToggleClimb() );
+        controller1.bmpL.whenHeld( new ToggleIntakeMotor() );
+        controller1.bmpR.whenHeld( new ToggleIntake() );
 
-        secondController.btnA.whenHeld( new SetShooterSpeed(FLYWHEEL_MANUAL_RPM_1) );
-        secondController.btnB.whenHeld( new SetShooterSpeed(FLYWHEEL_MANUAL_RPM_2) );
-        secondController.btnX.whenHeld( new SetShooterSpeed(FLYWHEEL_MANUAL_RPM_3) );
-        secondController.btnY.whenHeld( new AutoAim() );
-        secondController.bmpL.whenHeld( new ReverseTower() );
-        secondController.bmpR.whenHeld( new ToggleIndexerTower() );
+        controller2.btnA.whenHeld( new SetShooterSpeed(FLYWHEEL_MANUAL_RPM_1) );
+        controller2.btnB.whenHeld( new SetShooterSpeed(FLYWHEEL_MANUAL_RPM_2) );
+        controller2.btnX.whenHeld( new SetShooterSpeed(FLYWHEEL_MANUAL_RPM_3) );
+        controller2.btnY.whenHeld( new AutoAim() );
+        controller2.bmpL.whenHeld( new ReverseTower() );
+        controller2.bmpR.whenHeld( new ToggleIndexerTower() );
     }
 
 }

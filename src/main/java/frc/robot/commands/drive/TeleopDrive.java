@@ -27,7 +27,7 @@ public class TeleopDrive extends CommandBase {
 
     @Override
     public void execute() {
-        Vector3 processedInput = DRIVE_CONTROLS.processInput(oi.firstController);
+        Vector3 processedInput = DRIVE_CONTROLS.processInput();
 
         double left = processedInput.x;
         double right = processedInput.y;
@@ -50,21 +50,23 @@ public class TeleopDrive extends CommandBase {
     }
 
     public enum DriveControls { // Maps a mode of input to the appropriate method
-        ARCADE_DRIVE((xboxController) -> {
-            double speed = smooth( -xboxController.getY(Hand.kLeft) ); // https://www.desmos.com/calculator/uc1689lozj
-            double rotation = smooth(xboxController.getX(Hand.kRight) );
+    
+        ARCADE_DRIVE(() -> {
+            double speed = smooth( -oi.controller1.getY(Hand.kLeft) ); // https://www.desmos.com/calculator/uc1689lozj
+            double rotation = smooth(oi.controller1.getX(Hand.kRight) );
 
             double left = speed + rotation;
             double right = speed - rotation;
 
             return new Vector3(left, right, 0);
         }),
-        GTA_DRIVE((xboxController) -> {
+
+        GTA_DRIVE(() -> {
             double speed = smooth(
-                  xboxController.getTrigger(Hand.kRight)
-                - xboxController.getTrigger(Hand.kLeft)
+                  oi.controller1.getTrigger(Hand.kRight)
+                - oi.controller1.getTrigger(Hand.kLeft)
             );
-            double rotation = smooth(xboxController.getX(Hand.kRight));
+            double rotation = smooth(oi.controller1.getX(Hand.kRight));
 
             double left = speed + rotation;
             double right = speed - rotation;
@@ -72,14 +74,14 @@ public class TeleopDrive extends CommandBase {
             return new Vector3(left, right, 0);
         });
 
-        private Function<Controller, Vector3> controlFunction;
+        private Supplier<Vector3> controlFunction;
 
-        private DriveControls(Function<Controller, Vector3> cf) {
+        private DriveControls(Supplier<Vector3> cf) {
             this.controlFunction = cf;
         }
 
-        public Vector3 processInput(Controller controller) {
-            return controlFunction.apply(controller);
+        public Vector3 processInput() {
+            return controlFunction.get();
         }
 
     }

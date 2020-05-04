@@ -7,21 +7,16 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Controller
 {
+    
+    private static final double DEADZONE_STICK = 0.2;
+    private static final double DEADZONE_TRIGGER = 0.1;
 
     public JoystickButton btnA, btnX, btnY, btnB, bmpL, bmpR;
     private XboxController controller;
-    private double stick_dz, trigger_dz;
 
-    public Controller( int port, double stick_deadzone )
-    {
-        this(port, stick_deadzone, 0.05); // TODO probs should be 0?
-    }
-
-    public Controller( int port, double stick_deadzone, double trigger_deadzone )
+    public Controller(int port)
     {
         controller = new XboxController(port);
-        trigger_dz = trigger_deadzone;
-        stick_dz = stick_deadzone;
 
         btnA = new JoystickButton(controller, Button.kA.value);
         btnB = new JoystickButton(controller, Button.kB.value);
@@ -31,7 +26,7 @@ public class Controller
         bmpR = new JoystickButton(controller, Button.kBumperRight.value);
     }
 
-    private double dzone( double x, double dz )
+    private double deadzone( double x, double dz )
     {
         if(Math.abs(x) < dz)
             return 0;
@@ -41,17 +36,17 @@ public class Controller
 
     public double getY( GenericHID.Hand hand )
     {
-        return dzone(controller.getY( hand ), stick_dz);
+        return deadzone(controller.getY( hand ), DEADZONE_STICK);
     }
 
     public double getX( GenericHID.Hand hand )
     {
-        return dzone(controller.getX( hand ), stick_dz);
+        return deadzone(controller.getX( hand ), DEADZONE_STICK);
     }
 
     public double getTrigger( GenericHID.Hand hand )
     {
-        return dzone(controller.getTriggerAxis( hand ), trigger_dz);
+        return deadzone(controller.getTriggerAxis( hand ), DEADZONE_TRIGGER);
     }
 
 }
