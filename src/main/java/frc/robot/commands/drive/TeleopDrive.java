@@ -45,22 +45,14 @@ public class TeleopDrive extends CommandBase {
         return false;
     }
 
-    private static double deadzone(double x, double d) {
-        if(Math.abs(x) < d) {
-            return 0;
-        } else {
-            return (x - d * Math.signum(x)) / (1.0 - d);
-        }
-    }
-
     private static double smooth(double x) {
         return ((0.6 * Math.pow(Math.abs(x), 10.0)) + (0.4 * Math.abs(x))) * Math.signum(x);
     }
 
     public enum DriveControls { // Maps a mode of input to the appropriate method
         ARCADE_DRIVE((xboxController) -> {
-            double speed = smooth(deadzone(-xboxController.getY(Hand.kLeft), STICK_DEADZONE)); // https://www.desmos.com/calculator/uc1689lozj
-            double rotation = smooth(deadzone(xboxController.getX(Hand.kRight), STICK_DEADZONE));
+            double speed = smooth( -xboxController.getY(Hand.kLeft) ); // https://www.desmos.com/calculator/uc1689lozj
+            double rotation = smooth(xboxController.getX(Hand.kRight) );
 
             double left = speed + rotation;
             double right = speed - rotation;
@@ -69,10 +61,10 @@ public class TeleopDrive extends CommandBase {
         }),
         GTA_DRIVE((xboxController) -> {
             double speed = smooth(
-                  deadzone(xboxController.getTrigger(Hand.kRight), TRIGGER_DEADZONE)
-                - deadzone(xboxController.getTrigger(Hand.kLeft), TRIGGER_DEADZONE)
+                  xboxController.getTrigger(Hand.kRight)
+                - xboxController.getTrigger(Hand.kLeft)
             );
-            double rotation = smooth(deadzone(xboxController.getX(Hand.kRight), STICK_DEADZONE));
+            double rotation = smooth(xboxController.getX(Hand.kRight));
 
             double left = speed + rotation;
             double right = speed - rotation;

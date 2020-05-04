@@ -13,6 +13,7 @@ public class AutoSpinControlPanel extends CommandBase {
 
     private PanelColor goalColor;
 
+    private double COLOR_PASSES = 7;
     private double colorPasses;
     private PanelColor startColor;
     private PanelColor lastColor;
@@ -30,7 +31,7 @@ public class AutoSpinControlPanel extends CommandBase {
         } else {
             controlType = ControlType.ROTATION_CONTROL;
             colorPasses = 0;
-            startColor = controlPanelSubsystem.getCurrentColor();
+            startColor = controlPanelSubsystem.currentColor;
             if(startColor == PanelColor.NONE) {
                 cancel();
                 System.err.println("Cannot start rotation control without seeing a color!"); // log error
@@ -44,7 +45,7 @@ public class AutoSpinControlPanel extends CommandBase {
     @Override
     public void execute() {
         if(controlType == ControlType.ROTATION_CONTROL) {
-            PanelColor currentColor = controlPanelSubsystem.getCurrentColor();
+            PanelColor currentColor = controlPanelSubsystem.currentColor;
             if(currentColor != PanelColor.NONE && lastColor != currentColor) {
                 if(lastColor == startColor) {
                     colorPasses++;
@@ -63,8 +64,8 @@ public class AutoSpinControlPanel extends CommandBase {
     @Override
     public boolean isFinished() {
         return (controlType == ControlType.ROTATION_CONTROL)
-                ? (colorPasses >= ControlPanelSpinner.COLOR_PASSES)
-                : (controlPanelSubsystem.getCurrentColor() == goalColor);
+                ? (colorPasses >= COLOR_PASSES)
+                : (controlPanelSubsystem.currentColor == goalColor);
     }
 
     private enum ControlType {

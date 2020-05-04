@@ -23,8 +23,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public final static double PID_D = 0;
     public final static double INTEGRAL_MAX = 1.0;
     // Velocity Constants
-    public final static double RPS_MAX = 7000.0 / 60.0;
-    public final static double RPS_THRESHOLD = 50.0 / 60.0; // Flywheel must be within threshold to shoot balls
+    public final static double RPM_MAX = 7000.0;
+    public final static double RPM_THRESHOLD = 50.0; // will not shoot until within threshold
     public final static double PCT_MAX = 0.9;
     public final static double PCT_MIN = 0;
     // Flywheel Constants
@@ -51,13 +51,6 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
-    @Override
-    public void periodic() { // TODO do we need these?
-        SmartDashboard.putNumber("Shooter RPM", currentRPS*60.0);
-        SmartDashboard.putNumber("Shooter goal RPM", goalRPS*60.0);
-        SmartDashboard.putBoolean("Shooter velocity at goal", isVelocityAtGoal());
-    }
-
     public void flywheelPID() {
         currentRPS = getFlywheelVelocity();
         double percentOutput;
@@ -80,7 +73,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setFlywheelGoalVelocity(double rps) {
         integralError = 0;
         lastVelocityError = 0;
-        goalRPS = clamp(rps, 0, RPS_MAX);
+        goalRPS = clamp(rps, 0, RPM_MAX/60.0);
     }
 
     public double getFlywheelVelocity() {
@@ -91,7 +84,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public boolean isVelocityAtGoal() {
-        return Math.abs(getFlywheelVelocity() - goalRPS) <= RPS_THRESHOLD;
+        return Math.abs(getFlywheelVelocity() - goalRPS) <= RPM_THRESHOLD/60.0;
     }
 
 }

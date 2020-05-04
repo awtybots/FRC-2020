@@ -41,10 +41,10 @@ public final class Constants {
         // Enable PID tuning TODO this should be tuned before comp
         public final static boolean IS_TUNING = false;
 
-        // Manual Shooting speeds (RPS)
-        public final static double FLYWHEEL_MANUAL_RPS_1 = 4000.0 / 60.0;
-        public final static double FLYWHEEL_MANUAL_RPS_2 = 4250.0 / 60.0;
-        public final static double FLYWHEEL_MANUAL_RPS_3 = 6000.0 / 60.0;
+        // Manual Shooting speeds
+        public final static double FLYWHEEL_MANUAL_RPM_1 = 4000.0;
+        public final static double FLYWHEEL_MANUAL_RPM_2 = 4250.0;
+        public final static double FLYWHEEL_MANUAL_RPM_3 = 6000.0;
 
         // Auto Aiming thresholds
         public final static double MAX_AIMING_DRIVE_OUTPUT = 0.3;

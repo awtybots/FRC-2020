@@ -11,12 +11,12 @@ public class SetShooterSpeed extends CommandBase {
     private boolean toggled;
     private boolean autoIndex;
 
-    public SetShooterSpeed(double rps) {
-        this(rps, false);
+    public SetShooterSpeed(double rpm) {
+        this(rpm, false);
     }
 
-    public SetShooterSpeed(double rps, boolean autoIndex) {
-        this.rps = rps;
+    public SetShooterSpeed(double rpm, boolean autoIndex) {
+        this.rps = rpm/60.0;
         this.autoIndex = autoIndex;
         toggled = false;
     }
