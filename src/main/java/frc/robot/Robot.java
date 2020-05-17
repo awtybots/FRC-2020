@@ -34,7 +34,6 @@ public class Robot extends TimedRobot {
     /// ----- Electrical/CANBus ----- ///
     private DigitalOutput LEDOutput = new DigitalOutput(0);
     private Compressor compressor = new Compressor();
-    public static final double PERIOD = 0.02; // Hearbeat of CANBus (CANBus messages sent this many seconds)
 
     @Override
     public void robotInit() {
@@ -69,17 +68,17 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() { CommandScheduler.getInstance().run(); }
 
     @Override
-    public void disabledInit() {
+    public void disabledInit() { // TODO error handling
         limelightSubsystem.toggleLight(false); // Plz don't blind us
     }
 
     @Override
     public void autonomousInit() {
-        LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
-        limelightSubsystem.toggleLight(false);
-
         autonCommand = new Auton(autonChooser.getSelected());
         autonCommand.schedule();
+
+        LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
+        limelightSubsystem.toggleLight(false); // TODO error handling
     }
 
     @Override

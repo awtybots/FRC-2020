@@ -6,6 +6,8 @@ import frc.robot.subsystems.DrivetrainSubsystem.MotorControlMode;
 
 public final class Constants {
 
+    public static final double PERIOD = 0.02;
+
     public final static class DriveTrain {
         // OPTIONS
         public final static boolean IS_TUNING = false; // whether or not to tune PID/FeedForward on SmartDashboard
@@ -25,24 +27,23 @@ public final class Constants {
     }
 
     public final static class Shooter {
-        // Enable PID tuning TODO this should be tuned before comp
+        // Enable PID tuning TODO this should be tuned and removed before comp
         public final static boolean IS_TUNING = false;
 
         // Manual Shooting speeds
-        public final static double FLYWHEEL_MANUAL_RPM_1 = 4000.0;
-        public final static double FLYWHEEL_MANUAL_RPM_2 = 4250.0;
-        public final static double FLYWHEEL_MANUAL_RPM_3 = 6000.0;
+        public final static double MANUAL_RPM_1 = 4000.0;
+        public final static double MANUAL_RPM_2 = 4250.0;
+        public final static double MANUAL_RPM_3 = 6000.0;
 
-        // Auto Aiming thresholds
+        // AutoAim Thresholds
         public final static double MAX_AIMING_DRIVE_OUTPUT = 0.3;
         public final static double TARGET_ANGLE_THRESHOLD = 1; // degrees
         public final static double TARGET_ANGLE_SLOW_THRESHOLD = 15; // degrees
     }
 
     public final static class Limelight {
-        public final static double CAMERA_X_OFFSET = 1.75;
+        public final static double CAMERA_HEIGHT = 1.75;
         public final static double CAMERA_MOUNTING_ANGLE = 41;
-
         public final static double BOOT_TIME = 45; // seconds
     }
 
