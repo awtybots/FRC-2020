@@ -42,7 +42,7 @@ public final class Constants {
     }
 
     public final static class Limelight {
-        public final static double CAMERA_HEIGHT = 1.75;
+        public final static double CAMERA_HORIZONTAL_SKEW = 1.75;
         public final static double CAMERA_MOUNTING_ANGLE = 41;
         public final static double BOOT_TIME = 45; // seconds
     }
