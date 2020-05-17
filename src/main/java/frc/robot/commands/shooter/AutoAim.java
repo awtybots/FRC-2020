@@ -17,7 +17,7 @@ public class AutoAim extends CommandBase {
     }
 
     @Override
-    public void initialize() {
+    public void initialize() { // TODO error handling
         limelightSubsystem.setPipeline(Pipeline.POWER_PORT);
         limelightSubsystem.toggleLight(true);
     }
@@ -40,16 +40,16 @@ public class AutoAim extends CommandBase {
             drivetrainSubsystem.setMotorOutput(speed * MAX_AIMING_DRIVE_OUTPUT, -speed * MAX_AIMING_DRIVE_OUTPUT);
         }
     }
+    
+    @Override
+    public boolean isFinished() {
+        return onTarget;
+    }
 
     @Override
     public void end(boolean interrupted) {
         drivetrainSubsystem.stop();
-        limelightSubsystem.toggleLight(false);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return onTarget;
+        limelightSubsystem.toggleLight(false); // TODO error handling/warnings
     }
 
 }

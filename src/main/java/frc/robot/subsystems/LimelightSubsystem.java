@@ -42,8 +42,8 @@ public class LimelightSubsystem extends SubsystemBase {
     private double getDouble(String name) {
         return table.getEntry(name).getDouble(0);
     }
-    private void setNumber(String name, Number number) {
-        table.getEntry(name).setNumber(number);
+    private boolean setNumber(String name, Number number) {
+        return table.getEntry(name).setNumber(number);
     }
 
 
@@ -54,23 +54,23 @@ public class LimelightSubsystem extends SubsystemBase {
             return null;
         }
 
-        double target_x = getDouble("tx");
-        double target_y = getDouble("ty");
+        double targetX = getDouble("tx");
+        double targetY = getDouble("ty");
 
         return new Vector3(
-            target_x - CAMERA_X_OFFSET,
-            CAMERA_MOUNTING_ANGLE + target_y,
+            targetX - CAMERA_HEIGHT,
+            CAMERA_MOUNTING_ANGLE + targetY,
             0
         ).print("Limelight data");
     }
 
-	public void toggleLight(boolean on) {
-        setNumber("ledMode", on ? 3 : 1);
+	public boolean toggleLight(boolean on) {
+        return setNumber("ledMode", on ? 3 : 1);
 	}
 
 
-    public void setPipeline(Pipeline pipeline) {
-        setNumber("pipeline", pipeline.num);
+    public boolean setPipeline(Pipeline pipeline) {
+        return setNumber("pipeline", pipeline.num);
     }
 
     public enum Pipeline {

@@ -7,47 +7,47 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
-import edu.wpi.first.wpilibj.SPI;
-import frc.robot.RobotMap.MotorIDs;
-
-import frc.robot.Robot;
 import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.subsystems.DrivetrainSubsystem.MotorGroup.*;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.RobotMap.MotorIDs;
+
 public class DrivetrainSubsystem extends SubsystemBase {
 
-    // Motors
+    // --- Motors --- //
     private static WPI_TalonFX motorL1 = new WPI_TalonFX(MotorIDs.DRIVE_L1);
     private static WPI_TalonFX motorL2 = new WPI_TalonFX(MotorIDs.DRIVE_L2);
     private static WPI_TalonFX motorR1 = new WPI_TalonFX(MotorIDs.DRIVE_R1);
     private static WPI_TalonFX motorR2 = new WPI_TalonFX(MotorIDs.DRIVE_R2);
-    // NavX
+    // --- NavX --- //
     private final AHRS navX = new AHRS(SPI.Port.kMXP);
-    // Constants
-    /// Safety
-    public final static double PCT_MIN = 0;
-    public final static double PCT_MAX = 0.9;
-    public final static double PCT_ACCELERATION_MAX = 0.6;
-    public final static double VELOCITY_MAX = 36; // inches per second
-    public final static double ACCELERATION_MAX = 6; // inches per second^2
-    /// PID
-    public final static double PID_P = 0.02;
-    public final static double PID_I = 0;
-    public final static double PID_D = 0;
-    public final static double MAX_INTEGRAL = 1.0;
-    /// FEEDFORWARD
-    public final static double FF_S = 1.3; // voltage required to move a wheel any amount
-    public final static double FF_V = 0.12; // voltage required to sustain a wheel's speed moving 1 inch per second
-    public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 inch per second per second
+    // --- Constants --- //
+        /// ----- Safety ----- ///
+        public final static double PCT_MIN = 0;
+        public final static double PCT_MAX = 0.9;
+        public final static double PCT_ACCELERATION_MAX = 0.6;
+        public final static double VELOCITY_MAX = 36; // inches per second
+        public final static double ACCELERATION_MAX = 6; // inches per second^2
+        /// ----- PID ----- ///
+        public final static double PID_P = 0.02;
+        public final static double PID_I = 0;
+        public final static double PID_D = 0;
+        public final static double MAX_INTEGRAL = 1.0;
+        /// ----- Feedforward ----- ///
+        public final static double FF_S = 1.3; // voltage required to move a wheel any amount
+        public final static double FF_V = 0.12; // voltage required to sustain a wheel's speed moving 1 inch per second
+        public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 inch per second per second
 
     public DrivetrainSubsystem()
     {//{{{
@@ -167,11 +167,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
             double currentVelocity = getWheelVelocity();
             double goalAcceleration = goalVelocity - currentVelocity;
             double velocityError = DRIVE_MODE == DriveMode.RAMPED_VELOCITY
-                ? clamp(goalAcceleration, -ACCELERATION_MAX * Robot.PERIOD, ACCELERATION_MAX * Robot.PERIOD)
+                ? clamp(goalAcceleration, -ACCELERATION_MAX * Constants.PERIOD, ACCELERATION_MAX * Constants.PERIOD)
                 : goalAcceleration;
-            double accelerationError = (velocityError - lastVelocityError) / Robot.PERIOD;
+            double accelerationError = (velocityError - lastVelocityError) / Constants.PERIOD;
             lastVelocityError = velocityError;
-            integralError = clamp(integralError + (velocityError * Robot.PERIOD), -MAX_INTEGRAL / PID_I, MAX_INTEGRAL / PID_I);
+            integralError = clamp(integralError + (velocityError * Constants.PERIOD), -MAX_INTEGRAL / PID_I, MAX_INTEGRAL / PID_I);
 
             double P = (IS_TUNING ? SmartDashboard.getNumber("DriveTrain PID_P", PID_P) : PID_P) * velocityError;
             double I = (IS_TUNING ? SmartDashboard.getNumber("DriveTrain PID_I", PID_I) : PID_I) * integralError;
@@ -185,7 +185,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             double currentVelocity = getWheelVelocity();
             double goalAcceleration = goalVelocity - currentVelocity;
             double constrainedGoalAcceleration = DRIVE_MODE == DriveMode.RAMPED_VELOCITY
-                ? clamp(goalAcceleration, -ACCELERATION_MAX * Robot.PERIOD, ACCELERATION_MAX * Robot.PERIOD)
+                ? clamp(goalAcceleration, -ACCELERATION_MAX * Constants.PERIOD, ACCELERATION_MAX * Constants.PERIOD)
                 : goalAcceleration;
             double constrainedGoalVelocity = currentVelocity + constrainedGoalAcceleration;
 
