@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import static frc.robot.Robot.*;
-import frc.robot.Constants.ControlPanelSpinner;
 import frc.robot.subsystems.ControlPanelSubsystem.PanelColor;
 
 public class AutoSpinControlPanel extends CommandBase {
@@ -13,7 +12,7 @@ public class AutoSpinControlPanel extends CommandBase {
 
     private PanelColor goalColor;
 
-    private double COLOR_PASSES = 7;
+    private final double COLOR_PASSES = 7;
     private double colorPasses;
     private PanelColor startColor;
     private PanelColor lastColor;
@@ -24,7 +23,7 @@ public class AutoSpinControlPanel extends CommandBase {
 
     @Override
     public void initialize() {
-        String gameData = DriverStation.getInstance().getGameSpecificMessage();
+        final String gameData = DriverStation.getInstance().getGameSpecificMessage();
         if (gameData.length() > 0) {
             controlType = ControlType.POSITION_CONTROL;
             goalColor = PanelColor.fromChar(gameData.charAt(0));
@@ -32,7 +31,7 @@ public class AutoSpinControlPanel extends CommandBase {
             controlType = ControlType.ROTATION_CONTROL;
             colorPasses = 0;
             startColor = controlPanelSubsystem.currentColor;
-            if(startColor == PanelColor.NONE) {
+            if (startColor == PanelColor.NONE) {
                 cancel();
                 System.err.println("Cannot start rotation control without seeing a color!"); // log error
             }
@@ -44,10 +43,10 @@ public class AutoSpinControlPanel extends CommandBase {
 
     @Override
     public void execute() {
-        if(controlType == ControlType.ROTATION_CONTROL) {
-            PanelColor currentColor = controlPanelSubsystem.currentColor;
-            if(currentColor != PanelColor.NONE && lastColor != currentColor) {
-                if(lastColor == startColor) {
+        if (controlType == ControlType.ROTATION_CONTROL) {
+            final PanelColor currentColor = controlPanelSubsystem.currentColor;
+            if (currentColor != PanelColor.NONE && lastColor != currentColor) {
+                if (lastColor == startColor) {
                     colorPasses++;
                     SmartDashboard.putNumber("Color Passes", colorPasses);
                 }
@@ -57,7 +56,7 @@ public class AutoSpinControlPanel extends CommandBase {
     }
 
     @Override
-    public void end(boolean interrupted) {
+    public void end(final boolean interrupted) {
         controlPanelSubsystem.toggle(false);
     }
 

@@ -17,6 +17,7 @@ import frc.robot.commands.main.Auton.AutonType;
 
 public class Robot extends TimedRobot {
 
+    /// ----- Subsytems ----- ///
     public static DrivetrainSubsystem drivetrainSubsystem;
     public static IntakeSubsystem intakeSubsystem;
     public static ShooterSubsystem shooterSubsystem;
@@ -26,32 +27,33 @@ public class Robot extends TimedRobot {
     public static ClimbSubsystem climbSubsystem;
     public static OI oi;
 
+    /// ----- Autonomous ----- ///
     private Auton autonCommand;
     private SendableChooser<AutonType> autonChooser;
 
+    /// ----- Electrical/CANBus ----- ///
     private DigitalOutput LEDOutput = new DigitalOutput(0);
     private Compressor compressor = new Compressor();
-
-    public static double PERIOD = 0.02;
+    public static final double PERIOD = 0.02; // Hearbeat of CANBus (CANBus messages sent this many seconds)
 
     @Override
     public void robotInit() {
-        // subsystems
+        /// ---- Subsystems ---- ///
         drivetrainSubsystem = new DrivetrainSubsystem();
-        intakeSubsystem = new IntakeSubsystem();
-        shooterSubsystem = new ShooterSubsystem();
+        limelightSubsystem  = new LimelightSubsystem();
+        shooterSubsystem    = new ShooterSubsystem();
+        intakeSubsystem     = new IntakeSubsystem();
+        climbSubsystem      = new ClimbSubsystem();
         controlPanelSubsystem = new ControlPanelSubsystem();
-        limelightSubsystem = new LimelightSubsystem();
         indexerTowerSubsystem = new IndexerTowerSubsystem();
-        climbSubsystem = new ClimbSubsystem();
         oi = new OI();
 
-        // electrical
+        /// ---- Electrical ---- ///
         LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
         compressor.setClosedLoopControl(true);
         compressor.start();
 
-        // Put all Auton choices on SmartDashboard
+        // Add all Autons to SmartDashboard
         autonChooser = new SendableChooser<>();
         for(AutonType autonType : AutonType.values()) {
             if(autonType == AutonType.SHOOT_AND_MOVE_FORWARD) {
@@ -63,20 +65,12 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData(autonChooser);
     }
 
-    /**
-     * This function is called every robot packet, no matter the mode. Use this for
-     * items like diagnostics that you want ran during disabled, autonomous,
-     * teleoperated and test.
-     *
-     * This runs after the mode specific periodic functions, but before LiveWindow
-     * and SmartDashboard integrated updating.
-     */
     @Override
     public void robotPeriodic() { CommandScheduler.getInstance().run(); }
 
     @Override
     public void disabledInit() {
-        limelightSubsystem.toggleLight(false);
+        limelightSubsystem.toggleLight(false); // Plz don't blind us
     }
 
     @Override

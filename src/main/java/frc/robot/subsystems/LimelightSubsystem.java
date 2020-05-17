@@ -25,7 +25,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(!startupDone && timer.get() > STARTUP_TIME) {
+        if(!startupDone && timer.get() > BOOT_TIME) {
             startupDone = true;
             toggleLight(false);
         }
@@ -54,12 +54,12 @@ public class LimelightSubsystem extends SubsystemBase {
             return null;
         }
 
-        double tx = getDouble("tx");
-        double ty = getDouble("ty");
+        double target_x = getDouble("tx");
+        double target_y = getDouble("ty");
 
         return new Vector3(
-            tx - CAMERA_X_OFFSET,
-            CAMERA_MOUNTING_ANGLE + ty,
+            target_x - CAMERA_X_OFFSET,
+            CAMERA_MOUNTING_ANGLE + target_y,
             0
         ).print("Limelight data");
     }

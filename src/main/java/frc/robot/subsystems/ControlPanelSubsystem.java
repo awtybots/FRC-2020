@@ -1,11 +1,12 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,7 +17,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
     private final WPI_TalonSRX spinner = new WPI_TalonSRX(MotorIDs.CONTROL_PANEL_SPINNER);
 
-    private final ColorSensorV3 colorSensor = new ColorSensorV3(ControlPanelSpinner.PORT);
+    private final ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kOnboard);
     private final ColorMatch colorMatcher = new ColorMatch();
 
     public PanelColor currentColor = PanelColor.NONE;
@@ -41,7 +42,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
         detectedColor = getDetectedColor();
 
         if(detectedColor == pendingColor) {
-            if(verifyColorTimer.get() >= ControlPanelSpinner.VERIFY_COLOR_TIME) {
+            if(verifyColorTimer.get() >= ControlPanelSpinner.VERIFY_COLOR_SEC) {
                 verifyColorTimer.stop();
 
                 currentColor = pendingColor;
@@ -71,7 +72,7 @@ public class ControlPanelSubsystem extends SubsystemBase {
         // SmartDashboard.putString("Detected color", (int)(detectedColorRaw.red*100) + ", " + (int)(detectedColorRaw.green*100) + ", " + (int)(detectedColorRaw.blue*100));
         ColorMatchResult colorMatchResult = colorMatcher.matchClosestColor(detectedColorRaw);
         // SmartDashboard.putNumber("Color confidence", colorMatchResult.confidence);
-        if(colorMatchResult.confidence < ControlPanelSpinner.MINIMUM_COLOR_CONFIDENCE) return PanelColor.NONE;
+        if(colorMatchResult.confidence < ControlPanelSpinner.MIN_COLOR_CONFIDENCE) return PanelColor.NONE;
         for(PanelColor color : PanelColor.getColors()) {
             if(colorMatchResult.color == color.getColor()) {
                 return color;
