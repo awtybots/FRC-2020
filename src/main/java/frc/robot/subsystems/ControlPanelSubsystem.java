@@ -58,9 +58,6 @@ public class ControlPanelSubsystem extends SubsystemBase {
                 pendingColor = detectedColor;
             }
         }
-
-        // if(currentColor != null)
-        //     SmartDashboard.putString("Current color", currentColor.getName());
     }
 
     public void toggle(boolean on) {
@@ -69,10 +66,11 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
     private PanelColor getDetectedColor() {
         Color detectedColorRaw = colorSensor.getColor();
-        // SmartDashboard.putString("Detected color", (int)(detectedColorRaw.red*100) + ", " + (int)(detectedColorRaw.green*100) + ", " + (int)(detectedColorRaw.blue*100));
         ColorMatchResult colorMatchResult = colorMatcher.matchClosestColor(detectedColorRaw);
-        // SmartDashboard.putNumber("Color confidence", colorMatchResult.confidence);
-        if(colorMatchResult.confidence < ControlPanelSpinner.MIN_COLOR_CONFIDENCE) return PanelColor.NONE;
+
+        if(colorMatchResult.confidence < ControlPanelSpinner.MIN_COLOR_CONFIDENCE)
+            return PanelColor.NONE;
+
         for(PanelColor color : PanelColor.getColors()) {
             if(colorMatchResult.color == color.getColor()) {
                 return color;
