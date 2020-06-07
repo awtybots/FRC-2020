@@ -15,7 +15,8 @@ import frc.robot.commands.main.*;
 import frc.robot.commands.drive.TeleopDrive;
 import frc.robot.commands.main.Auton.AutonType;
 
-public class Robot extends TimedRobot {
+public class Robot extends TimedRobot
+{
 
     /// ----- Subsytems ----- ///
     public static DrivetrainSubsystem drivetrainSubsystem;
@@ -36,7 +37,8 @@ public class Robot extends TimedRobot {
     private Compressor compressor = new Compressor();
 
     @Override
-    public void robotInit() {
+    public void robotInit()
+    {
         /// ---- Subsystems ---- ///
         drivetrainSubsystem = new DrivetrainSubsystem();
         limelightSubsystem  = new LimelightSubsystem();
@@ -54,8 +56,10 @@ public class Robot extends TimedRobot {
 
         // Add all Autons to SmartDashboard
         autonChooser = new SendableChooser<>();
-        for(AutonType autonType : AutonType.values()) {
-            if(autonType == AutonType.SHOOT_AND_MOVE_FORWARD) {
+        for(AutonType autonType : AutonType.values())
+        {
+            if(autonType == AutonType.SHOOT_AND_MOVE_FORWARD)
+            {
                 autonChooser.setDefaultOption(autonType.toString(), autonType);
             } else {
                 autonChooser.addOption(autonType.toString(), autonType);
@@ -68,12 +72,14 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() { CommandScheduler.getInstance().run(); }
 
     @Override
-    public void disabledInit() { // TODO error handling
+    public void disabledInit()
+    { // TODO error handling
         limelightSubsystem.toggleLight(false); // Plz don't blind us
     }
 
     @Override
-    public void autonomousInit() {
+    public void autonomousInit()
+    {
         autonCommand = new Auton(autonChooser.getSelected());
         autonCommand.schedule();
 
@@ -82,8 +88,10 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopInit() {
-        if(autonCommand != null) autonCommand.cancel();
+    public void teleopInit()
+    {
+        if(autonCommand != null)
+            autonCommand.cancel();
 
         CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new TeleopDrive());
     }

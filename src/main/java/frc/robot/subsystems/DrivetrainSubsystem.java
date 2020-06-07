@@ -23,49 +23,54 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotMap.MotorIDs;
 
-public class DrivetrainSubsystem extends SubsystemBase {
+public class DrivetrainSubsystem extends SubsystemBase
+{
 
     // --- Motors --- //
-    private static WPI_TalonFX motorL1 = new WPI_TalonFX(MotorIDs.DRIVE_L1);
-    private static WPI_TalonFX motorL2 = new WPI_TalonFX(MotorIDs.DRIVE_L2);
-    private static WPI_TalonFX motorR1 = new WPI_TalonFX(MotorIDs.DRIVE_R1);
-    private static WPI_TalonFX motorR2 = new WPI_TalonFX(MotorIDs.DRIVE_R2);
+    private static WPI_TalonFX motorL1 = new WPI_TalonFX( MotorIDs.DRIVE_L1 );
+    private static WPI_TalonFX motorL2 = new WPI_TalonFX( MotorIDs.DRIVE_L2 );
+    private static WPI_TalonFX motorR1 = new WPI_TalonFX( MotorIDs.DRIVE_R1 );
+    private static WPI_TalonFX motorR2 = new WPI_TalonFX( MotorIDs.DRIVE_R2 );
     // --- NavX --- //
-    private final AHRS navX = new AHRS(SPI.Port.kMXP);
+    private final AHRS navX = new AHRS( SPI.Port.kMXP );
     // --- Constants --- //
         /// ----- Safety ----- ///
         public final static double PCT_MIN = 0;
         public final static double PCT_MAX = 0.9;
         public final static double PCT_ACCELERATION_MAX = 0.6;
-        public final static double VELOCITY_MAX = 36; // inches per second
-        public final static double ACCELERATION_MAX = 6; // inches per second^2
-        /// ----- PID ----- ///
+        public final static double VELOCITY_MAX = 36; // inches/second
+        public final static double ACCELERATION_MAX = 6; // inches/second^2
+        /// ----- PID ----- /// TODO possible TalonFX PID?
         public final static double PID_P = 0.02;
         public final static double PID_I = 0;
         public final static double PID_D = 0;
         public final static double MAX_INTEGRAL = 1.0;
-        /// ----- Feedforward ----- ///
+        /// ----- Feedforward ----- /// TODO do we want/need this?
         public final static double FF_S = 1.3; // voltage required to move a wheel any amount
         public final static double FF_V = 0.12; // voltage required to sustain a wheel's speed moving 1 inch per second
         public final static double FF_A = 0.1; // voltage required to accelerate wheel at 1 inch per second per second
 
     public DrivetrainSubsystem()
-    {//{{{
-        for(WPI_TalonFX motor : ALL.motorList) {
+    {
+        for(WPI_TalonFX motor : ALL.motorList)
+        {
             motor.configFactoryDefault();
             motor.setNeutralMode( NeutralMode.Coast );
             motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
-            if(DRIVE_MODE == DriveMode.RAMPED_PERCENT) {
+            if(DRIVE_MODE == DriveMode.RAMPED_PERCENT)
+            {
                 motor.configOpenloopRamp(1.0 / PCT_ACCELERATION_MAX);
             }
         }
 
-        for(WPI_TalonFX motor : RIGHT.motorList) {
+        for(WPI_TalonFX motor : RIGHT.motorList)
+        {
             motor.setInverted(TalonFXInvertType.Clockwise);
         }
 
-        if(IS_TUNING) {
+        if(IS_TUNING)
+        {
             SmartDashboard.setDefaultNumber("DriveTrain PID_P", PID_P);
             SmartDashboard.setDefaultNumber("DriveTrain PID_I", PID_I);
             SmartDashboard.setDefaultNumber("DriveTrain PID_D", PID_D);
@@ -74,13 +79,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
             SmartDashboard.setDefaultNumber("DriveTrain FF_V", FF_V);
             SmartDashboard.setDefaultNumber("DriveTrain FF_A", FF_A);
         }
-    }//}}}
+    }
 
     @Override
     public void periodic()
-    {//{{{
-        if(DRIVE_MODE == DriveMode.VELOCITY || DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
-            if(MOTOR_CONTROL_MODE == MotorControlMode.PID) {
+    {
+        if(DRIVE_MODE == DriveMode.VELOCITY || DRIVE_MODE == DriveMode.RAMPED_VELOCITY)
+        {
+            if(MOTOR_CONTROL_MODE == MotorControlMode.PID)
+            {
                 LEFT.drivePID();
                 RIGHT.drivePID();
             } else {
@@ -88,21 +95,24 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 RIGHT.driveFeedforward();
             }
         }
-    }//}}}
+    }
 
     // DRIVE COMMAND FUNCTIONS
 
-    public void setMotorOutput(double left, double right) {
+    public void setMotorOutput(double left, double right)
+    {
         LEFT.setMotorOutput(left * PCT_MAX);
         RIGHT.setMotorOutput(right * PCT_MAX);
     }
 
-    public void setGoalVelocity(double left, double right) {
+    public void setGoalVelocity(double left, double right)
+    {
         LEFT.setGoalVelocity(left * VELOCITY_MAX);
         RIGHT.setGoalVelocity(right * VELOCITY_MAX);
     }
 
-    public void stop() {
+    public void stop()
+    {
         setGoalVelocity(0, 0);
         setMotorOutput(0, 0);
     }
@@ -110,25 +120,30 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     // SENSORS
 
-    public void resetSensors() {
-        for(WPI_TalonFX motor : ALL.motorList) {
+    public void resetSensors()
+    {
+        for(WPI_TalonFX motor : ALL.motorList)
+        {
             motor.setSelectedSensorPosition(0);
         }
         navX.reset();
     }
 
-    public double getRotation() {
+    public double getRotation()
+    {
         return -navX.getAngle();
     }
 
 
     // ENUMS
 
-    public enum MotorControlMode {
+    public enum MotorControlMode
+    {
         PID, FEEDFORWARD;
     }
 
-    public enum DriveMode {
+    public enum DriveMode
+    {
         PERCENT,
         RAMPED_PERCENT,
         VELOCITY,
@@ -136,9 +151,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public enum MotorGroup {//{{{
-        LEFT(new WPI_TalonFX[]{ motorL1, motorL2 }),
-        RIGHT(new WPI_TalonFX[]{ motorR1, motorR2 }),
-        ALL(new WPI_TalonFX[]{ motorL1, motorL2, motorR1, motorR2 });
+        LEFT(  new WPI_TalonFX[]{ motorL1, motorL2 } ),
+        RIGHT( new WPI_TalonFX[]{ motorR1, motorR2 } ),
+        ALL(   new WPI_TalonFX[]{ motorL1, motorL2, motorR1, motorR2 } );
 
         private WPI_TalonFX[] motorList;
 
@@ -150,20 +165,29 @@ public class DrivetrainSubsystem extends SubsystemBase {
             this.motorList = motorList;
         }
 
-        public double getWheelDistance() {
-            return motorList[0].getSelectedSensorPosition() / 2048.0 * WHEEL_CIRCUMFERENCE;
+        public double getWheelDistance()
+        {
+            return motorList[0].getSelectedSensorPosition()
+                / 2048.0 // --> revs
+                * WHEEL_CIRCUMFERENCE; // --> distance (inches)
         }
-        public double getWheelVelocity() {
-            return motorList[0].getSelectedSensorVelocity() / 2048.0 * 10.0 * WHEEL_CIRCUMFERENCE;
+        public double getWheelVelocity()
+        {
+            return motorList[0].getSelectedSensorVelocity()
+                / 2048.0 // --> revs/100ms
+                * 10.0   // --> revs/second
+                * WHEEL_CIRCUMFERENCE; // --> inches/second
         }
 
-        private void setGoalVelocity(double goalVelocity) {
+        private void setGoalVelocity(double goalVelocity)
+        {
             this.integralError = 0;
             this.lastVelocityError = 0;
             this.goalVelocity = clamp(goalVelocity, -VELOCITY_MAX, VELOCITY_MAX);
         }
 
-        private void drivePID() {
+        private void drivePID()
+        {
             double currentVelocity = getWheelVelocity();
             double goalAcceleration = goalVelocity - currentVelocity;
             double velocityError = DRIVE_MODE == DriveMode.RAMPED_VELOCITY
@@ -181,7 +205,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
             setMotorOutput(output);
         }
 
-        private void driveFeedforward() {
+        private void driveFeedforward()
+        {
             double currentVelocity = getWheelVelocity();
             double goalAcceleration = goalVelocity - currentVelocity;
             double constrainedGoalAcceleration = DRIVE_MODE == DriveMode.RAMPED_VELOCITY
@@ -197,13 +222,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
             setMotorOutput(voltage/12.0);
         }
 
-        private void setMotorOutput(double pct) {
-            if(Math.abs(pct) < PCT_MIN) {
+        private void setMotorOutput(double pct)
+        {
+            if(Math.abs(pct) < PCT_MIN)
+            {
                 pct = 0;
             } else {
                 pct = clamp(pct, -PCT_MAX, PCT_MAX);
             }
-            for(WPI_TalonFX motor : motorList) {
+            for(WPI_TalonFX motor : motorList)
+            {
                 motor.set(pct);
             }
         }

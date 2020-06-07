@@ -13,7 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ControlPanelSpinner;
 import frc.robot.RobotMap.MotorIDs;
 
-public class ControlPanelSubsystem extends SubsystemBase {
+public class ControlPanelSubsystem extends SubsystemBase
+{
 
     private final WPI_TalonSRX spinner = new WPI_TalonSRX(MotorIDs.CONTROL_PANEL_SPINNER);
 
@@ -26,23 +27,28 @@ public class ControlPanelSubsystem extends SubsystemBase {
 
     private Timer verifyColorTimer = new Timer();
 
-    public ControlPanelSubsystem() {
+    public ControlPanelSubsystem()
+    {
         spinner.configFactoryDefault();
         spinner.setNeutralMode( NeutralMode.Brake );
 
         toggle(false);
 
-        for(PanelColor color : PanelColor.values()) {
+        for(PanelColor color : PanelColor.values())
+        {
             colorMatcher.addColorMatch(color.getColor());
         }
     }
 
     @Override
-    public void periodic() {
+    public void periodic()
+    {
         detectedColor = getDetectedColor();
 
-        if(detectedColor == pendingColor) {
-            if(verifyColorTimer.get() >= ControlPanelSpinner.VERIFY_COLOR_SEC) {
+        if(detectedColor == pendingColor)
+        {
+            if(verifyColorTimer.get() >= ControlPanelSpinner.VERIFY_COLOR_SEC)
+            {
                 verifyColorTimer.stop();
 
                 currentColor = pendingColor;
@@ -51,7 +57,8 @@ public class ControlPanelSubsystem extends SubsystemBase {
         } else {
             pendingColor = null;
 
-            if(detectedColor != currentColor) {
+            if(detectedColor != currentColor)
+            {
                 verifyColorTimer.reset();
                 verifyColorTimer.start();
 
@@ -60,26 +67,31 @@ public class ControlPanelSubsystem extends SubsystemBase {
         }
     }
 
-    public void toggle(boolean on) {
+    public void toggle(boolean on)
+    {
         spinner.set(on ? ControlPanelSpinner.MOTOR_SPEED : 0);
     }
 
-    private PanelColor getDetectedColor() {
+    private PanelColor getDetectedColor()
+    {
         Color detectedColorRaw = colorSensor.getColor();
         ColorMatchResult colorMatchResult = colorMatcher.matchClosestColor(detectedColorRaw);
 
         if(colorMatchResult.confidence < ControlPanelSpinner.MIN_COLOR_CONFIDENCE)
             return PanelColor.NONE;
 
-        for(PanelColor color : PanelColor.getColors()) {
-            if(colorMatchResult.color == color.getColor()) {
+        for(PanelColor color : PanelColor.getColors())
+        {
+            if(colorMatchResult.color == color.getColor())
+            {
                 return color;
             }
         }
         return PanelColor.NONE;
     }
 
-    public enum PanelColor {
+    public enum PanelColor
+    {
         RED     (ControlPanelSpinner.RED),
         GREEN   (ControlPanelSpinner.GREEN),
         BLUE    (ControlPanelSpinner.BLUE),
@@ -89,24 +101,30 @@ public class ControlPanelSubsystem extends SubsystemBase {
         private Color color;
         private String name;
 
-        private PanelColor(double[] rgb) {
+        private PanelColor(double[] rgb)
+        {
             this.color = ColorMatch.makeColor(rgb[0], rgb[1], rgb[2]);
             this.name = this.toString();
         }
 
-        public Color getColor() {
+        public Color getColor()
+        {
             return color;
         }
-        public String getName() {
+        public String getName()
+        {
             return name;
         }
 
-        public static PanelColor[] getColors() {
+        public static PanelColor[] getColors()
+        {
             return new PanelColor[]{RED, GREEN, BLUE, YELLOW};
         }
 
-        public static PanelColor fromChar(char c) {
-            switch(c) {
+        public static PanelColor fromChar(char c)
+        {
+            switch(c)
+            {
                 case 'R':
                     return RED;
                 case 'G':

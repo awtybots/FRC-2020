@@ -1,8 +1,10 @@
 package frc.robot;
 
-public final class RobotMap {
+public final class RobotMap
+{
 
-    public final static class MotorIDs {
+    public final static class MotorIDs
+    {
         public static final int DRIVE_L1 = 1;
         public static final int DRIVE_L2 = 2;
 
@@ -22,7 +24,8 @@ public final class RobotMap {
         public static final int CONTROL_PANEL_SPINNER = 13;
     }
 
-    public final static class SolenoidChannels {
+    public final static class SolenoidChannels
+    {
         public static final int INTAKE_FWD = 0;
         public static final int INTAKE_REV = 4;
 

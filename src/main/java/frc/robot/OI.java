@@ -8,11 +8,13 @@ import frc.robot.commands.intake.*;
 import frc.robot.commands.shooter.*;
 import frc.robot.commands.indexer.*;
 
-public class OI {
+public class OI
+{
 
     public Controller controller1, controller2;
 
-    public OI() {
+    public OI()
+    {
         controller1  = new Controller(0);
         controller2 = new Controller(1);
 
