@@ -7,38 +7,38 @@ import static frc.robot.Robot.indexerTowerSubsystem;
 
 public class SetShooterSpeed extends CommandBase {
 
-    private double rps;
-    private boolean toggled;
+    private double rpm;
+    private boolean towerToggled;
     private boolean autoIndex;
 
-    public SetShooterSpeed(double rpm) {
-        this(rpm, false);
+    public SetShooterSpeed(double rpm_) {
+        this(rpm_, false);
     }
 
-    public SetShooterSpeed(double rpm, boolean autoIndex) {
-        this.rps = rpm/60.0;
+    public SetShooterSpeed(double rpm_, boolean autoIndex) {
+        this.rpm = rpm_;
         this.autoIndex = autoIndex;
-        toggled = false;
+        towerToggled = false;
     }
 
     @Override
     public void initialize() {
-        shooterSubsystem.setFlywheelGoalVelocity(rps);
+        shooterSubsystem.setFlywheelGoalVelocity(rpm);
     }
 
     @Override
     public void execute() {
         shooterSubsystem.flywheelPID();
-        if(autoIndex && (!toggled) && shooterSubsystem.isVelocityAtGoal()) {
+        if(autoIndex && (!towerToggled) && shooterSubsystem.isVelocityAtGoal()) {
             indexerTowerSubsystem.toggle(true);
-            toggled = true;
+            towerToggled = true;
         }
     }
 
     @Override
     public void end(boolean interrupted) {
         shooterSubsystem.setFlywheelGoalVelocity(0);
-        if(toggled)
+        if(towerToggled)
             indexerTowerSubsystem.toggle(false);
     }
 

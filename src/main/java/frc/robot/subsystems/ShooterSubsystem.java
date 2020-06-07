@@ -71,10 +71,10 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheel.set(percentOutput);
     }
 
-    public void setFlywheelGoalVelocity(double rps) {
+    public void setFlywheelGoalVelocity(double rpm) {
         integralError = 0;
         lastVelocityError = 0;
-        goalRPS = clamp(rps, 0, RPM_MAX/60.0);
+        goalRPS = clamp(rpm/60.0, 0, RPM_MAX/60.0);
     }
 
     public double getFlywheelVelocity() {

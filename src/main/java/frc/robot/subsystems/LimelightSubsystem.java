@@ -5,7 +5,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static frc.robot.Constants.Limelight.*;
+import static frc.robot.Constants.Limelight;
 
 import javax.annotation.CheckForNull;
 
@@ -25,7 +25,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(!startupDone && timer.get() > BOOT_TIME) {
+        if(!startupDone && timer.get() > Limelight.BOOT_TIME) {
             startupDone = true;
             toggleLight(false);
         }
@@ -58,8 +58,8 @@ public class LimelightSubsystem extends SubsystemBase {
         double targetY = getDouble("ty");
 
         return new Vector3(
-            targetX - CAMERA_HORIZONTAL_SKEW,
-            CAMERA_MOUNTING_ANGLE + targetY,
+            targetX - Limelight.HORIZONTAL_SKEW,
+            Limelight.MOUNTING_ANGLE + targetY,
             0
         ).print("Limelight data");
     }
