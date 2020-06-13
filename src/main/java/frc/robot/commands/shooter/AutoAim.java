@@ -31,12 +31,12 @@ public class AutoAim extends CommandBase {
             return;
         }
 
-        onTarget = Math.abs(limelightData.x) < TARGET_ANGLE_THRESHOLD;
+        onTarget = Math.abs(limelightData.x) < TARGET_THRESHOLD_DEG;
 
         if(onTarget) {
             drivetrainSubsystem.stop();
         } else {
-            double speed = MathUtil.clamp(limelightData.x / TARGET_ANGLE_SLOW_THRESHOLD, -1.0, 1.0);
+            double speed = MathUtil.clamp(limelightData.x / TARGET_SLOW_THRESHOLD_DEG, -1.0, 1.0);
             drivetrainSubsystem.setMotorOutput(speed * MAX_AIMING_DRIVE_OUTPUT, -speed * MAX_AIMING_DRIVE_OUTPUT);
         }
     }

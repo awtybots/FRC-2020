@@ -12,7 +12,6 @@ public class AutoSpinControlPanel extends CommandBase {
 
     private PanelColor goalColor;
 
-    private final double COLOR_PASSES = 7;
     private double colorPasses;
     private PanelColor startColor;
     private PanelColor lastColor;
@@ -63,7 +62,7 @@ public class AutoSpinControlPanel extends CommandBase {
     @Override
     public boolean isFinished() {
         return (controlType == ControlType.ROTATION_CONTROL)
-                ? (colorPasses >= COLOR_PASSES)
+                ? (colorPasses >= 7)
                 : (controlPanelSubsystem.currentColor == goalColor);
     }
 
