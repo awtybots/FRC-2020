@@ -73,7 +73,7 @@ public class Robot extends TimedRobot
 
     @Override
     public void disabledInit()
-    { // TODO error handling
+    {
         limelightSubsystem.toggleLight(false); // Plz don't blind us
     }
 
@@ -84,7 +84,7 @@ public class Robot extends TimedRobot
         autonCommand.schedule();
 
         LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
-        limelightSubsystem.toggleLight(false); // TODO error handling
+        limelightSubsystem.toggleLight(false);
     }
 
     @Override
