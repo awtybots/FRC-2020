@@ -40,7 +40,7 @@ public class AutoAim extends CommandBase {
             drivetrainSubsystem.setMotorOutput(speed * MAX_AIMING_DRIVE_OUTPUT, -speed * MAX_AIMING_DRIVE_OUTPUT);
         }
     }
-    
+
     @Override
     public boolean isFinished() {
         return onTarget;
