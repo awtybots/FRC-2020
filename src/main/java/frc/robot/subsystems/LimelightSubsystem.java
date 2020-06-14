@@ -42,17 +42,16 @@ public class LimelightSubsystem extends SubsystemBase {
     private double getDouble(String name) {
         return table.getEntry(name).getDouble(0);
     }
-    private boolean setNumber(String name, Number number) {
-        return table.getEntry(name).setNumber(number);
+    private boolean setNumber(String name, Number defaultNumber) {
+        return table.getEntry(name).setNumber(defaultNumber);
     }
 
 
     @CheckForNull
     public Vector3 getTargetData() {
         boolean targetExists = getDouble("tv") == 1.0;
-        if(!targetExists) {
+        if(!targetExists)
             return null;
-        }
 
         double targetX = getDouble("tx");
         double targetY = getDouble("ty");
@@ -65,12 +64,20 @@ public class LimelightSubsystem extends SubsystemBase {
     }
 
 	public boolean toggleLight(boolean on) {
-        return setNumber("ledMode", on ? 3 : 1);
+        if (! setNumber("ledMode", on ? 3 : 1) )
+        {
+            System.err.println("Unable to toggle light");
+            return false;
+        } else return true;
 	}
 
 
     public boolean setPipeline(Pipeline pipeline) {
-        return setNumber("pipeline", pipeline.num);
+        if (! setNumber("pipeline", pipeline.num) )
+        {
+            System.err.println("Unable to set pipeline");
+            return false;
+        } else return true;
     }
 
     public enum Pipeline {
