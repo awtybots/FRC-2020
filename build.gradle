@@ -1,7 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2020.3.2"
-    id "com.diffplug.gradle.spotless" version "4.4.0"
+    id 'com.github.sherter.google-java-format' version '0.9'
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -71,17 +71,14 @@ jar {
 
 // Custom rules
 /// Formatting ///
-apply plugin: 'java'
-spotless {
-  java {
-    importOrder  'java', 'javax', 'edu.wpi.first', 'com', 'frc', ''
-    replace      'Not enough space after if', 'if(', 'if ('
-    replaceRegex 'Too much space after if', 'if +\\(', 'if ('
-    replaceRegex 'Too many blank lines following {', '\\{\\n\\s*\\n+', '{\n'
-
-    removeUnusedImports()
-    trimTrailingWhitespace()
-    indentWithSpaces(4) // or spaces. Takes an integer argument if you don't like 4
-  }
+task format(type: com.github.sherter.googlejavaformatgradleplugin.GoogleJavaFormat) {
+  source 'src/main/java/frc/robot'
+  include '**/*.java'
+  exclude '**/*Template.java'
 }
-build.dependsOn 'spotlessApply'
+
+task verifyFormatting(type: com.github.sherter.googlejavaformatgradleplugin.VerifyGoogleJavaFormat) {
+  source 'src/main/java/frc/robot'
+  include '**/*.java'
+}
+build.dependsOn "format"

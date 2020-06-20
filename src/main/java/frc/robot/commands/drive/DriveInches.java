@@ -4,7 +4,6 @@ import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.Robot.*;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import frc.robot.subsystems.DrivetrainSubsystem.DriveMode;
 import frc.robot.subsystems.DrivetrainSubsystem.MotorGroup;
 

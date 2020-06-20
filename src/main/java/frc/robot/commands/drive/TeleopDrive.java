@@ -10,12 +10,10 @@ package frc.robot.commands.drive;
 import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.Robot.*;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import frc.robot.util.Vector3;
+import java.util.function.Supplier;
 
 public class TeleopDrive extends CommandBase {
   public TeleopDrive() {

@@ -1,11 +1,10 @@
 package frc.robot.util;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class Vector3 {
   public double x;
