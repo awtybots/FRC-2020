@@ -1,7 +1,6 @@
 package frc.robot;
 
 public final class RobotMap {
-
   public static final class MotorIDs {
     public static final int DRIVE_L1 = 1;
     public static final int DRIVE_L2 = 2;

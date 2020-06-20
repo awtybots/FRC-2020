@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimbSubsystem extends SubsystemBase {
-
   private DoubleSolenoid pistons = new DoubleSolenoid(CLIMB_FWD, CLIMB_REV);
 
   public boolean anglePistonsUp = false;

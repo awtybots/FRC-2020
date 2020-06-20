@@ -1,13 +1,13 @@
 package frc.robot.util;
 
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class Vector3 {
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+public class Vector3 {
   public double x;
   public double y;
   public double z;

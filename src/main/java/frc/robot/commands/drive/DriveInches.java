@@ -4,11 +4,11 @@ import static frc.robot.Constants.DriveTrain.*;
 import static frc.robot.Robot.*;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import frc.robot.subsystems.DrivetrainSubsystem.DriveMode;
 import frc.robot.subsystems.DrivetrainSubsystem.MotorGroup;
 
 public class DriveInches extends CommandBase {
-
   private final double goalDistance;
   private double goalSpeed;
   private double currentDistance = 0;
@@ -29,11 +29,11 @@ public class DriveInches extends CommandBase {
     currentDistance = MotorGroup.ALL.getWheelDistance();
 
     // stopping distance (ramped velocity only)
-    /*if(DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
+    /*if (DRIVE_MODE == DriveMode.RAMPED_VELOCITY) {
         double currentVelocity = MotorGroup.ALL.getWheelVelocity();
         double remainingDistance = Math.abs(goalDistance - currentDistance);
         double stoppingDistance = currentVelocity * currentVelocity / MAX_ACCELERATION / 2.0;
-        if(stoppingDistance >= remainingDistance) {
+        if (stoppingDistance >= remainingDistance) {
             goalSpeed = 0; // start slowing down before we hit the target
         }
     }*/

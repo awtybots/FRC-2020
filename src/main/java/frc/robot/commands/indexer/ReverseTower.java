@@ -5,7 +5,6 @@ import static frc.robot.Robot.*;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ReverseTower extends CommandBase {
-
   public ReverseTower() {
     addRequirements(indexerTowerSubsystem);
   }

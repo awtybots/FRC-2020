@@ -5,7 +5,6 @@ import frc.robot.subsystems.DrivetrainSubsystem.DriveMode;
 import frc.robot.subsystems.DrivetrainSubsystem.MotorControlMode;
 
 public final class Constants {
-
   public static final double PERIOD = 0.02;
 
   public static final class DriveTrain {

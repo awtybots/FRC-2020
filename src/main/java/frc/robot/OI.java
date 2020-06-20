@@ -9,7 +9,6 @@ import frc.robot.commands.shooter.*;
 import frc.robot.util.Controller;
 
 public class OI {
-
   public Controller controller1, controller2;
 
   public OI() {

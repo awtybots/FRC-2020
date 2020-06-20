@@ -6,7 +6,6 @@ import static frc.robot.Robot.shooterSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SetShooterSpeed extends CommandBase {
-
   private double rpm;
   private boolean towerToggled;
   private boolean autoIndex;

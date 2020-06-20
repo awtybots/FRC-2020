@@ -1,11 +1,12 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import frc.robot.RobotMap.MotorIDs;
 
 public class IndexerTowerSubsystem extends SubsystemBase {
-
   private final WPI_TalonSRX indexerL = new WPI_TalonSRX(MotorIDs.INDEXER_L);
   private final WPI_TalonSRX indexerR = new WPI_TalonSRX(MotorIDs.INDEXER_R);
   private final WPI_TalonSRX tower1 = new WPI_TalonSRX(MotorIDs.TOWER_1);

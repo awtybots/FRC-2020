@@ -2,18 +2,19 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.wpiutil.math.MathUtil.clamp;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 import frc.robot.Constants.Shooter;
 import frc.robot.RobotMap.MotorIDs;
 
 public class ShooterSubsystem extends SubsystemBase {
-
   private final WPI_TalonFX flywheel = new WPI_TalonFX(MotorIDs.FLYWHEEL);
   // --- Constants ---//
   /// ----- PID ----- ///

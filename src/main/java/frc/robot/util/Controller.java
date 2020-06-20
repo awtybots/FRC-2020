@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Controller {
-
   private static final double DEADZONE_STICK = 0.2;
   private static final double DEADZONE_TRIGGER = 0.1;
 
