@@ -37,12 +37,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public static final double PCT_ACCELERATION_MAX = 0.6;
   public static final double VELOCITY_MAX = 36; // inches/second
   public static final double ACCELERATION_MAX = 6; // inches/second^2
-  /// ----- PID ----- /// TODO possible TalonFX PID?
+  /// ----- PID ----- ///
   public static final double PID_P = 0.02;
   public static final double PID_I = 0;
   public static final double PID_D = 0;
   public static final double MAX_INTEGRAL = 1.0;
-  /// ----- Feedforward ----- /// TODO do we want/need this?
+  /// ----- Feedforward ----- ///
   public static final double FF_S = 1.3; // voltage required to move a wheel any amount
   public static final double FF_V =
       0.12; // voltage required to sustain a wheel's speed moving 1 inch per second

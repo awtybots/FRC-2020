@@ -1,27 +1,15 @@
 # Created by https://www.gitignore.io/api/c++,java,linux,macos,gradle,windows,visualstudiocode
 
-### C++ ###
-# Prerequisites
-*.d
-
 # Compiled Object files
 *.slo
 *.lo
 *.o
 *.obj
 
-# Precompiled Headers
-*.gch
-*.pch
-
 # Compiled Dynamic libraries
 *.so
 *.dylib
 *.dll
-
-# Fortran module files
-*.mod
-*.smod
 
 # Compiled Static libraries
 *.lai
@@ -35,10 +23,7 @@
 *.app
 
 ### Java ###
-# Compiled class file
 *.class
-
-# Log file
 *.log
 
 # BlueJ files
@@ -58,21 +43,6 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-
-### Linux ###
-*~
-
-# temporary files which can be created if a process still has a handle open of a deleted file
-.fuse_hidden*
-
-# KDE directory preferences
-.directory
-
-# Linux trash folder which might appear on any partition or disk
-.Trash-*
-
-# .nfs files are created when an open file is removed but is still being accessed
-.nfs*
 
 ### macOS ###
 # General
@@ -104,9 +74,8 @@ Temporary Items
 
 ### VisualStudioCode ###
 .vscode/*
-!.vscode/settings.json
+*.code-workspace
 !.vscode/tasks.json
-!.vscode/launch.json
 !.vscode/extensions.json
 
 ### Windows ###
@@ -137,18 +106,9 @@ $RECYCLE.BIN/
 ### Gradle ###
 .gradle
 /build/
-
-# Ignore Gradle GUI config
 gradle-app.setting
-
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
-
-# Cache of project
 .gradletasknamecache
-
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
 
 # # VS Code Specific Java Settings
 .classpath
@@ -157,11 +117,7 @@ gradle-app.setting
 bin/
 imgui.ini
 
-
-# End of https://www.gitignore.io/api/c++,java,linux,macos,gradle,windows,visualstudiocode
-.vscode/launch.json
-.vscode/settings.json
+# Custom
 src/main/deploy/example.txt
 todo.txt
-workspace.code-workspace
 *.geany
