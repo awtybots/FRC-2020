@@ -17,17 +17,11 @@ public class Robot extends TimedRobot {
   /// ----- Subsytems ----- ///
   public static DrivetrainSubsystem drivetrainSubsystem;
   public static IntakeSubsystem intakeSubsystem;
-  public static           ShooterSubsystem             shooterSubsystem;
-    public
-      static
-        ControlPanelSubsystem
-      controlPanelSubsystem
-    ;
-    public
-      static
-        LimelightSubsystem
-      limelightSubsystem
-    ;
+                public
+                  static
+          ShooterSubsystem shooterSubsystem;
+  public static ControlPanelSubsystem controlPanelSubsystem;
+  public static LimelightSubsystem limelightSubsystem;
   public static IndexerTowerSubsystem indexerTowerSubsystem;
   public static ClimbSubsystem climbSubsystem;
   public static OI oi;
