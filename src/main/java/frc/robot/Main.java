@@ -10,14 +10,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public final class Main {
+  // do not touch anything here, WPILib said so
 
-    // do not touch anything here, WPILib said so
+  private Main() {}
 
-    private Main() {
-
-    }
-
-    public static void main(String... args) {
-        RobotBase.startRobot(Robot::new);
-    }
+  public static void main(String... args) {
+    RobotBase.startRobot(Robot::new);
+  }
 }

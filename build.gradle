@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2020.3.2"
+    id 'com.github.sherter.google-java-format' version '0.9'
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -13,11 +14,7 @@ def ROBOT_MAIN_CLASS = "frc.robot.Main"
 deploy {
     targets {
         roboRIO("roborio") {
-            // Team number is loaded either from the .wpilib/wpilib_preferences.json
-            // or from command line. If not found an exception will be thrown.
-            // You can use getTeamOrDefault(team) instead of getTeamNumber if you
-            // want to store a team number in this file.
-            team = frc.getTeamNumber()
+            team = 5829
         }
     }
     artifacts {
@@ -67,3 +64,16 @@ jar {
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
     DuplicatesStrategy.INCLUDE
 }
+
+// Custom rules
+/// Formatting ///
+task format(type: com.github.sherter.googlejavaformatgradleplugin.GoogleJavaFormat) {
+  source 'src/main/java/frc/robot'
+  include '**/*.java'
+}
+
+task verifyFormatting(type: com.github.sherter.googlejavaformatgradleplugin.VerifyGoogleJavaFormat) {
+  source 'src/main/java/frc/robot'
+  include '**/*.java'
+}
+build.dependsOn "format"

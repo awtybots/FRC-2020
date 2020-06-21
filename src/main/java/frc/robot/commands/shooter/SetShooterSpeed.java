@@ -1,45 +1,42 @@
 package frc.robot.commands.shooter;
 
+import static frc.robot.Robot.indexerTowerSubsystem;
+import static frc.robot.Robot.shooterSubsystem;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import static frc.robot.Robot.shooterSubsystem;
-import static frc.robot.Robot.indexerTowerSubsystem;
-
 public class SetShooterSpeed extends CommandBase {
+  private double rpm;
+  private boolean towerToggled;
+  private boolean autoIndex;
 
-    private double rps;
-    private boolean toggled;
-    private boolean autoIndex;
+  public SetShooterSpeed(double rpm_) {
+    this(rpm_, false);
+  }
 
-    public SetShooterSpeed(double rpm) {
-        this(rpm, false);
+  public SetShooterSpeed(double rpm_, boolean autoIndex) {
+    this.rpm = rpm_;
+    this.autoIndex = autoIndex;
+    towerToggled = false;
+  }
+
+  @Override
+  public void initialize() {
+    shooterSubsystem.setFlywheelGoalVelocity(rpm);
+  }
+
+  @Override
+  public void execute() {
+    shooterSubsystem.flywheelPID();
+    if (autoIndex && (!towerToggled) && shooterSubsystem.isVelocityAtGoal()) {
+      indexerTowerSubsystem.toggle(true);
+      towerToggled = true;
     }
+  }
 
-    public SetShooterSpeed(double rpm, boolean autoIndex) {
-        this.rps = rpm/60.0;
-        this.autoIndex = autoIndex;
-        toggled = false;
-    }
-
-    @Override
-    public void initialize() {
-        shooterSubsystem.setFlywheelGoalVelocity(rps);
-    }
-
-    @Override
-    public void execute() {
-        shooterSubsystem.flywheelPID();
-        if(autoIndex && (!toggled) && shooterSubsystem.isVelocityAtGoal()) {
-            indexerTowerSubsystem.toggle(true);
-            toggled = true;
-        }
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        shooterSubsystem.setFlywheelGoalVelocity(0);
-        if(toggled)
-            indexerTowerSubsystem.toggle(false);
-    }
-
+  @Override
+  public void end(boolean interrupted) {
+    shooterSubsystem.setFlywheelGoalVelocity(0);
+    if (towerToggled) indexerTowerSubsystem.toggle(false);
+  }
 }
