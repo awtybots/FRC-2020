@@ -47,7 +47,6 @@ public class Robot extends TimedRobot {
     /// ---- Electrical ---- ///
     LEDOutput.set(DriverStation.getInstance().getAlliance() == Alliance.Red);
     compressor.setClosedLoopControl(true);
-    compressor.start();
 
     // Add all Autons to SmartDashboard
     autonChooser = new SendableChooser<>();

@@ -45,9 +45,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /// ----- Feedforward ----- ///
   public static final double FF_S = 1.3; // voltage required to move a wheel any amount
   public static final double FF_V =
-      0.12; // voltage required to sustain a wheel's speed moving 1 inch per second
+      0.12; // voltage required to sustain a wheel's speed moving 1in/second
   public static final double FF_A =
-      0.1; // voltage required to accelerate wheel at 1 inch per second per second
+      0.1; // voltage required to accelerate wheel at 1in/second^2
 
   public DrivetrainSubsystem() {
     for (WPI_TalonFX motor : ALL.motorList) {
@@ -132,7 +132,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     RAMPED_VELOCITY;
   }
 
-  public enum MotorGroup { // {{{
+  public enum MotorGroup {
     LEFT(new WPI_TalonFX[] {motorL1, motorL2}),
     RIGHT(new WPI_TalonFX[] {motorR1, motorR2}),
     ALL(new WPI_TalonFX[] {motorL1, motorL2, motorR1, motorR2});
@@ -232,5 +232,5 @@ public class DrivetrainSubsystem extends SubsystemBase {
         motor.set(pct);
       }
     }
-  } // }}}
+  }
 }
