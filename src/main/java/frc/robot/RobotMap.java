@@ -28,7 +28,7 @@ public final class RobotMap {
     public static final int CLIMB_FWD = 1;
     public static final int CLIMB_REV = 2;
 
-    public static final int ANGLE_CLIMB_FWD = 6;
-    public static final int ANGLE_CLIMB_REV = 7;
+    public static final int ANGLE_CLIMB_FWD = 5;
+    public static final int ANGLE_CLIMB_REV = 6;
   }
 }
