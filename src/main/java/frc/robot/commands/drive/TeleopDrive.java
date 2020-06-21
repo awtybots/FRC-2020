@@ -42,7 +42,7 @@ public class TeleopDrive extends CommandBase {
 
   private static double smooth(double x) {
     return ((0.6 * Math.pow(Math.abs(x), 10.0)) + (0.4 * Math.abs(x)))
-        * Math.signum(x); // https://www.desmos.com/calculator/uc1689lozj
+        * Math.signum(x); // https://www.desmos.com/calculator/4bpajjzmgo
   }
 
   public enum DriveControls { // Maps a mode of input to the appropriate method
