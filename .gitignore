@@ -164,3 +164,4 @@ imgui.ini
 src/main/deploy/example.txt
 todo.txt
 workspace.code-workspace
+*.geany

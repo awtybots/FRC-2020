@@ -14,11 +14,7 @@ def ROBOT_MAIN_CLASS = "frc.robot.Main"
 deploy {
     targets {
         roboRIO("roborio") {
-            // Team number is loaded either from the .wpilib/wpilib_preferences.json
-            // or from command line. If not found an exception will be thrown.
-            // You can use getTeamOrDefault(team) instead of getTeamNumber if you
-            // want to store a team number in this file.
-            team = frc.getTeamNumber()
+            team = 5829
         }
     }
     artifacts {
@@ -74,7 +70,6 @@ jar {
 task format(type: com.github.sherter.googlejavaformatgradleplugin.GoogleJavaFormat) {
   source 'src/main/java/frc/robot'
   include '**/*.java'
-  exclude '**/*Template.java'
 }
 
 task verifyFormatting(type: com.github.sherter.googlejavaformatgradleplugin.VerifyGoogleJavaFormat) {
