@@ -63,6 +63,20 @@ public class LimelightSubsystem extends SubsystemBase {
     } else return true;
   }
 
+  /**
+  * Sets the limelight to one of two modes: Vision Processor or Driver Camera.
+  * Driver camera mode increases the exposure and disables vision processing.
+  * Vision Processor mode is the default mode of the Limelight.
+  * @param disableVision  if true, sets the Limelight mode to Driver Camera.
+  * If false, it returns to the default vision processor mode.
+  */
+  public boolean setDriverCamera(boolean disableVision) {
+    if (disableVision)
+      setNumber("camMode", 1);
+    else
+      setNumber("camMode", 0);
+  }
+
   public boolean setPipeline(Pipeline pipeline) {
     if (!setNumber("pipeline", pipeline.num)) {
       System.err.println("Unable to set pipeline");
