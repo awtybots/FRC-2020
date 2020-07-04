@@ -63,6 +63,10 @@ public class LimelightSubsystem extends SubsystemBase {
     } else return true;
   }
 
+  public boolean setCameraMode(CameraMode mode) {
+    return setNumber("camMode", mode.num);
+  }
+
   public boolean setPipeline(Pipeline pipeline) {
     if (!setNumber("pipeline", pipeline.num)) {
       System.err.println("Unable to set pipeline");
@@ -77,6 +81,19 @@ public class LimelightSubsystem extends SubsystemBase {
     public int num;
 
     private Pipeline(int num) {
+      this.num = num;
+    }
+  }
+
+  public enum CameraMode {
+    /** Default mode. Processes frames and returns target data */
+    VISION_PROCESSOR(0),
+    /** Increases exposure and disables vision processing. Acts like a normal camera. */
+    DRIVER_CAMERA(1);
+
+    public int num;
+
+    private CameraMode(int num) {
       this.num = num;
     }
   }
