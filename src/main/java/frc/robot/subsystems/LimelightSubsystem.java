@@ -63,11 +63,6 @@ public class LimelightSubsystem extends SubsystemBase {
     } else return true;
   }
 
-  /**
-   * Sets the limelight to one of two modes: Vision Processor or Driver Camera. Driver camera mode
-   * increases the exposure and disables vision processing. Vision Processor mode is the default
-   * mode of the Limelight.
-   */
   public boolean setCameraMode(CameraMode mode) {
     return setNumber("camMode", mode.num);
   }
@@ -91,7 +86,9 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public enum CameraMode {
+    /** Default mode. Processes frames and returns target data */
     VISION_PROCESSOR(0),
+    /** Increases exposure and disables vision processing. Acts like a normal camera. */
     DRIVER_CAMERA(1);
 
     public int num;
